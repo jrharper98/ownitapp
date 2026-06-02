@@ -1107,10 +1107,12 @@ document.getElementById("add-biz").addEventListener("click", function() {
     if (!state.businesses.length) state.businesses = [""];
     state.businesses.push("");
     buildBizList();
-    var inputs = document.querySelectorAll(".biz-input");
+    // Focus the newly added input so the cursor is ready to type
+    var inputs = document.getElementById("biz-list").querySelectorAll("input.finput");
     if (inputs.length) {
-      inputs[inputs.length - 1].focus();
-      inputs[inputs.length - 1].scrollIntoView({ behavior: "smooth", block: "center" });
+      var last = inputs[inputs.length - 1];
+      last.focus();
+      last.scrollIntoView({ behavior: "smooth", block: "center" });
     }
   }
 });
@@ -2567,25 +2569,11 @@ function openReceiptInTab(receipt) {
 }
 
 function downloadReceipt(receipt) {
-  try {
-    var blob = dataUrlToBlob(receipt.dataUrl);
-    var url = URL.createObjectURL(blob);
-    var a = document.createElement("a");
-    a.setAttribute("href", url);
-    a.setAttribute("download", receipt.name || "receipt");
-    a.style.display = "none";
-    document.body.appendChild(a);
-    a.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window }));
-    setTimeout(function() { document.body.removeChild(a); URL.revokeObjectURL(url); }, 200);
-  } catch (e) {
-    var a2 = document.createElement("a");
-    a2.setAttribute("href", receipt.dataUrl);
-    a2.setAttribute("download", receipt.name || "receipt");
-    a2.style.display = "none";
-    document.body.appendChild(a2);
-    a2.dispatchEvent(new MouseEvent("click", { bubbles: true, cancelable: true, view: window }));
-    setTimeout(function() { document.body.removeChild(a2); }, 200);
-  }
+  // Use the data URL directly (NOT a blob/object URL). On Safari iOS, blob
+  // URLs are treated as in-page navigations and never land in Files/Downloads,
+  // while a data: URI with a dispatched MouseEvent triggers a real download.
+  // This matches the backup-download path (triggerDownload) that works.
+  triggerDownload(receipt.dataUrl, receipt.name || "receipt");
 }
 // EDIT EXPENSE MODAL
 // ══════════════════════════════════════
