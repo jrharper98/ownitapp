@@ -1093,6 +1093,13 @@ function resetAll() {
 
 /* ── MAIN SHOW ── */
 async function startShow() {
+  // Init and start music
+  initAudio();
+  if (audioCtx.state === 'suspended') await audioCtx.resume();
+  stopMusic();
+  musicStartTime = audioCtx.currentTime + 0.05;
+  playMusic(musicStartTime);
+
   animOn = true;
   resetAll();
   await sleep(50);
@@ -1286,10 +1293,6 @@ async function startShow() {
 }
 
 window.addEventListener('load', () => setTimeout(startShow, 400));
-
-/* ═══════════════════════════════════════════
-   MUSIC ENGINE
-═══════════════════════════════════════════ */
 let audioCtx = null;
 let masterGain = null;
 let musicStartTime = 0;
@@ -1548,18 +1551,6 @@ function playMusic(videoStartTime) {
   masterGain.gain.linearRampToValueAtTime(0.52, v+90.0);
   masterGain.gain.linearRampToValueAtTime(0,    v+95.0);
 }
-
-// Patch startShow to init and start music
-const _origStartShow = startShow;
-startShow = async function() {
-  initAudio();
-  if (audioCtx.state === 'suspended') await audioCtx.resume();
-  stopMusic();
-  // Schedule music to start at the same time as the show
-  musicStartTime = audioCtx.currentTime + 0.05;
-  playMusic(musicStartTime);
-  await _origStartShow();
-};
 
 </script>
 </body>
