@@ -1091,6 +1091,160 @@ function resetAll() {
   $('progress-bar').style.width = '0%';
 }
 
+/* ═══════════════════════════════════════════
+   MUSIC ENGINE
+═══════════════════════════════════════════ */
+let audioCtx = null;
+let masterGain = null;
+let musicStartTime = 0;
+let scheduledNodes = [];
+
+function initAudio() {
+  if (audioCtx) return;
+  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+  masterGain = audioCtx.createGain();
+  masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
+  masterGain.connect(audioCtx.destination);
+}
+
+function stopMusic() {
+  if (!audioCtx) return;
+  scheduledNodes.forEach(n => { try { n.stop(); } catch(e) {} });
+  scheduledNodes = [];
+  if (masterGain) masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
+}
+
+function note(freq, startT, dur, type, gainVal, attack, release) {
+  if (!audioCtx) return;
+  const osc = audioCtx.createOscillator();
+  const g   = audioCtx.createGain();
+  osc.type = type || 'sine';
+  osc.frequency.setValueAtTime(freq, startT);
+  g.gain.setValueAtTime(0, startT);
+  g.gain.linearRampToValueAtTime(gainVal, startT + (attack || 0.04));
+  g.gain.setValueAtTime(gainVal, startT + dur - (release || 0.12));
+  g.gain.linearRampToValueAtTime(0, startT + dur);
+  osc.connect(g);
+  g.connect(masterGain);
+  osc.start(startT);
+  osc.stop(startT + dur + 0.05);
+  scheduledNodes.push(osc);
+}
+
+function pad(freqs, startT, dur, gainVal) {
+  freqs.forEach(f => {
+    note(f,         startT, dur, 'sine',     gainVal * 0.55, 0.3, 0.5);
+    note(f * 1.002, startT, dur, 'triangle', gainVal * 0.25, 0.4, 0.6);
+  });
+}
+
+function bass(freq, startT, dur) {
+  note(freq, startT, dur, 'triangle', 0.18, 0.01, 0.15);
+}
+
+function mel(freq, startT, dur) {
+  note(freq, startT, dur, 'triangle', 0.13, 0.03, 0.1);
+}
+
+function arp(freqs, startT, stepDur, reps, gainVal) {
+  for (let r = 0; r < reps; r++) {
+    freqs.forEach((f, i) => {
+      const t = startT + (r * freqs.length + i) * stepDur;
+      note(f, t, stepDur * 1.4, 'sine', gainVal * 0.55, 0.02, 0.08);
+    });
+  }
+}
+
+const C3=130.8, E3=164.8, G3=196,   B3=246.9,
+      C4=261.6, D4=293.7, E4=329.6, F4=349.2,
+      G4=392,   A4=440,   B4=493.9, C5=523.3,
+      D5=587.3, E5=659.3, G5=784;
+
+function playMusic(v) {
+  masterGain.gain.cancelScheduledValues(v);
+  masterGain.gain.setValueAtTime(0, v);
+  masterGain.gain.linearRampToValueAtTime(0.52, v + 3.0);
+
+  // Title card (0-8s): sparse ascending notes
+  mel(C4, v+0.2, 0.6); mel(E4, v+1.1, 0.6); mel(G4, v+2.0, 0.6);
+  mel(C5, v+3.0, 1.0); mel(B4, v+4.2, 0.6); mel(G4, v+5.0, 0.6);
+  mel(E4, v+6.0, 0.8); mel(C5, v+7.0, 1.2);
+
+  // Scene 1-2 Intro/Tabs (8-22s): first chord, upbeat groove
+  pad([C4,E4,G4], v+8.0, 4.0, 0.16); bass(C3, v+8.0, 1.8);
+  arp([C4,E4,G4], v+8.2, 0.22, 2, 0.10);
+  pad([A4*0.5,C4,E4], v+12.0, 4.0, 0.15); bass(A4*0.5, v+12.0, 1.8);
+  arp([A4*0.5,C4,E4], v+12.2, 0.22, 2, 0.09);
+  mel(E5, v+13.0, 0.4); mel(D5, v+13.5, 0.4); mel(C5, v+14.0, 0.6);
+  pad([F4*0.5,C4,F4], v+16.0, 4.0, 0.15); bass(F4*0.5, v+16.0, 1.8);
+  mel(F5, v+17.0, 0.4); mel(E5, v+17.5, 0.4); mel(D5, v+18.0, 0.6);
+  pad([G3,B3,D4], v+20.0, 2.5, 0.15); bass(G3, v+20.0, 1.6);
+  mel(G4, v+20.5, 0.3); mel(A4, v+21.0, 0.3); mel(B4, v+21.5, 0.5);
+
+  // Scene 3-4 Expense/Income (22-46s): rhythmic arpeggios
+  pad([C4,E4,G4], v+22.0, 4.5, 0.14); bass(C3, v+22.0, 1.8);
+  arp([C4,E4,G4,C5], v+22.1, 0.18, 3, 0.09);
+  mel(C5, v+23.5, 0.35); mel(B4, v+24.0, 0.35); mel(A4, v+24.5, 0.5);
+  pad([A4*0.5,C4,E4], v+26.5, 4.0, 0.14); bass(A4*0.5, v+26.5, 1.8);
+  arp([A4*0.5,C4,E4,A4], v+26.6, 0.18, 3, 0.09);
+  mel(A4, v+28.0, 0.35); mel(G4, v+28.5, 0.35); mel(F4, v+29.0, 0.5);
+  pad([F4*0.5,C4,F4], v+31.0, 3.5, 0.14); bass(F4*0.5, v+31.0, 1.8);
+  arp([F4*0.5,C4,F4,A4], v+31.1, 0.18, 2, 0.09);
+  pad([G3,B3,D4], v+34.5, 2.0, 0.14); bass(G3, v+34.5, 1.5);
+  mel(B4, v+35.0, 0.4); mel(C5, v+35.5, 0.5);
+  pad([C4,E4,G4], v+36.0, 4.5, 0.15); bass(C3, v+36.0, 1.8);
+  mel(E5, v+36.5, 0.4); mel(D5, v+37.0, 0.4); mel(C5, v+37.5, 0.6);
+  pad([A4*0.5,C4,E4], v+40.5, 3.5, 0.14); bass(A4*0.5, v+40.5, 1.8);
+  arp([A4*0.5,C4,E4], v+40.6, 0.2, 2, 0.09);
+  mel(A4, v+42.0, 0.35); mel(C5, v+42.5, 0.5);
+  pad([F4*0.5,C4,F4], v+44.0, 2.5, 0.14); bass(F4*0.5, v+44.0, 1.6);
+  mel(F5, v+44.5, 0.4); mel(E5, v+45.0, 0.5);
+
+  // Scene 5 Earnings (46-55s): swell on grand total
+  pad([G3,B3,D4], v+46.0, 3.5, 0.14); bass(G3, v+46.0, 1.8);
+  mel(G4, v+46.5, 0.4); mel(A4, v+47.0, 0.4); mel(B4, v+47.5, 0.6);
+  pad([C4,E4,G4,C5], v+49.5, 5.5, 0.20); bass(C3, v+49.5, 2.0);
+  mel(C5, v+50.0, 0.5); mel(E5, v+50.8, 0.5);
+  mel(G5, v+51.6, 0.8); mel(C5, v+52.6, 1.2);
+
+  // Scene 6-7 Export/Name (55-73s): steady groove
+  pad([F4*0.5,C4,F4], v+55.0, 4.0, 0.14); bass(F4*0.5, v+55.0, 1.8);
+  arp([F4*0.5,C4,F4], v+55.1, 0.2, 2, 0.09);
+  mel(F4, v+56.5, 0.35); mel(G4, v+57.0, 0.35); mel(A4, v+57.5, 0.5);
+  pad([G3,B3,D4], v+59.0, 3.5, 0.14); bass(G3, v+59.0, 1.8);
+  mel(B4, v+60.5, 0.35); mel(C5, v+61.0, 0.5);
+  pad([C4,E4,G4], v+62.5, 2.0, 0.14); bass(C3, v+62.5, 1.6);
+  pad([A4*0.5,C4,E4], v+64.0, 4.0, 0.14); bass(A4*0.5, v+64.0, 1.8);
+  arp([A4*0.5,C4,E4,A4], v+64.1, 0.17, 3, 0.09);
+  mel(A4, v+65.5, 0.35); mel(B4, v+66.0, 0.35); mel(C5, v+66.5, 0.5);
+  pad([F4*0.5,C4,F4], v+68.0, 3.5, 0.14); bass(F4*0.5, v+68.0, 1.8);
+  mel(F4, v+69.5, 0.35); mel(A4, v+70.0, 0.5);
+  pad([G3,B3,D4], v+71.5, 2.0, 0.14); bass(G3, v+71.5, 1.6);
+  mel(G4, v+72.0, 0.35); mel(B4, v+72.5, 0.4);
+
+  // Scene 8-9 Colors/Home Screen (73-88s): builds to finale
+  pad([C4,E4,G4], v+73.0, 4.5, 0.15); bass(C3, v+73.0, 1.8);
+  arp([C4,E4,G4,C5], v+73.1, 0.16, 3, 0.10);
+  mel(C5, v+74.0, 0.35); mel(E5, v+74.6, 0.35); mel(G5, v+75.2, 0.6);
+  pad([A4*0.5,C4,E4], v+77.5, 3.5, 0.14); bass(A4*0.5, v+77.5, 1.8);
+  mel(A4, v+78.5, 0.35); mel(C5, v+79.0, 0.35); mel(E5, v+79.5, 0.5);
+  pad([F4*0.5,C4,F4], v+81.0, 2.0, 0.15); bass(F4*0.5, v+81.0, 1.5);
+  pad([G3,B3,D4], v+83.0, 3.5, 0.16); bass(G3, v+83.0, 1.8);
+  arp([G3,B3,D4,G4], v+83.1, 0.16, 3, 0.10);
+  mel(D5, v+84.5, 0.4); mel(B4, v+85.0, 0.4);
+  mel(G4, v+85.5, 0.4); mel(D5, v+86.2, 0.5);
+
+  // Scene 10 Finale (88-92s): warm resolution
+  pad([C4,E4,G4,C5], v+88.0, 5.0, 0.18); bass(C3, v+88.0, 2.0);
+  mel(C5, v+88.5, 0.5); mel(E5, v+89.2, 0.5);
+  mel(G5, v+89.9, 0.6); mel(C5, v+90.8, 1.5);
+
+  // Fade out (90-95s)
+  masterGain.gain.setValueAtTime(0.52, v+88.0);
+  masterGain.gain.linearRampToValueAtTime(0.52, v+90.0);
+  masterGain.gain.linearRampToValueAtTime(0,    v+95.0);
+}
+
 /* ── MAIN SHOW ── */
 async function startShow() {
   // Init and start music
@@ -1293,265 +1447,6 @@ async function startShow() {
 }
 
 window.addEventListener('load', () => setTimeout(startShow, 400));
-let audioCtx = null;
-let masterGain = null;
-let musicStartTime = 0;
-let scheduledNodes = [];
-
-function initAudio() {
-  if (audioCtx) return;
-  audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-  masterGain = audioCtx.createGain();
-  masterGain.gain.setValueAtTime(0, audioCtx.currentTime);
-  masterGain.connect(audioCtx.destination);
-}
-
-function stopMusic() {
-  if (!audioCtx) return;
-  scheduledNodes.forEach(n => { try { n.stop(); } catch(e) {} });
-  scheduledNodes = [];
-  if (masterGain) masterGain.gain.cancelScheduledValues(audioCtx.currentTime);
-}
-
-// Create a soft oscillator note
-function note(freq, startT, dur, type, gainVal, attack, release) {
-  if (!audioCtx) return;
-  const osc = audioCtx.createOscillator();
-  const g   = audioCtx.createGain();
-  osc.type = type || 'sine';
-  osc.frequency.setValueAtTime(freq, startT);
-  g.gain.setValueAtTime(0, startT);
-  g.gain.linearRampToValueAtTime(gainVal, startT + (attack || 0.04));
-  g.gain.setValueAtTime(gainVal, startT + dur - (release || 0.12));
-  g.gain.linearRampToValueAtTime(0, startT + dur);
-  osc.connect(g);
-  g.connect(masterGain);
-  osc.start(startT);
-  osc.stop(startT + dur + 0.05);
-  scheduledNodes.push(osc);
-}
-
-// Soft pad chord (multiple detuned sines)
-function pad(freqs, startT, dur, gainVal) {
-  freqs.forEach((f, i) => {
-    note(f,        startT, dur, 'sine',     gainVal * 0.55, 0.3, 0.5);
-    note(f * 1.002, startT, dur, 'triangle', gainVal * 0.25, 0.4, 0.6);
-  });
-}
-
-// Pluck bass note
-function bass(freq, startT, dur) {
-  note(freq, startT, dur, 'triangle', 0.18, 0.01, 0.15);
-}
-
-// Melody note (soft triangle)
-function mel(freq, startT, dur) {
-  note(freq, startT, dur, 'triangle', 0.13, 0.03, 0.1);
-}
-
-// Arpeggio helper — plays chord tones in sequence
-function arp(freqs, startT, stepDur, reps, gainVal) {
-  for (let r = 0; r < reps; r++) {
-    freqs.forEach((f, i) => {
-      const t = startT + (r * freqs.length + i) * stepDur;
-      note(f, t, stepDur * 1.4, 'sine', gainVal * 0.55, 0.02, 0.08);
-    });
-  }
-}
-
-// Note frequencies (C major)
-const C3=130.8, E3=164.8, G3=196, B3=246.9,
-      C4=261.6, D4=293.7, E4=329.6, F4=349.2,
-      G4=392,   A4=440,   B4=493.9, C5=523.3,
-      D5=587.3, E5=659.3, F5=698.5, G5=784,
-      A5=880;
-
-// Chord sets (C maj, Am, F maj, G maj, Em)
-const Cmaj  = [C4, E4, G4];
-const Amin  = [A4*0.5, C4, E4];
-const Fmaj  = [F4*0.5, C4, F4];
-const Gmaj  = [G3, B3, D4];
-const Emaj  = [E3, B3, E4];
-
-function playMusic(videoStartTime) {
-  // videoStartTime = audioCtx.currentTime when video started
-  const v = videoStartTime;
-
-  // Master fade in
-  masterGain.gain.cancelScheduledValues(v);
-  masterGain.gain.setValueAtTime(0, v);
-  masterGain.gain.linearRampToValueAtTime(0.52, v + 3.0);
-
-  // ── TITLE CARD (0–8s): sparse single notes, anticipation ──
-  mel(C4,  v+0.2,  0.6);
-  mel(E4,  v+1.1,  0.6);
-  mel(G4,  v+2.0,  0.6);
-  mel(C5,  v+3.0,  1.0);
-  mel(B4,  v+4.2,  0.6);
-  mel(G4,  v+5.0,  0.6);
-  mel(E4,  v+6.0,  0.8);
-  mel(C5,  v+7.0,  1.2);
-
-  // ── SCENE 1 INTRO (8–9.5s): first chord lands ──
-  pad(Cmaj,  v+8.0,  4.0, 0.16);
-  bass(C3,   v+8.0,  1.8);
-  arp(Cmaj,  v+8.2,  0.22, 2, 0.10);
-
-  // ── SCENE 2 TABS (9.5–22s): upbeat groove ──
-  pad(Amin,  v+12.0, 4.0, 0.15);
-  bass(A4*0.5, v+12.0, 1.8);
-  arp(Amin,  v+12.2, 0.22, 2, 0.09);
-  mel(E5,    v+13.0, 0.4);
-  mel(D5,    v+13.5, 0.4);
-  mel(C5,    v+14.0, 0.6);
-
-  pad(Fmaj,  v+16.0, 4.0, 0.15);
-  bass(F4*0.5, v+16.0, 1.8);
-  arp(Fmaj,  v+16.2, 0.22, 2, 0.09);
-  mel(F5,    v+17.0, 0.4);
-  mel(E5,    v+17.5, 0.4);
-  mel(D5,    v+18.0, 0.6);
-
-  pad(Gmaj,  v+20.0, 2.5, 0.15);
-  bass(G3,   v+20.0, 1.6);
-  mel(G4,    v+20.5, 0.3);
-  mel(A4,    v+21.0, 0.3);
-  mel(B4,    v+21.5, 0.5);
-
-  // ── SCENE 3 EXPENSE (22–36s): rhythmic arpeggios ──
-  pad(Cmaj,  v+22.0, 4.5, 0.14);
-  bass(C3,   v+22.0, 1.8);
-  arp([C4,E4,G4,C5], v+22.1, 0.18, 3, 0.09);
-  mel(C5,    v+23.5, 0.35);
-  mel(B4,    v+24.0, 0.35);
-  mel(A4,    v+24.5, 0.5);
-
-  pad(Amin,  v+26.5, 4.0, 0.14);
-  bass(A4*0.5, v+26.5, 1.8);
-  arp([A4*0.5,C4,E4,A4], v+26.6, 0.18, 3, 0.09);
-  mel(A4,    v+28.0, 0.35);
-  mel(G4,    v+28.5, 0.35);
-  mel(F4,    v+29.0, 0.5);
-
-  pad(Fmaj,  v+31.0, 3.5, 0.14);
-  bass(F4*0.5, v+31.0, 1.8);
-  arp([F4*0.5,C4,F4,A4], v+31.1, 0.18, 2, 0.09);
-
-  pad(Gmaj,  v+34.5, 2.0, 0.14);
-  bass(G3,   v+34.5, 1.5);
-  mel(B4,    v+35.0, 0.4);
-  mel(C5,    v+35.5, 0.5);
-
-  // ── SCENE 4 INCOME (36–46s): lighter, upward feel ──
-  pad(Cmaj,  v+36.0, 4.5, 0.15);
-  bass(C3,   v+36.0, 1.8);
-  mel(E5,    v+36.5, 0.4);
-  mel(D5,    v+37.0, 0.4);
-  mel(C5,    v+37.5, 0.6);
-  mel(B4,    v+38.5, 0.4);
-
-  pad(Amin,  v+40.5, 3.5, 0.14);
-  bass(A4*0.5, v+40.5, 1.8);
-  arp(Amin,  v+40.6, 0.2, 2, 0.09);
-  mel(A4,    v+42.0, 0.35);
-  mel(C5,    v+42.5, 0.5);
-
-  pad(Fmaj,  v+44.0, 2.5, 0.14);
-  bass(F4*0.5, v+44.0, 1.6);
-  mel(F5,    v+44.5, 0.4);
-  mel(E5,    v+45.0, 0.5);
-
-  // ── SCENE 5 EARNINGS (46–55s): swell + lift at grand total ──
-  pad(Gmaj,  v+46.0, 3.5, 0.14);
-  bass(G3,   v+46.0, 1.8);
-  mel(G4,    v+46.5, 0.4);
-  mel(A4,    v+47.0, 0.4);
-  mel(B4,    v+47.5, 0.6);
-
-  // Swell on grand total reveal ~50s
-  pad([C4,E4,G4,C5], v+49.5, 5.5, 0.20);
-  bass(C3,   v+49.5, 2.0);
-  mel(C5,    v+50.0, 0.5);
-  mel(E5,    v+50.8, 0.5);
-  mel(G5,    v+51.6, 0.8);
-  mel(C5,    v+52.6, 1.2);
-
-  // ── SCENE 6 EXPORT (55–64s): steady groove ──
-  pad(Fmaj,  v+55.0, 4.0, 0.14);
-  bass(F4*0.5, v+55.0, 1.8);
-  arp(Fmaj,  v+55.1, 0.2, 2, 0.09);
-  mel(F4,    v+56.5, 0.35);
-  mel(G4,    v+57.0, 0.35);
-  mel(A4,    v+57.5, 0.5);
-
-  pad(Gmaj,  v+59.0, 3.5, 0.14);
-  bass(G3,   v+59.0, 1.8);
-  arp(Gmaj,  v+59.1, 0.2, 2, 0.09);
-  mel(B4,    v+60.5, 0.35);
-  mel(C5,    v+61.0, 0.5);
-
-  pad(Cmaj,  v+62.5, 2.0, 0.14);
-  bass(C3,   v+62.5, 1.6);
-
-  // ── SCENE 7 NAME (64–73s): playful arpeggios ──
-  pad(Amin,  v+64.0, 4.0, 0.14);
-  bass(A4*0.5, v+64.0, 1.8);
-  arp([A4*0.5,C4,E4,A4], v+64.1, 0.17, 3, 0.09);
-  mel(A4,    v+65.5, 0.35);
-  mel(B4,    v+66.0, 0.35);
-  mel(C5,    v+66.5, 0.5);
-
-  pad(Fmaj,  v+68.0, 3.5, 0.14);
-  bass(F4*0.5, v+68.0, 1.8);
-  arp(Fmaj,  v+68.1, 0.17, 3, 0.09);
-  mel(F4,    v+69.5, 0.35);
-  mel(A4,    v+70.0, 0.5);
-
-  pad(Gmaj,  v+71.5, 2.0, 0.14);
-  bass(G3,   v+71.5, 1.6);
-  mel(G4,    v+72.0, 0.35);
-  mel(B4,    v+72.5, 0.4);
-
-  // ── SCENE 8 COLORS (73–82s): builds toward finale ──
-  pad(Cmaj,  v+73.0, 4.5, 0.15);
-  bass(C3,   v+73.0, 1.8);
-  arp([C4,E4,G4,C5], v+73.1, 0.16, 3, 0.10);
-  mel(C5,    v+74.0, 0.35);
-  mel(E5,    v+74.6, 0.35);
-  mel(G5,    v+75.2, 0.6);
-
-  pad(Amin,  v+77.5, 3.5, 0.14);
-  bass(A4*0.5, v+77.5, 1.8);
-  mel(A4,    v+78.5, 0.35);
-  mel(C5,    v+79.0, 0.35);
-  mel(E5,    v+79.5, 0.5);
-
-  pad(Fmaj,  v+81.0, 2.0, 0.15);
-  bass(F4*0.5, v+81.0, 1.5);
-
-  // ── SCENE 9 HOME SCREEN (82–88s): final build ──
-  pad(Gmaj,  v+83.0, 3.5, 0.16);
-  bass(G3,   v+83.0, 1.8);
-  arp([G3,B3,D4,G4], v+83.1, 0.16, 3, 0.10);
-  mel(D5,    v+84.5, 0.4);
-  mel(B4,    v+85.0, 0.4);
-  mel(G4,    v+85.5, 0.4);
-  mel(D5,    v+86.2, 0.5);
-
-  // ── SCENE 10 FINALE (88–92s): warm resolution ──
-  pad([C4,E4,G4,C5], v+88.0, 5.0, 0.18);
-  bass(C3,   v+88.0, 2.0);
-  mel(C5,    v+88.5, 0.5);
-  mel(E5,    v+89.2, 0.5);
-  mel(G5,    v+89.9, 0.6);
-  mel(C5,    v+90.8, 1.5);
-
-  // ── FADE OUT (90–95s) ──
-  masterGain.gain.setValueAtTime(0.52, v+88.0);
-  masterGain.gain.linearRampToValueAtTime(0.52, v+90.0);
-  masterGain.gain.linearRampToValueAtTime(0,    v+95.0);
-}
-
 </script>
 </body>
 </html>
