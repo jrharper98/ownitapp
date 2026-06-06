@@ -1247,16 +1247,19 @@ function playMusic(v) {
 
 /* ── MAIN SHOW ── */
 async function startShow() {
-  // Init and start music
+  // Init audio context on user gesture
   initAudio();
   if (audioCtx.state === 'suspended') await audioCtx.resume();
   stopMusic();
-  musicStartTime = audioCtx.currentTime + 0.05;
-  playMusic(musicStartTime);
 
   animOn = true;
   resetAll();
   await sleep(50);
+
+  // Start music AFTER reset so audioCtx.currentTime is accurate
+  musicStartTime = audioCtx.currentTime + 0.05;
+  playMusic(musicStartTime);
+
   startTime = Date.now();
   requestAnimationFrame(tickProgress);
 
