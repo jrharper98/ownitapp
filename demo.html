@@ -153,13 +153,13 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
   display: block;
 }
 .co-title {
-  font-size: 11px;
+  font-size: 13px;
   font-weight: 700;
   color: var(--teal);
   margin-bottom: 3px;
 }
 .co-body {
-  font-size: 10px;
+  font-size: 12px;
   color: rgba(255,255,255,0.78);
   line-height: 1.5;
 }
@@ -699,10 +699,91 @@ html, body { width: 100%; height: 100%; overflow: hidden; background: #000; }
   box-shadow: 0 0 7px var(--teal);
   transition: width 0.1s linear;
 }
+/* ── SPLASH SCREEN ── */
+#splash {
+  position: fixed;
+  inset: 0;
+  background: var(--navy);
+  display: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+  gap: 20px;
+  transition: opacity 0.6s ease;
+}
+#splash.fadeout { opacity: 0; pointer-events: none; }
+
+.splash-logo {
+  opacity: 0;
+  transform: scale(0.85);
+  animation: splashIn 0.7s cubic-bezier(.34,1.5,.64,1) 0.2s forwards;
+}
+.splash-title {
+  font-family: 'Playfair Display', serif;
+  font-size: clamp(28px, 8vw, 48px);
+  font-weight: 900;
+  color: var(--white);
+  opacity: 0;
+  animation: splashIn 0.6s ease 0.4s forwards;
+}
+.splash-sub {
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(11px, 3vw, 15px);
+  color: var(--muted);
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  opacity: 0;
+  animation: splashIn 0.6s ease 0.55s forwards;
+}
+.splash-play-btn {
+  margin-top: 12px;
+  background: var(--teal);
+  color: var(--white);
+  border: none;
+  border-radius: 99px;
+  padding: 16px 40px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: clamp(14px, 3.5vw, 18px);
+  font-weight: 700;
+  cursor: pointer;
+  letter-spacing: 0.5px;
+  box-shadow: 0 6px 28px rgba(0,180,166,0.45);
+  opacity: 0;
+  animation: splashIn 0.6s ease 0.75s forwards;
+  transition: transform 0.2s ease;
+}
+.splash-play-btn:hover { transform: scale(1.05); }
+.splash-play-btn:active { transform: scale(0.97); }
+
+@keyframes splashIn {
+  to { opacity: 1; transform: scale(1) translateY(0); }
+  from { opacity: 0; transform: scale(0.92) translateY(8px); }
+}
 </style>
 </head>
 <body>
 <div id="stage">
+
+  <!-- ══ SPLASH SCREEN ══ -->
+  <div id="splash">
+    <div class="splash-logo">
+      <svg width="80" height="80" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+        <rect x="3" y="3" width="194" height="194" rx="42" fill="#0F2940" stroke="#00B4A6" stroke-width="6"/>
+        <polygon points="92,146 30,146 55,76" fill="#F4A300"/>
+        <polygon points="108,146 168,146 142,96" fill="#F4A300"/>
+        <polygon points="100,50 124,106 124,160 76,160 76,106" fill="#00B4A6"/>
+        <rect x="28" y="141" width="144" height="22" rx="6" fill="#F4A300"/>
+        <circle cx="55" cy="76" r="9" fill="#FFFFFF"/>
+        <circle cx="100" cy="50" r="10" fill="#FFFFFF"/>
+        <circle cx="142" cy="96" r="8" fill="#FFFFFF"/>
+        <circle cx="100" cy="50" r="16" fill="none" stroke="#00B4A6" stroke-width="3" stroke-dasharray="4 3"/>
+      </svg>
+    </div>
+    <div class="splash-title">OwnIt</div>
+    <div class="splash-sub">Custom Business Tracker</div>
+    <button class="splash-play-btn" onclick="launchShow()">▶ &nbsp;Watch Demo</button>
+  </div>
 
   <!-- ══ PHASE A: TITLE CARD ══ -->
   <div id="phase-title">
@@ -1092,6 +1173,14 @@ function resetAll() {
 }
 
 /* ── MAIN SHOW ── */
+async function launchShow() {
+  const splash = $('splash');
+  splash.classList.add('fadeout');
+  setTimeout(() => { splash.style.display = 'none'; }, 650);
+  await sleep(200);
+  startShow();
+}
+
 async function startShow() {
   animOn = true;
   resetAll();
@@ -1285,7 +1374,10 @@ async function startShow() {
   setLabel('');
 }
 
-window.addEventListener('load', () => setTimeout(startShow, 400));
+window.addEventListener('load', () => {
+  // Show splash screen — wait for tap to start
+  document.getElementById('splash').style.display = 'flex';
+});
 </script>
 
 <audio id="bg-music" preload="auto">
