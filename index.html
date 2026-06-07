@@ -4,1442 +4,631 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>OwnIt — Your Custom Business Expense Tracker</title>
-<meta name="description" content="A mobile-first custom business expense tracker built for entrepreneurs. Track income, expenses, events and taxes across all your businesses. Starting at $350.">
+<meta name="description" content="A mobile-first custom business expense tracker built for entrepreneurs. Track income, expenses and taxes across all your businesses. Plans from $75.">
 <link rel="icon" type="image/svg+xml" href="OwnIt_Icon.svg">
 <link rel="alternate icon" type="image/png" href="OwnIt_Icon.png">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
-<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,900;1,700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,700;0,800;0,900;1,600;1,700;1,800&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
 <style>
-/* ═══════════════════════════════════
-   TOKENS
-═══════════════════════════════════ */
-:root {
-  --navy:    #0D1B2A;
-  --navy2:   #0F2940;
-  --navy3:   #1A2E42;
-  --teal:    #00B4A6;
-  --teal-lt: #A8DCDA;
-  --teal-dk: #007A74;
-  --gold:    #F4A300;
-  --gold-lt: #FDE8B0;
-  --white:   #FFFFFF;
-  --off:     #F0F8FF;
-  --muted:   #6B7C93;
-  --border:  #D6EEF0;
-  --green:   #1DB954;
-  --red:     #E53935;
-  --blue:    #0070E0;
-  --r:       14px;
-  --r-lg:    24px;
+/* ═══════ TOKENS — CREAM & CALM ═══════ */
+:root{
+  --navy:#0D1B2A; --navy2:#0F2940; --navy-dk:#0A1622;
+  --teal:#00B4A6; --teal-dk:#007A74; --teal-lt:#A8DCDA; --teal-tint:#E7F4F2;
+  --gold:#F4A300; --gold-dk:#C77F00; --gold-soft:#FBEED0;
+  --cream:#FAF6EE; --warm:#FCFBF7; --white:#FFFFFF;
+  --muted:#5C6B79; --muted2:#8493A1; --line:#E9E3D7; --line-dk:rgba(255,255,255,.12);
+  --r:14px; --r-lg:22px;
 }
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+html{scroll-behavior:smooth;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--navy);line-height:1.6;overflow-x:hidden;-webkit-font-smoothing:antialiased;}
+.serif{font-family:'Playfair Display',serif;}
+a{text-decoration:none;}
 
-*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+/* ═══════ NAV ═══════ */
+nav{position:fixed;top:0;left:0;right:0;z-index:100;height:66px;padding:0 5vw;display:flex;align-items:center;justify-content:space-between;background:rgba(250,246,238,.82);backdrop-filter:blur(16px);border-bottom:1px solid rgba(13,27,42,.07);transition:background .3s;}
+.nav-logo{display:flex;align-items:center;gap:9px;font-family:'Playfair Display',serif;font-size:21px;font-weight:900;color:var(--navy);letter-spacing:.2px;}
+.nav-logo .it{color:var(--teal-dk);}
+.nav-links{display:flex;align-items:center;gap:28px;list-style:none;}
+.nav-links a{font-size:13.5px;font-weight:500;color:var(--navy);opacity:.78;transition:opacity .2s,color .2s;letter-spacing:.2px;}
+.nav-links a:hover{opacity:1;color:var(--teal-dk);}
+.nav-cta{display:inline-flex;align-items:center;background:var(--gold);color:var(--navy)!important;opacity:1!important;padding:9px 18px;border-radius:99px;font-weight:700!important;font-size:13px!important;letter-spacing:.2px;box-shadow:0 6px 18px -8px rgba(244,163,0,.8);transition:transform .18s,box-shadow .18s;}
+.nav-cta:hover{transform:translateY(-1px);box-shadow:0 10px 24px -8px rgba(244,163,0,.9);}
+@media(max-width:780px){.nav-links a:not(.nav-cta){display:none;}}
 
-html { scroll-behavior: smooth; }
+/* ═══════ SHARED SECTION ═══════ */
+section{position:relative;}
+.inner{max-width:1120px;margin:0 auto;padding:104px 5vw;}
+.label{font-size:11px;font-weight:700;letter-spacing:2.6px;text-transform:uppercase;color:var(--teal-dk);margin-bottom:16px;display:flex;align-items:center;gap:11px;}
+.label::before{content:"";width:26px;height:1.5px;background:var(--teal-dk);opacity:.55;}
+.label.center{justify-content:center;}
+.label.center::before{display:none;}
+h2{font-family:'Playfair Display',serif;font-size:clamp(32px,5vw,52px);font-weight:900;line-height:1.04;letter-spacing:-.8px;margin-bottom:16px;color:var(--navy);}
+h2 em{font-style:italic;color:var(--teal-dk);}
+.desc{font-size:16.5px;color:var(--muted);max-width:540px;line-height:1.7;font-weight:300;}
+.desc .hl{color:var(--gold-dk);font-weight:600;}
+.dark h2,.dark .label{color:#fff;}
+.dark .label{color:var(--teal-lt);}
+.dark .desc{color:rgba(255,255,255,.78);}
 
-body {
-  font-family: 'DM Sans', sans-serif;
-  background: var(--teal-dk);
-  color: var(--white);
-  overflow-x: hidden;
-  line-height: 1.6;
-}
+/* ═══════ HERO ═══════ */
+.hero{min-height:96vh;display:flex;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:120px 5vw 90px;position:relative;overflow:hidden;background:var(--cream);}
+.hero::before{content:"";position:absolute;inset:0;background:
+  radial-gradient(ellipse 60% 50% at 50% 8%,rgba(0,180,166,.10) 0%,transparent 60%),
+  radial-gradient(ellipse 50% 40% at 85% 90%,rgba(244,163,0,.09) 0%,transparent 60%);pointer-events:none;}
+.hero-in{position:relative;z-index:1;max-width:820px;}
+.hero-logo{display:block;margin:0 auto 26px;filter:drop-shadow(0 14px 30px rgba(13,27,42,.18));}
+.badge{display:inline-flex;align-items:center;gap:8px;background:rgba(0,180,166,.1);border:1px solid rgba(0,180,166,.22);color:var(--teal-dk);font-size:11px;font-weight:700;letter-spacing:1.8px;text-transform:uppercase;padding:7px 15px;border-radius:99px;margin-bottom:26px;}
+.badge .d{width:6px;height:6px;border-radius:50%;background:var(--teal);}
+h1{font-family:'Playfair Display',serif;font-size:clamp(50px,8.5vw,92px);font-weight:900;line-height:.97;letter-spacing:-1.5px;}
+h1 em{font-style:italic;color:var(--teal-dk);display:inline-block;}
+.hero-sub{font-size:clamp(16px,2vw,19px);color:var(--muted);font-weight:300;max-width:520px;margin:22px auto 38px;line-height:1.7;}
+.hero-btns{display:flex;gap:13px;justify-content:center;flex-wrap:wrap;}
+.btn-primary{display:inline-flex;align-items:center;gap:8px;background:var(--gold);color:var(--navy);font-size:14.5px;font-weight:700;padding:15px 32px;border-radius:99px;letter-spacing:.2px;box-shadow:0 12px 30px -10px rgba(244,163,0,.85);transition:transform .18s,box-shadow .18s;}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 18px 40px -12px rgba(244,163,0,.95);}
+.btn-secondary{display:inline-flex;align-items:center;gap:8px;background:transparent;color:var(--navy);font-size:14.5px;font-weight:600;padding:15px 28px;border-radius:99px;border:1.5px solid rgba(13,27,42,.18);transition:all .18s;}
+.btn-secondary:hover{border-color:var(--teal-dk);color:var(--teal-dk);}
+.dark .btn-secondary{color:#fff;border-color:rgba(255,255,255,.25);}
+.dark .btn-secondary:hover{border-color:var(--teal-lt);color:var(--teal-lt);}
+.hero-stats{display:flex;gap:40px;justify-content:center;flex-wrap:wrap;margin-top:60px;padding-top:42px;border-top:1px solid rgba(13,27,42,.12);}
+.stat{text-align:center;}
+.stat .v{font-family:'Playfair Display',serif;font-size:34px;font-weight:900;color:var(--navy);line-height:1;}
+.stat .v span{color:var(--teal-dk);}
+.stat .k{font-size:11px;color:var(--muted2);letter-spacing:1.2px;text-transform:uppercase;font-weight:600;margin-top:7px;}
+@keyframes fade-up{from{opacity:0;transform:translateY(22px);}to{opacity:1;transform:translateY(0);}}
 
-/* ═══════════════════════════════════
-   NOISE TEXTURE OVERLAY
-═══════════════════════════════════ */
-body::before {
-  content: '';
-  position: fixed;
-  inset: 0;
-  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.03'/%3E%3C/svg%3E");
-  pointer-events: none;
-  z-index: 0;
-  opacity: 0.4;
-}
+/* ═══════ WHAT IS IT (navy band) ═══════ */
+.what{background:var(--navy);}
+.what-grid{display:grid;grid-template-columns:1fr 1fr;gap:62px;align-items:center;margin-top:54px;}
+@media(max-width:820px){.what-grid{grid-template-columns:1fr;gap:44px;}}
+.what-text p{font-size:16px;color:rgba(255,255,255,.8);line-height:1.85;margin-bottom:18px;font-weight:300;}
+.what-text strong{color:#fff;font-weight:600;}
+.what-text .hl{color:var(--gold);font-weight:600;}
+.pills{display:flex;flex-wrap:wrap;gap:9px;margin-top:26px;}
+.pill{background:rgba(255,255,255,.06);border:1px solid rgba(255,255,255,.14);color:rgba(255,255,255,.9);font-size:12.5px;font-weight:600;padding:7px 15px;border-radius:99px;letter-spacing:.2px;}
 
-/* ═══════════════════════════════════
-   NAV
-═══════════════════════════════════ */
-nav {
-  position: fixed;
-  top: 0; left: 0; right: 0;
-  z-index: 100;
-  padding: 0 5vw;
-  height: 64px;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  background: rgba(168,220,218,0.95);
-  backdrop-filter: blur(16px);
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-  transition: background 0.3s;
-}
-.nav-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 22px;
-  font-weight: 900;
-  color: var(--navy);
-  text-decoration: none;
-  letter-spacing: 0.3px;
-}
-.nav-logo span { color: var(--teal); }
-.nav-links {
-  display: flex;
-  align-items: center;
-  gap: 28px;
-  list-style: none;
-}
-.nav-links a {
-  font-size: 13px;
-  font-weight: 500;
-  color: rgba(255,255,255,0.85);
-  text-decoration: none;
-  transition: color 0.2s;
-  letter-spacing: 0.3px;
-}
-.nav-links a:hover { color: var(--teal); }
-.nav-cta {
-  background: var(--teal) !important;
-  color: var(--navy) !important;
-  padding: 8px 18px;
-  border-radius: 99px;
-  font-weight: 700 !important;
-  font-size: 12px !important;
-  letter-spacing: 0.5px;
-}
-.nav-cta:hover { background: var(--teal-dk) !important; color: var(--white) !important; }
+/* phone */
+.phone{background:var(--navy2);border-radius:42px;border:2px solid rgba(255,255,255,.1);box-shadow:0 0 0 1px rgba(0,0,0,.5),0 44px 90px -30px rgba(0,0,0,.7),inset 0 1px 0 rgba(255,255,255,.06);padding:42px 20px 24px;max-width:268px;margin:0 auto;position:relative;}
+.phone::before{content:"";position:absolute;top:13px;left:50%;transform:translateX(-50%);width:74px;height:18px;background:#0a121d;border-radius:0 0 14px 14px;}
+.mh{background:rgba(0,30,28,.7);border-radius:12px 12px 0 0;padding:11px 13px;display:flex;justify-content:space-between;align-items:center;border-bottom:1px solid rgba(255,255,255,.08);}
+.mh .t{font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:#fff;}
+.dot{width:7px;height:7px;border-radius:50%;background:#1DB954;box-shadow:0 0 7px #1DB954;}
+.mtabs{display:flex;gap:5px;padding:9px 13px;background:rgba(10,21,37,.85);}
+.mtab{display:flex;align-items:center;gap:5px;flex-shrink:0;font-size:8.5px;font-weight:600;padding:5px 9px;border-radius:7px;color:var(--muted2);border:1px solid rgba(255,255,255,.08);}
+.mtab .pd{width:5px;height:5px;border-radius:50%;}
+.mtab.on{background:var(--teal);color:#fff;border-color:var(--teal);}
+.mtab.on .pd{background:#fff;}
+.mbody{padding:11px 13px;background:#0c2421;border-radius:0 0 12px 12px;}
+.mcard{background:rgba(255,255,255,.05);border-radius:9px;padding:9px 11px;margin-bottom:7px;}
+.mlabel{font-size:7.5px;color:var(--muted2);text-transform:uppercase;letter-spacing:.6px;margin-bottom:3px;}
+.mval{font-size:16px;font-weight:700;color:#fff;}
+.anim-field{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:8px;padding:6px 9px;transition:all .4s ease;}
+.sc-row{display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,.06);transition:opacity .3s ease;}
 
-@media (max-width: 640px) {
-  .nav-links { display: none; }
-}
+/* ═══════ FEATURES (warm white) ═══════ */
+.features{background:var(--warm);}
+.feat-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px;margin-top:54px;}
+.fcard{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);padding:30px 28px;transition:transform .25s,box-shadow .25s,border-color .25s;}
+.fcard:hover{transform:translateY(-4px);box-shadow:0 24px 50px -28px rgba(13,27,42,.4);border-color:rgba(0,180,166,.4);}
+.fcard .ic{width:42px;height:42px;margin-bottom:18px;}
+.fcard h4{font-size:16px;font-weight:700;color:var(--navy);margin-bottom:7px;}
+.fcard p{font-size:13.5px;color:var(--muted);line-height:1.65;font-weight:300;}
 
-/* ═══════════════════════════════════
-   HERO
-═══════════════════════════════════ */
-.hero {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  padding: 100px 5vw 80px;
-  position: relative;
-  overflow: hidden;
-}
+/* ═══════ HOW (teal tint) ═══════ */
+.how{background:var(--teal-tint);}
+.steps{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));margin-top:54px;position:relative;}
+.steps::before{content:"";position:absolute;top:32px;left:8%;right:8%;height:1.5px;background:repeating-linear-gradient(90deg,rgba(0,122,116,.35) 0 8px,transparent 8px 16px);pointer-events:none;}
+.step{padding:30px 22px;text-align:center;position:relative;}
+.step-num{width:64px;height:64px;border-radius:50%;background:var(--white);border:1.5px solid var(--teal);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:24px;font-weight:900;color:var(--teal-dk);margin:0 auto 20px;position:relative;z-index:1;box-shadow:0 10px 26px -12px rgba(0,180,166,.7);}
+.step h4{font-size:15px;font-weight:700;margin-bottom:9px;color:var(--navy);}
+.step p{font-size:13px;color:var(--muted);line-height:1.6;font-weight:300;}
 
-/* Mesh gradient background */
-.hero::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 20% 20%, rgba(0,180,166,0.2) 0%, transparent 60%),
-    radial-gradient(ellipse 60% 80% at 80% 80%, rgba(244,163,0,0.1) 0%, transparent 60%),
-    radial-gradient(ellipse 50% 50% at 50% 50%, rgba(168,220,218,0.3) 0%, transparent 100%);
-  pointer-events: none;
-}
+/* ═══════ PRICING (cream) ═══════ */
+.pricing{background:var(--cream);}
+.pricing .ph{text-align:center;max-width:640px;margin:0 auto 52px;}
+.pricing .ph .label{justify-content:center;}.pricing .ph .label::before{display:none;}
+.pricing .ph .desc{margin:14px auto 0;text-align:center;}
+.tiers{display:grid;grid-template-columns:repeat(3,1fr);gap:20px;align-items:stretch;}
+@media(max-width:860px){.tiers{grid-template-columns:1fr;max-width:440px;margin:0 auto;}}
+.tier{background:var(--white);border:1.5px solid var(--line);border-radius:var(--r-lg);padding:34px 28px 30px;display:flex;flex-direction:column;position:relative;}
+.tier.teal{border-color:var(--teal);box-shadow:0 30px 60px -34px rgba(0,180,166,.6);}
+.tier.gold{border-color:var(--gold);box-shadow:0 30px 60px -34px rgba(244,163,0,.55);}
+.tbadge{position:absolute;top:-13px;left:50%;transform:translateX(-50%);font-size:10px;font-weight:800;letter-spacing:1.4px;text-transform:uppercase;padding:6px 15px;border-radius:99px;white-space:nowrap;}
+.tbadge.teal{background:var(--teal);color:#fff;}
+.tbadge.gold{background:var(--gold);color:var(--navy);}
+.tname{font-family:'Playfair Display',serif;font-weight:800;font-size:24px;margin-bottom:4px;}
+.twho{font-size:13px;color:var(--muted);min-height:36px;line-height:1.4;}
+.tprice{display:flex;align-items:baseline;gap:3px;margin:16px 0 4px;}
+.tprice .cur{font-family:'Playfair Display',serif;font-weight:800;font-size:26px;color:var(--teal-dk);}
+.tprice .amt{font-family:'Playfair Display',serif;font-weight:900;font-size:52px;line-height:1;color:var(--navy);}
+.tprice .plus{font-family:'Playfair Display',serif;font-weight:800;font-size:26px;color:var(--navy);}
+.tonce{font-size:11px;font-weight:600;letter-spacing:1px;text-transform:uppercase;color:var(--muted2);}
+.tbtn{display:block;margin-top:24px;text-align:center;padding:13px;border-radius:12px;font-size:13.5px;font-weight:700;letter-spacing:.2px;transition:transform .16s,box-shadow .16s;}
+.tbtn.teal{background:var(--teal);color:#fff;box-shadow:0 10px 24px -10px rgba(0,180,166,.8);}
+.tbtn.gold{background:var(--gold);color:var(--navy);box-shadow:0 10px 24px -10px rgba(244,163,0,.8);}
+.tbtn.ghost{background:var(--white);color:var(--navy);border:1.5px solid var(--line);}
+.tbtn:hover{transform:translateY(-2px);}
+.tpts{list-style:none;margin-top:24px;display:flex;flex-direction:column;gap:10px;}
+.tpts li{display:flex;gap:10px;font-size:13px;color:var(--navy);line-height:1.45;align-items:flex-start;}
+.tpts li svg{width:17px;height:17px;flex-shrink:0;margin-top:1px;}
 
-/* Decorative ring */
-.hero::after {
-  content: '';
-  position: absolute;
-  width: 600px; height: 600px;
-  border-radius: 50%;
-  border: 1px solid rgba(0,180,166,0.08);
-  top: 50%; left: 50%;
-  transform: translate(-50%, -50%);
-  pointer-events: none;
-  animation: ring-pulse 4s ease-in-out infinite;
-}
-@keyframes ring-pulse {
-  0%, 100% { transform: translate(-50%, -50%) scale(1); opacity: 0.5; }
-  50% { transform: translate(-50%, -50%) scale(1.05); opacity: 1; }
-}
+.compare{margin-top:44px;background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);overflow:hidden;}
+.cscroll{overflow-x:auto;}
+table.cmp{width:100%;border-collapse:collapse;min-width:640px;}
+table.cmp thead th{background:var(--navy);color:#fff;font-size:12.5px;font-weight:700;text-align:center;padding:16px 12px;}
+table.cmp thead th:first-child{text-align:left;padding-left:24px;}
+table.cmp thead th .sub{display:block;font-size:10px;font-weight:500;opacity:.6;margin-top:3px;letter-spacing:1px;text-transform:uppercase;}
+table.cmp thead th.tealcol{background:#0a2a3f;}
+table.cmp tbody td{font-size:13px;text-align:center;padding:13px 12px;border-bottom:1px solid #F1ECE1;color:var(--navy);}
+table.cmp tbody td:first-child{text-align:left;padding-left:24px;font-weight:500;}
+table.cmp tbody tr:nth-child(even) td{background:#FCFAF4;}
+table.cmp tbody tr:last-child td{border-bottom:none;}
+.ck svg{width:19px;height:19px;}
+.dash{display:inline-block;width:14px;height:2px;border-radius:2px;background:#CFD6DC;}
+.ctxt{font-size:12px;font-weight:600;color:var(--teal-dk);}
+.cmut{font-size:12px;color:var(--muted);}
+.addons{margin-top:26px;background:var(--teal-tint);border:1px solid rgba(0,180,166,.22);border-radius:var(--r-lg);padding:30px 34px;}
+.addons h4{font-size:11px;font-weight:800;letter-spacing:2px;text-transform:uppercase;color:var(--teal-dk);margin-bottom:18px;}
+.addons-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+@media(max-width:760px){.addons-grid{grid-template-columns:1fr;}}
+.addon{display:flex;flex-direction:column;}
+.addon .t{font-family:'Playfair Display',serif;font-weight:800;font-size:17px;color:var(--navy);}
+.addon .pr{font-size:12px;font-weight:700;color:var(--teal-dk);margin:3px 0 5px;}
+.addon .d{font-size:12.5px;color:var(--muted);line-height:1.55;}
 
-.hero-content { position: relative; z-index: 1; max-width: 760px; }
+/* ═══════ CUSTOMIZE (warm white) ═══════ */
+.custom{background:var(--warm);}
+.custom-grid{display:grid;grid-template-columns:1fr 1fr;gap:60px;align-items:center;margin-top:54px;}
+@media(max-width:820px){.custom-grid{grid-template-columns:1fr;}}
+.citems{display:flex;flex-direction:column;gap:14px;}
+.citem{display:flex;gap:16px;align-items:flex-start;background:var(--white);border:1px solid var(--line);border-radius:var(--r);padding:20px 22px;transition:border-color .25s,transform .25s;}
+.citem:hover{border-color:rgba(0,180,166,.4);transform:translateX(3px);}
+.citem .ic{width:34px;height:34px;flex-shrink:0;margin-top:2px;}
+.citem h4{font-size:15px;font-weight:700;margin-bottom:4px;color:var(--navy);}
+.citem p{font-size:12.5px;color:var(--muted);line-height:1.6;font-weight:300;}
+.palette{background:var(--white);border:1px solid var(--line);border-radius:var(--r-lg);padding:26px;box-shadow:0 24px 50px -34px rgba(13,27,42,.4);}
+.palette .pcap{font-size:10px;color:var(--muted2);letter-spacing:1px;text-transform:uppercase;font-weight:700;margin-bottom:14px;}
+.prow{display:flex;align-items:center;gap:14px;margin-bottom:12px;}
+.pname{font-size:13px;font-weight:700;color:var(--navy);width:110px;flex-shrink:0;}
+.pswatch{display:flex;gap:7px;}
+.pdot{width:28px;height:28px;border-radius:50%;box-shadow:inset 0 0 0 1px rgba(0,0,0,.08);}
+.ptag{font-family:'Playfair Display',serif;font-style:italic;font-size:15px;color:var(--muted);text-align:center;padding-top:12px;margin-top:4px;border-top:1px solid var(--line);}
 
-.hero-badge {
-  display: inline-flex;
-  align-items: center;
-  gap: 6px;
-  background: rgba(0,0,0,0.08);
-  border: 1px solid rgba(255,255,255,0.3);
-  color: var(--white);
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 6px 14px;
-  border-radius: 99px;
-  margin-bottom: 28px;
-  animation: fade-up 0.6s ease both;
-}
-.hero-badge::before { content: '✦'; font-size: 8px; }
+/* ═══════ CTA (navy band) ═══════ */
+.cta{background:var(--navy);text-align:center;position:relative;overflow:hidden;}
+.cta::before{content:"";position:absolute;inset:0;background:radial-gradient(ellipse 70% 60% at 50% 0%,rgba(0,180,166,.16) 0%,transparent 70%);pointer-events:none;}
+.cta .inner{position:relative;z-index:1;}
+.cta h2{margin:0 auto 16px;max-width:600px;}
+.cta .desc{margin:0 auto 34px;text-align:center;}
+.cta-note{font-size:13px;color:rgba(255,255,255,.6);margin-top:20px;}
 
-h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(52px, 9vw, 96px);
-  font-weight: 900;
-  line-height: 0.95;
-  letter-spacing: -1px;
-  margin-bottom: 10px;
-  animation: fade-up 0.6s ease 0.1s both;
-}
-h1 .line2 {
-  display: block;
-  color: var(--teal);
-  font-style: italic;
-}
+/* ═══════ FOOTER ═══════ */
+footer{background:var(--navy-dk);padding:46px 5vw 30px;}
+.foot-top{max-width:1120px;margin:0 auto;display:flex;align-items:flex-start;justify-content:space-between;flex-wrap:wrap;gap:24px;}
+.foot-logo{display:flex;align-items:center;gap:9px;font-family:'Playfair Display',serif;font-size:20px;font-weight:900;color:#fff;}
+.foot-logo .it{color:var(--teal-lt);}
+.foot-tag{font-size:12.5px;color:rgba(255,255,255,.5);margin-top:8px;}
+.foot-links{display:flex;gap:24px;list-style:none;flex-wrap:wrap;}
+.foot-links a{font-size:13px;color:rgba(255,255,255,.62);transition:color .2s;}
+.foot-links a:hover{color:var(--teal-lt);}
+.foot-copy{max-width:1120px;margin:28px auto 0;padding-top:22px;border-top:1px solid rgba(255,255,255,.08);font-size:12px;color:rgba(255,255,255,.4);text-align:center;}
 
-.hero-sub {
-  font-size: clamp(15px, 2vw, 18px);
-  color: rgba(13,27,42,0.7);
-  font-weight: 300;
-  max-width: 520px;
-  margin: 18px auto 36px;
-  line-height: 1.7;
-  animation: fade-up 0.6s ease 0.2s both;
-}
-
-.hero-btns {
-  display: flex;
-  gap: 12px;
-  justify-content: center;
-  flex-wrap: wrap;
-  animation: fade-up 0.6s ease 0.3s both;
-}
-.btn-primary {
-  background: var(--gold);
-  color: var(--navy);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 700;
-  padding: 14px 32px;
-  border-radius: 99px;
-  text-decoration: none;
-  letter-spacing: 0.3px;
-  box-shadow: 0 8px 32px rgba(244,163,0,0.3);
-  transition: transform 0.2s, box-shadow 0.2s;
-  display: inline-flex; align-items: center; gap: 8px;
-}
-.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 12px 40px rgba(244,163,0,0.4); }
-.btn-secondary {
-  background: transparent;
-  color: var(--white);
-  font-family: 'DM Sans', sans-serif;
-  font-size: 14px;
-  font-weight: 600;
-  padding: 14px 28px;
-  border-radius: 99px;
-  text-decoration: none;
-  border: 1.5px solid rgba(255,255,255,0.2);
-  transition: all 0.2s;
-  display: inline-flex; align-items: center; gap: 8px;
-}
-.btn-secondary:hover { border-color: var(--teal); color: var(--teal); }
-
-/* Hero stats row */
-.hero-stats {
-  display: flex;
-  gap: 32px;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: 56px;
-  padding-top: 40px;
-  border-top: 1px solid rgba(13,27,42,0.15);
-  animation: fade-up 0.6s ease 0.4s both;
-}
-.stat { text-align: center; }
-.stat-val {
-  font-family: 'Playfair Display', serif;
-  font-size: 32px;
-  font-weight: 900;
-  color: var(--navy);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.stat-val span { color: var(--teal); }
-.stat-lbl { font-size: 11px; color: rgba(255,255,255,0.7); letter-spacing: 1px; text-transform: uppercase; font-weight: 500; }
-
-@keyframes fade-up {
-  from { opacity: 0; transform: translateY(24px); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-
-/* ═══════════════════════════════════
-   SECTION SHARED
-═══════════════════════════════════ */
-section { position: relative; z-index: 1; }
-
-.section-inner {
-  max-width: 1100px;
-  margin: 0 auto;
-  padding: 100px 5vw;
-}
-
-.section-label {
-  font-size: 10px;
-  font-weight: 700;
-  letter-spacing: 3px;
-  text-transform: uppercase;
-  color: var(--navy);
-  opacity: 0.6;
-  margin-bottom: 14px;
-  display: flex;
-  align-items: center;
-  gap: 10px;
-}
-.section-label::before { content: ''; display: block; width: 24px; height: 1.5px; background: var(--navy); opacity: 0.4; }
-
-h2 {
-  font-family: 'Playfair Display', serif;
-  font-size: clamp(32px, 5vw, 52px);
-  font-weight: 900;
-  line-height: 1.1;
-  letter-spacing: -0.5px;
-  margin-bottom: 16px;
-  color: var(--navy);
-}
-.section-desc {
-  font-size: 16px;
-  color: rgba(255,255,255,0.8);
-  max-width: 520px;
-  line-height: 1.7;
-  font-weight: 300;
-}
-
-/* ═══════════════════════════════════
-   WHAT IS IT
-═══════════════════════════════════ */
-.what-section { background: #A8DCDA; }
-
-.what-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: center;
-  margin-top: 56px;
-}
-@media (max-width: 768px) { .what-grid { grid-template-columns: 1fr; gap: 40px; } }
-
-.what-text p {
-  font-size: 16px;
-  color: rgba(13,27,42,0.75);
-  line-height: 1.8;
-  margin-bottom: 20px;
-  font-weight: 300;
-}
-.what-text p strong { color: var(--navy); font-weight: 600; }
-
-.what-pills {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 8px;
-  margin-top: 28px;
-}
-.pill {
-  background: rgba(0,0,0,0.08);
-  border: 1px solid rgba(255,255,255,0.25);
-  color: var(--white);
-  font-size: 12px;
-  font-weight: 600;
-  padding: 6px 14px;
-  border-radius: 99px;
-  letter-spacing: 0.3px;
-}
-
-/* Phone mockup */
-.phone-mock {
-  background: #0D1B2A;
-  border-radius: 42px;
-  border: 2px solid rgba(255,255,255,0.1);
-  box-shadow:
-    0 0 0 1px rgba(0,0,0,0.5),
-    0 40px 80px rgba(0,0,0,0.5),
-    inset 0 1px 0 rgba(255,255,255,0.06);
-  padding: 40px 20px 24px;
-  max-width: 260px;
-  margin: 0 auto;
-  position: relative;
-}
-.phone-mock::before {
-  content: '';
-  position: absolute;
-  top: 12px; left: 50%;
-  transform: translateX(-50%);
-  width: 72px; height: 18px;
-  background: #111827;
-  border-radius: 0 0 14px 14px;
-  border: 1.5px solid rgba(255,255,255,0.06);
-  border-top: none;
-}
-.mock-header {
-  background: rgba(0,30,28,0.9);
-  border-radius: 12px 12px 0 0;
-  padding: 10px 12px;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  border-bottom: 1px solid rgba(255,255,255,0.07);
-}
-.mock-title { font-family: 'Playfair Display', serif; font-size: 13px; font-weight: 700; }
-.mock-dot { width: 7px; height: 7px; border-radius: 50%; background: var(--green); box-shadow: 0 0 6px var(--green); }
-.mock-tabs {
-  display: flex;
-  gap: 4px;
-  padding: 8px 12px;
-  background: rgba(10,21,37,0.8);
-  overflow: hidden;
-}
-.mock-tab {
-  flex-shrink: 0;
-  font-size: 8px;
-  font-weight: 600;
-  padding: 4px 8px;
-  border-radius: 6px;
-  color: var(--muted);
-  border: 1px solid rgba(255,255,255,0.07);
-}
-.mock-tab.on { background: var(--teal); color: var(--white); border-color: var(--teal); font-size: 8px; }
-.mock-body { padding: 10px 12px; background: #0D2421; border-radius: 0 0 12px 12px; }
-.mock-card {
-  background: rgba(255,255,255,0.05);
-  border-radius: 8px;
-  padding: 8px 10px;
-  margin-bottom: 6px;
-}
-.mock-label { font-size: 7px; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 2px; }
-.mock-val { font-size: 16px; font-weight: 700; }
-
-/* ═══════════════════════════════════
-   FEATURES
-═══════════════════════════════════ */
-.features-section { background: var(--teal-dk); }
-
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 16px;
-  margin-top: 56px;
-}
-
-.feature-card {
-  background: rgba(0,100,94,0.12);
-  border: 1px solid rgba(255,255,255,0.12);
-  border-radius: var(--r-lg);
-  padding: 28px;
-  transition: border-color 0.3s, transform 0.3s, box-shadow 0.3s;
-  position: relative;
-  overflow: hidden;
-}
-.feature-card::before {
-  content: '';
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 2px;
-  background: linear-gradient(90deg, var(--teal), transparent);
-  opacity: 0;
-  transition: opacity 0.3s;
-}
-.feature-card:hover {
-  border-color: rgba(0,180,166,0.25);
-  transform: translateY(-3px);
-  box-shadow: 0 16px 48px rgba(0,0,0,0.3);
-}
-.feature-card:hover::before { opacity: 1; }
-.feature-icon {
-  font-size: 28px;
-  margin-bottom: 14px;
-  display: block;
-}
-.feature-title {
-  font-size: 15px;
-  font-weight: 700;
-  color: var(--navy);
-  margin-bottom: 6px;
-  letter-spacing: 0.2px;
-}
-.feature-desc {
-  font-size: 13px;
-  color: rgba(255,255,255,0.85);
-  line-height: 1.6;
-  font-weight: 300;
-}
-
-/* ═══════════════════════════════════
-   HOW IT WORKS
-═══════════════════════════════════ */
-.how-section {
-  background: #A8DCDA;
-  overflow: hidden;
-}
-
-.steps-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
-  gap: 0;
-  margin-top: 56px;
-  position: relative;
-}
-.steps-grid::before {
-  content: '';
-  position: absolute;
-  top: 28px; left: 0; right: 0;
-  height: 1px;
-  background: linear-gradient(90deg, transparent, rgba(13,27,42,0.2), transparent);
-  pointer-events: none;
-}
-
-.step {
-  padding: 28px 24px;
-  position: relative;
-  text-align: center;
-}
-.step-num {
-  width: 56px; height: 56px;
-  border-radius: 50%;
-  background: var(--teal-dk);
-  border: 2px solid var(--teal);
-  display: flex; align-items: center; justify-content: center;
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--teal);
-  margin: 0 auto 18px;
-  position: relative;
-  z-index: 1;
-  box-shadow: 0 0 20px rgba(0,180,166,0.2);
-}
-.step-title {
-  font-size: 14px;
-  font-weight: 700;
-  margin-bottom: 8px;
-  color: var(--navy);
-}
-.step-desc {
-  font-size: 12px;
-  color: rgba(13,27,42,0.65);
-  line-height: 1.6;
-  font-weight: 300;
-}
-
-/* ═══════════════════════════════════
-   PRICING
-═══════════════════════════════════ */
-.pricing-section { background: var(--teal-dk); }
-
-.pricing-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 24px;
-  margin-top: 56px;
-  align-items: start;
-}
-@media (max-width: 680px) { .pricing-grid { grid-template-columns: 1fr; } }
-
-.price-card {
-  background: rgba(0,100,94,0.12);
-  border: 1px solid rgba(255,255,255,0.08);
-  border-radius: var(--r-lg);
-  padding: 36px;
-  position: relative;
-  overflow: hidden;
-}
-.price-card.featured {
-  border-color: var(--gold);
-  box-shadow: 0 0 48px rgba(244,163,0,0.12);
-}
-.price-card.featured::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background: radial-gradient(ellipse at top, rgba(244,163,0,0.06) 0%, transparent 70%);
-  pointer-events: none;
-}
-
-.price-badge {
-  display: inline-block;
-  background: var(--gold);
-  color: var(--navy);
-  font-size: 9px;
-  font-weight: 700;
-  letter-spacing: 2px;
-  text-transform: uppercase;
-  padding: 4px 12px;
-  border-radius: 99px;
-  margin-bottom: 16px;
-}
-
-.price-name {
-  font-size: 14px;
-  font-weight: 600;
-  color: rgba(13,27,42,0.7);
-  margin-bottom: 8px;
-  letter-spacing: 0.5px;
-  text-transform: uppercase;
-}
-.price-amount {
-  font-family: 'Playfair Display', serif;
-  font-size: 56px;
-  font-weight: 900;
-  color: var(--white);
-  line-height: 1;
-  margin-bottom: 4px;
-}
-.price-amount sup {
-  font-size: 24px;
-  vertical-align: super;
-  margin-right: 2px;
-  color: var(--gold);
-}
-.price-sub {
-  font-size: 12px;
-  color: rgba(13,27,42,0.55);
-  margin-bottom: 28px;
-}
-
-.price-divider {
-  height: 1px;
-  background: rgba(13,27,42,0.12);
-  margin: 24px 0;
-}
-
-.price-features { list-style: none; }
-.price-features li {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  font-size: 13px;
-  color: rgba(13,27,42,0.8);
-  margin-bottom: 10px;
-  font-weight: 400;
-  line-height: 1.5;
-}
-.price-features li::before {
-  content: '✓';
-  color: var(--teal);
-  font-weight: 700;
-  flex-shrink: 0;
-  margin-top: 1px;
-}
-
-.price-btn {
-  display: block;
-  text-align: center;
-  margin-top: 28px;
-  padding: 13px;
-  border-radius: 10px;
-  font-size: 13px;
-  font-weight: 700;
-  text-decoration: none;
-  letter-spacing: 0.3px;
-  transition: all 0.2s;
-}
-.price-btn.primary {
-  background: var(--gold);
-  color: var(--navy);
-  box-shadow: 0 4px 20px rgba(244,163,0,0.25);
-}
-.price-btn.primary:hover { transform: translateY(-2px); box-shadow: 0 8px 32px rgba(244,163,0,0.35); }
-.price-btn.secondary {
-  background: rgba(255,255,255,0.06);
-  color: var(--white);
-  border: 1px solid rgba(255,255,255,0.1);
-}
-.price-btn.secondary:hover { border-color: var(--teal); color: var(--teal); }
-
-/* Addons card */
-.addon-item {
-  display: flex;
-  align-items: center;
-  gap: 14px;
-  padding: 12px 0;
-  border-bottom: 1px solid rgba(255,255,255,0.06);
-}
-.addon-item:last-child { border-bottom: none; }
-.addon-price {
-  font-family: 'Playfair Display', serif;
-  font-size: 20px;
-  font-weight: 900;
-  color: var(--gold);
-  min-width: 52px;
-  flex-shrink: 0;
-}
-.addon-desc { font-size: 13px; color: rgba(255,255,255,0.85); font-weight: 400; }
-
-/* ═══════════════════════════════════
-   CUSTOMIZATION SECTION
-═══════════════════════════════════ */
-.custom-section {
-  background: #A8DCDA;
-  overflow: hidden;
-}
-.custom-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  align-items: center;
-  margin-top: 56px;
-}
-@media (max-width: 768px) { .custom-grid { grid-template-columns: 1fr; } }
-
-.custom-items { display: flex; flex-direction: column; gap: 16px; }
-.custom-item {
-  display: flex;
-  gap: 16px;
-  align-items: flex-start;
-  background: rgba(0,0,0,0.07);
-  border: 1px solid rgba(255,255,255,0.07);
-  border-radius: var(--r);
-  padding: 18px 20px;
-  transition: border-color 0.3s;
-}
-.custom-item:hover { border-color: rgba(0,180,166,0.3); }
-.custom-item-icon {
-  font-size: 24px;
-  flex-shrink: 0;
-  margin-top: 2px;
-}
-.custom-item-title { font-size: 14px; font-weight: 700; margin-bottom: 4px; color: var(--navy); }
-.custom-item-desc { font-size: 12px; color: rgba(255,255,255,0.8); line-height: 1.6; font-weight: 300; }
-
-/* Color palette visual */
-.palette-demo {
-  display: flex;
-  flex-direction: column;
-  gap: 12px;
-  padding: 24px;
-  background: rgba(0,0,0,0.08);
-  border-radius: var(--r-lg);
-  border: 1px solid rgba(255,255,255,0.06);
-}
-.palette-row { display: flex; gap: 8px; align-items: center; }
-.palette-label { font-size: 10px; color: rgba(255,255,255,0.7); width: 70px; flex-shrink: 0; }
-.palette-swatches { display: flex; gap: 6px; }
-.palette-dot {
-  width: 28px; height: 28px;
-  border-radius: 50%;
-  box-shadow: 0 2px 8px rgba(0,0,0,0.3);
-  flex-shrink: 0;
-}
-.palette-tagline {
-  font-family: 'Playfair Display', serif;
-  font-size: 15px;
-  font-style: italic;
-  color: rgba(13,27,42,0.5);
-  text-align: center;
-  padding-top: 8px;
-  border-top: 1px solid rgba(255,255,255,0.06);
-}
-
-/* ═══════════════════════════════════
-   CTA SECTION
-═══════════════════════════════════ */
-.cta-section {
-  background: var(--teal-dk);
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-.cta-section::before {
-  content: '';
-  position: absolute;
-  inset: 0;
-  background:
-    radial-gradient(ellipse 80% 60% at 50% 0%, rgba(0,180,166,0.15) 0%, transparent 70%);
-  pointer-events: none;
-}
-.cta-section .section-label { justify-content: center; }
-.cta-section .section-label::before { display: none; }
-
-.cta-section h2 { max-width: 600px; margin: 0 auto 16px; }
-.cta-section .section-desc { margin: 0 auto 36px; text-align: center; }
-.cta-note {
-  font-size: 12px;
-  color: rgba(13,27,42,0.6);
-  margin-top: 16px;
-}
-
-/* ═══════════════════════════════════
-   FOOTER
-═══════════════════════════════════ */
-footer {
-  background: #00B4A6;
-  border-top: 1px solid rgba(255,255,255,0.12);
-  padding: 32px 5vw;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  flex-wrap: wrap;
-  gap: 16px;
-}
-.footer-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 18px;
-  font-weight: 900;
-  color: var(--white);
-  text-decoration: none;
-}
-.footer-logo span { color: var(--white); }
-.footer-tagline {
-  font-size: 11px;
-  color: rgba(255,255,255,0.6);
-  margin-top: 3px;
-}
-.footer-links {
-  display: flex;
-  gap: 20px;
-  list-style: none;
-}
-.footer-links a {
-  font-size: 12px;
-  color: rgba(255,255,255,0.6);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-.footer-links a:hover { color: var(--teal); }
-.footer-copy {
-  font-size: 11px;
-  color: rgba(255,255,255,0.4);
-  width: 100%;
-  text-align: center;
-  padding-top: 16px;
-  border-top: 1px solid rgba(255,255,255,0.05);
-  margin-top: 8px;
-}
-
-/* ═══════════════════════════════════
-   SCROLL REVEAL
-═══════════════════════════════════ */
-.reveal {
-  opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.7s ease, transform 0.7s ease;
-}
-.reveal.visible {
-  opacity: 1;
-  transform: translateY(0);
-}
-.reveal-delay-1 { transition-delay: 0.1s; }
-.reveal-delay-2 { transition-delay: 0.2s; }
-.reveal-delay-3 { transition-delay: 0.3s; }
-.reveal-delay-4 { transition-delay: 0.4s; }
-.features-section .section-desc { color: rgba(255,255,255,0.85); }
-.features-section h2 { color: var(--navy); }
-.features-section .section-label { color: var(--navy); opacity: 0.6; }
+/* reveal */
+.reveal{opacity:0;transform:translateY(28px);transition:opacity .7s ease,transform .7s ease;}
+.reveal.vis{opacity:1;transform:translateY(0);}
+.d1{transition-delay:.08s;}.d2{transition-delay:.16s;}.d3{transition-delay:.24s;}.d4{transition-delay:.32s;}
+@media(prefers-reduced-motion:reduce){.reveal{opacity:1;transform:none;}*{animation:none!important;}}
 </style>
 </head>
 <body>
 
-<!-- ════════════════════════════════
-     NAV
-════════════════════════════════ -->
+<!-- NAV -->
 <nav>
-  <a href="#" class="nav-logo" style="display:flex;align-items:center;"><svg width="28" height="28" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:8px;flex-shrink:0"><rect x="3" y="3" width="194" height="194" rx="42" fill="#0F2940" stroke="#00B4A6" stroke-width="6"/>
-  <polygon points="92,146 30,146 55,76" fill="#F4A300"/>
-  <polygon points="108,146 168,146 142,96" fill="#F4A300"/>
-  <polygon points="100,50 124,106 124,160 76,160 76,106" fill="#00B4A6"/>
-  <rect x="28" y="141" width="144" height="22" rx="6" fill="#F4A300"/>
-  <circle cx="55" cy="76" r="9" fill="#FFFFFF"/>
-  <circle cx="100" cy="50" r="10" fill="#FFFFFF"/>
-  <circle cx="142" cy="96" r="8" fill="#FFFFFF"/>
-  <circle cx="100" cy="50" r="16" fill="none" stroke="#00B4A6" stroke-width="3" stroke-dasharray="4 3"/></svg><span style="color:var(--white);">Own</span><span style="color:var(--teal);">It</span></a>
+  <a href="index.html" class="nav-logo"><svg viewBox="0 0 200 200" width="30" height="30" aria-hidden="true"><rect x="3" y="3" width="194" height="194" rx="42" fill="#0F2940" stroke="#00B4A6" stroke-width="6"/><polygon points="92,146 30,146 55,76" fill="#F4A300"/><polygon points="108,146 168,146 142,96" fill="#F4A300"/><polygon points="100,50 124,106 124,160 76,160 76,106" fill="#00B4A6"/><rect x="28" y="141" width="144" height="22" rx="6" fill="#F4A300"/><circle cx="55" cy="76" r="9" fill="#FFFFFF"/><circle cx="100" cy="50" r="10" fill="#FFFFFF"/><circle cx="142" cy="96" r="8" fill="#FFFFFF"/><circle cx="100" cy="50" r="16" fill="none" stroke="#00B4A6" stroke-width="3" stroke-dasharray="4 3"/></svg><span>Own<span class="it">It</span></span></a>
   <ul class="nav-links">
     <li><a href="#features">Features</a></li>
     <li><a href="#how">How It Works</a></li>
     <li><a href="#pricing">Pricing</a></li>
     <li><a href="#customize">Customize</a></li>
-    <li><a href="#get-started" class="nav-cta">Get Started</a></li>
+    <li><a href="intake.html" class="nav-cta">Get Started</a></li>
   </ul>
 </nav>
 
-<!-- ════════════════════════════════
-     HERO
-════════════════════════════════ -->
+<!-- HERO -->
 <section class="hero">
-  <div class="hero-content">
-  <div style="margin-bottom:24px;animation:fade-up 0.5s ease both;">
-<svg width="72" height="72" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="filter:drop-shadow(0 8px 24px rgba(0,180,166,0.35))"><rect x="3" y="3" width="194" height="194" rx="42" fill="#0F2940" stroke="#00B4A6" stroke-width="6"/>
-  <polygon points="92,146 30,146 55,76" fill="#F4A300"/>
-  <polygon points="108,146 168,146 142,96" fill="#F4A300"/>
-  <polygon points="100,50 124,106 124,160 76,160 76,106" fill="#00B4A6"/>
-  <rect x="28" y="141" width="144" height="22" rx="6" fill="#F4A300"/>
-  <circle cx="55" cy="76" r="9" fill="#FFFFFF"/>
-  <circle cx="100" cy="50" r="10" fill="#FFFFFF"/>
-  <circle cx="142" cy="96" r="8" fill="#FFFFFF"/>
-  <circle cx="100" cy="50" r="16" fill="none" stroke="#00B4A6" stroke-width="3" stroke-dasharray="4 3"/></svg>
-  </div>
-    <div class="hero-badge">Make Tax Season Simple</div>
-    <h1>
-      <span style="color:#FFFFFF;">Track everything.<br>Stress nothing.</span>
-      <span class="line2" style="color:var(--teal-lt);">OwnIt.</span>
-    </h1>
-    <p class="hero-sub">Stop piecing together spreadsheets every April. OwnIt keeps every dollar organized all year — so when tax season hits, you're already ready.</p>
-    <div class="hero-btns">
-      <a href="#get-started" class="btn-primary">Get Your App →</a>
-      <a href="#features" class="btn-secondary">See Features</a>
+  <div class="hero-in">
+    <svg class="hero-logo reveal" viewBox="0 0 200 200" width="76" height="76" aria-label="OwnIt"><rect x="3" y="3" width="194" height="194" rx="42" fill="#0F2940" stroke="#00B4A6" stroke-width="6"/><polygon points="92,146 30,146 55,76" fill="#F4A300"/><polygon points="108,146 168,146 142,96" fill="#F4A300"/><polygon points="100,50 124,106 124,160 76,160 76,106" fill="#00B4A6"/><rect x="28" y="141" width="144" height="22" rx="6" fill="#F4A300"/><circle cx="55" cy="76" r="9" fill="#FFFFFF"/><circle cx="100" cy="50" r="10" fill="#FFFFFF"/><circle cx="142" cy="96" r="8" fill="#FFFFFF"/><circle cx="100" cy="50" r="16" fill="none" stroke="#00B4A6" stroke-width="3" stroke-dasharray="4 3"/></svg>
+    <div class="badge reveal d1"><span class="d"></span>Make tax season simple</div>
+    <h1 class="reveal d1">Track everything.<br>Stress nothing. <em>OwnIt.</em></h1>
+    <p class="hero-sub reveal d2">Stop piecing together spreadsheets every April. OwnIt keeps every dollar organized all year — so when tax season hits, you're already ready.</p>
+    <div class="hero-btns reveal d3">
+      <a href="intake.html" class="btn-primary">Get your app →</a>
+      <a href="demo.html" class="btn-secondary">Watch the demo</a>
     </div>
-    <div class="hero-stats">
-      <div class="stat">
-        <div class="stat-val"><span style="color:var(--navy);">$</span><span style="color:var(--teal-lt);">350</span></div>
-        <div class="stat-lbl">Starting Price</div>
-      </div>
-      <div class="stat">
-        <div class="stat-val"><span style="color:var(--teal-lt);">48</span><span style="color:var(--navy);">hr</span></div>
-        <div class="stat-lbl">Delivery Time</div>
-      </div>
-      <div class="stat">
-        <div class="stat-val"><span style="color:var(--teal-lt);">2</span><span style="color:var(--navy);">wk</span></div>
-        <div class="stat-lbl">Trial Period</div>
-      </div>
-      <div class="stat">
-        <div class="stat-val"><span style="color:var(--teal-lt);">0</span></div>
-        <div class="stat-lbl">Monthly Fees</div>
-      </div>
+    <div class="hero-stats reveal d4">
+      <div class="stat"><div class="v">$<span>75</span></div><div class="k">Starting price</div></div>
+      <div class="stat"><div class="v"><span>48</span>hr</div><div class="k">Delivery</div></div>
+      <div class="stat"><div class="v"><span>2</span>wk</div><div class="k">Trial period</div></div>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════════════
-     WHAT IS IT
-════════════════════════════════ -->
-<section class="what-section">
-  <div class="section-inner">
+<!-- WHAT IS IT -->
+<section class="what dark">
+  <div class="inner">
     <div class="reveal">
-      <div class="section-label">What Is OwnIt?</div>
-      <h2>Your businesses,<br>one simplified app.</h2>
-      <p class="section-desc"><span style="color:var(--gold);font-weight:600;">No App Store. No subscriptions. Just your data — organized, branded, and ready for tax season.</span></p>
+      <div class="label">What is OwnIt?</div>
+      <h2>All your business expenses,<br>one simplified app.</h2>
+      <p class="desc"><span class="hl">No App Store. No subscriptions. Just your data — organized, branded, and ready for tax season.</span></p>
     </div>
     <div class="what-grid">
-      <div class="what-text reveal reveal-delay-1">
-        <p>OwnIt is a <strong>mobile-first web app</strong> that lives on your iPhone Home Screen. Open it like any app — no download required.</p>
-        <p>Track expenses, income, and events across <strong>all your businesses</strong> from one beautifully designed dashboard, customized just for you. At tax time, export a <strong>Schedule C summary</strong> or CSV straight to your accountant — no scrambling, no guesswork.</p>
+      <div class="what-text reveal d1">
+        <p>OwnIt is a <strong>mobile-first web app</strong> that lives on your phone's Home Screen. Open it like any app — no download required.</p>
+        <p>Track expenses, income and events across <strong>all your businesses</strong> from one beautifully designed dashboard, customized just for you. At tax time, export a <strong>Schedule C summary</strong> or CSV straight to your accountant — no scrambling, no guesswork.</p>
         <p>When we build your app, <strong>you even own the name.</strong> It shows up on your Home Screen as your business — not ours.</p>
-        <div class="what-pills">
-          <span class="pill">📱 Home Screen App</span>
-          <span class="pill">💼 Multi-Business</span>
-          <span class="pill">📊 Tax-Ready</span>
-          <span class="pill">🔒 Your Data</span>
-          <span class="pill">♾ Yours Forever</span>
+        <div class="pills">
+          <span class="pill">Home Screen app</span>
+          <span class="pill">Multi-business</span>
+          <span class="pill">Tax-ready</span>
+          <span class="pill">Your data</span>
+          <span class="pill">Yours forever</span>
         </div>
       </div>
-      <div class="reveal reveal-delay-2">
-        <div class="phone-mock" style="position:relative;overflow:hidden;">
-          <!-- Animated screen scenes -->
-          <div id="anim-screen" style="width:100%;height:100%;position:relative;">
-
-            <!-- SCENE 1: Log Expense -->
+      <div class="reveal d2">
+        <div class="phone">
+          <div id="anim-screen" style="position:relative;">
+            <!-- SCENE 1 -->
             <div class="anim-scene" id="ascene-1">
-              <div class="mock-header">
-                <span class="mock-title">Add Expense</span>
-                <span class="mock-dot"></span>
-              </div>
-              <div class="mock-body" style="border-radius:0;padding:8px 10px;">
-                <div class="anim-field" id="af-date" style="opacity:0;transform:translateY(6px)">
-                  <div class="mock-label">Date</div>
-                  <div class="mock-val" style="font-size:11px;color:#fff;" id="af-date-val"></div>
-                </div>
-                <div class="anim-field" id="af-vendor" style="opacity:0;transform:translateY(6px);margin-top:5px">
-                  <div class="mock-label">Vendor</div>
-                  <div class="mock-val" style="font-size:11px;color:#fff;" id="af-vendor-val"></div>
-                </div>
-                <div class="anim-field" id="af-cat" style="opacity:0;transform:translateY(6px);margin-top:5px">
-                  <div class="mock-label">Category</div>
-                  <div class="mock-val" style="font-size:11px;color:#fff;" id="af-cat-val"></div>
-                </div>
-                <div class="anim-field" id="af-amt" style="opacity:0;transform:translateY(6px);margin-top:5px">
-                  <div class="mock-label">Amount</div>
-                  <div class="mock-val" style="font-size:11px;color:#fff;" id="af-amt-val"></div>
-                </div>
-                <div id="af-btn" style="opacity:0;transform:translateY(6px);margin-top:10px;background:#00B4A6;color:#fff;font-size:9px;font-weight:700;padding:7px;border-radius:8px;text-align:center;letter-spacing:0.3px;">+ Add Expense</div>
+              <div class="mh"><span class="t">Add Expense</span><span class="dot"></span></div>
+              <div class="mbody">
+                <div class="anim-field" id="af-date" style="opacity:0;transform:translateY(6px)"><div class="mlabel">Date</div><div class="mval" style="font-size:11px" id="af-date-val"></div></div>
+                <div class="anim-field" id="af-vendor" style="opacity:0;transform:translateY(6px);margin-top:6px"><div class="mlabel">Vendor</div><div class="mval" style="font-size:11px" id="af-vendor-val"></div></div>
+                <div class="anim-field" id="af-cat" style="opacity:0;transform:translateY(6px);margin-top:6px"><div class="mlabel">Category</div><div class="mval" style="font-size:11px" id="af-cat-val"></div></div>
+                <div class="anim-field" id="af-amt" style="opacity:0;transform:translateY(6px);margin-top:6px"><div class="mlabel">Amount</div><div class="mval" style="font-size:11px" id="af-amt-val"></div></div>
+                <div id="af-btn" style="opacity:0;transform:translateY(6px);margin-top:11px;background:var(--teal);color:#fff;font-size:9px;font-weight:700;padding:8px;border-radius:8px;text-align:center;letter-spacing:.3px;">+ Add Expense</div>
               </div>
             </div>
-
-            <!-- SCENE 2: Overview -->
+            <!-- SCENE 2 -->
             <div class="anim-scene" id="ascene-2" style="display:none;">
-              <div class="mock-header">
-                <span class="mock-title">Glam by Kia</span>
-                <span class="mock-dot"></span>
+              <div class="mh"><span class="t">Glam by Kia</span><span class="dot"></span></div>
+              <div class="mtabs">
+                <div class="mtab on"><span class="pd"></span>Glam</div>
+                <div class="mtab"><span class="pd" style="background:#F4A300"></span>Rover</div>
+                <div class="mtab"><span class="pd" style="background:#A8DCDA"></span>Studio</div>
               </div>
-              <div class="mock-tabs">
-                <div class="mock-tab on">💄 Glam</div>
-                <div class="mock-tab">🐾 Rover</div>
-                <div class="mock-tab">✂️ Studio</div>
-              </div>
-              <div class="mock-body" style="border-radius:0 0 12px 12px;padding:8px 10px;">
-                <div class="mock-card">
-                  <div class="mock-label">Income YTD</div>
-                  <div class="mock-val" id="ov-income" style="color:#0070E0;font-size:0px;">$4,820.00</div>
-                </div>
-                <div class="mock-card" style="margin-top:5px">
-                  <div class="mock-label">Expenses YTD</div>
-                  <div class="mock-val" id="ov-expense" style="color:#E53935;font-size:0px;">$1,240.50</div>
-                </div>
-                <div class="mock-card" style="margin-top:5px">
-                  <div class="mock-label">Net Profit</div>
-                  <div class="mock-val" id="ov-profit" style="color:#1a7a12;font-size:0px;">$3,579.50</div>
-                </div>
+              <div class="mbody">
+                <div class="mcard"><div class="mlabel">Income YTD</div><div class="mval" id="ov-income" style="color:#54B9FF;font-size:0">$4,820.00</div></div>
+                <div class="mcard" style="margin-top:6px"><div class="mlabel">Expenses YTD</div><div class="mval" id="ov-expense" style="color:#FF8A8A;font-size:0">$1,240.50</div></div>
+                <div class="mcard" style="margin-top:6px"><div class="mlabel">Net Profit</div><div class="mval" id="ov-profit" style="color:#5BE5A0;font-size:0">$3,579.50</div></div>
               </div>
             </div>
-
-            <!-- SCENE 3: Schedule C -->
+            <!-- SCENE 3 -->
             <div class="anim-scene" id="ascene-3" style="display:none;">
-              <div class="mock-header">
-                <span class="mock-title">Schedule C Summary</span>
-                <span class="mock-dot"></span>
-              </div>
-              <div class="mock-body" style="border-radius:0;padding:8px 10px;">
-                <div style="font-size:8px;color:#A8DCDA;font-weight:700;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;">Glam by Kia · 2025</div>
-                <div class="sc-row" id="sc1" style="opacity:0"><span style="font-size:9px;color:rgba(255,255,255,0.6);"><span style="color:#A8DCDA;font-weight:700;margin-right:4px;">Ln 8</span>Advertising</span><span style="font-size:9px;color:#fff;font-weight:600;">$320.00</span></div>
-                <div class="sc-row" id="sc2" style="opacity:0"><span style="font-size:9px;color:rgba(255,255,255,0.6);"><span style="color:#A8DCDA;font-weight:700;margin-right:4px;">Ln 9</span>Car &amp; Travel</span><span style="font-size:9px;color:#fff;font-weight:600;">$280.00</span></div>
-                <div class="sc-row" id="sc3" style="opacity:0"><span style="font-size:9px;color:rgba(255,255,255,0.6);"><span style="color:#A8DCDA;font-weight:700;margin-right:4px;">Ln 22</span>Supplies</span><span style="font-size:9px;color:#fff;font-weight:600;">$415.50</span></div>
-                <div class="sc-row" id="sc4" style="opacity:0"><span style="font-size:9px;color:rgba(255,255,255,0.6);"><span style="color:#A8DCDA;font-weight:700;margin-right:4px;">Ln 24b</span>Meals (50%)</span><span style="font-size:9px;color:#fff;font-weight:600;">$225.00</span></div>
-                <div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:5px;padding-top:5px;display:flex;justify-content:space-between;" id="sc-total" style="opacity:0">
-                  <span style="font-size:9px;color:#F4A300;font-weight:700;">Total Deductions</span>
-                  <span style="font-size:10px;color:#F4A300;font-weight:900;">$1,240.50</span>
-                </div>
-                <div id="sc-export-btn" style="opacity:0;margin-top:8px;background:linear-gradient(135deg,#0D1B2A,#0F2940);border:1px solid #00B4A6;color:#00B4A6;font-size:9px;font-weight:700;padding:7px;border-radius:8px;text-align:center;letter-spacing:0.3px;">📤 Export CSV</div>
+              <div class="mh"><span class="t">Schedule C Summary</span><span class="dot"></span></div>
+              <div class="mbody">
+                <div style="font-size:8px;color:var(--teal-lt);font-weight:700;letter-spacing:1px;margin-bottom:7px;text-transform:uppercase;">Glam by Kia · 2025</div>
+                <div class="sc-row" id="sc1" style="opacity:0"><span style="font-size:9px;color:rgba(255,255,255,.6)"><span style="color:var(--teal-lt);font-weight:700;margin-right:4px">Ln 8</span>Advertising</span><span style="font-size:9px;color:#fff;font-weight:600">$320.00</span></div>
+                <div class="sc-row" id="sc2" style="opacity:0"><span style="font-size:9px;color:rgba(255,255,255,.6)"><span style="color:var(--teal-lt);font-weight:700;margin-right:4px">Ln 9</span>Car &amp; Travel</span><span style="font-size:9px;color:#fff;font-weight:600">$280.00</span></div>
+                <div class="sc-row" id="sc3" style="opacity:0"><span style="font-size:9px;color:rgba(255,255,255,.6)"><span style="color:var(--teal-lt);font-weight:700;margin-right:4px">Ln 22</span>Supplies</span><span style="font-size:9px;color:#fff;font-weight:600">$415.50</span></div>
+                <div class="sc-row" id="sc4" style="opacity:0"><span style="font-size:9px;color:rgba(255,255,255,.6)"><span style="color:var(--teal-lt);font-weight:700;margin-right:4px">Ln 24b</span>Meals (50%)</span><span style="font-size:9px;color:#fff;font-weight:600">$225.00</span></div>
+                <div id="sc-total" style="opacity:0;border-top:1px solid rgba(255,255,255,.1);margin-top:6px;padding-top:6px;display:flex;justify-content:space-between"><span style="font-size:9px;color:var(--gold);font-weight:700">Total Deductions</span><span style="font-size:10px;color:var(--gold);font-weight:900">$1,240.50</span></div>
+                <div id="sc-export-btn" style="opacity:0;margin-top:9px;background:rgba(255,255,255,.05);border:1px solid var(--teal);color:var(--teal-lt);font-size:9px;font-weight:700;padding:8px;border-radius:8px;text-align:center;letter-spacing:.3px">Export CSV →</div>
               </div>
             </div>
-
-            <!-- SCENE 4: Export toast -->
+            <!-- SCENE 4 -->
             <div class="anim-scene" id="ascene-4" style="display:none;">
-              <div class="mock-header">
-                <span class="mock-title">Schedule C Summary</span>
-                <span class="mock-dot"></span>
-              </div>
-              <div class="mock-body" style="border-radius:0;padding:8px 10px;position:relative;">
-                <div style="font-size:8px;color:#A8DCDA;font-weight:700;letter-spacing:1px;margin-bottom:6px;text-transform:uppercase;">Glam by Kia · 2025</div>
-                <div class="sc-row"><span style="font-size:9px;color:rgba(255,255,255,0.6);"><span style="color:#A8DCDA;font-weight:700;margin-right:4px;">Ln 8</span>Advertising</span><span style="font-size:9px;color:#fff;font-weight:600;">$320.00</span></div>
-                <div class="sc-row"><span style="font-size:9px;color:rgba(255,255,255,0.6);"><span style="color:#A8DCDA;font-weight:700;margin-right:4px;">Ln 9</span>Car &amp; Travel</span><span style="font-size:9px;color:#fff;font-weight:600;">$280.00</span></div>
-                <div class="sc-row"><span style="font-size:9px;color:rgba(255,255,255,0.6);"><span style="color:#A8DCDA;font-weight:700;margin-right:4px;">Ln 22</span>Supplies</span><span style="font-size:9px;color:#fff;font-weight:600;">$415.50</span></div>
-                <div class="sc-row"><span style="font-size:9px;color:rgba(255,255,255,0.6);"><span style="color:#A8DCDA;font-weight:700;margin-right:4px;">Ln 24b</span>Meals (50%)</span><span style="font-size:9px;color:#fff;font-weight:600;">$225.00</span></div>
-                <div style="border-top:1px solid rgba(255,255,255,0.1);margin-top:5px;padding-top:5px;display:flex;justify-content:space-between;">
-                  <span style="font-size:9px;color:#F4A300;font-weight:700;">Total Deductions</span>
-                  <span style="font-size:10px;color:#F4A300;font-weight:900;">$1,240.50</span>
-                </div>
-                <div style="margin-top:8px;background:linear-gradient(135deg,#0D1B2A,#0F2940);border:1px solid #00B4A6;color:#00B4A6;font-size:9px;font-weight:700;padding:7px;border-radius:8px;text-align:center;letter-spacing:0.3px;opacity:0.5;">📤 Export CSV</div>
-                <div id="toast-msg" style="position:absolute;bottom:12px;left:10px;right:10px;background:#1DB954;color:#fff;font-size:9px;font-weight:700;padding:8px 10px;border-radius:8px;text-align:center;opacity:0;transform:translateY(10px);transition:all 0.4s ease;">✓ CSV Downloaded!</div>
+              <div class="mh"><span class="t">Schedule C Summary</span><span class="dot"></span></div>
+              <div class="mbody" style="position:relative">
+                <div style="font-size:8px;color:var(--teal-lt);font-weight:700;letter-spacing:1px;margin-bottom:7px;text-transform:uppercase;">Glam by Kia · 2025</div>
+                <div class="sc-row"><span style="font-size:9px;color:rgba(255,255,255,.6)"><span style="color:var(--teal-lt);font-weight:700;margin-right:4px">Ln 8</span>Advertising</span><span style="font-size:9px;color:#fff;font-weight:600">$320.00</span></div>
+                <div class="sc-row"><span style="font-size:9px;color:rgba(255,255,255,.6)"><span style="color:var(--teal-lt);font-weight:700;margin-right:4px">Ln 9</span>Car &amp; Travel</span><span style="font-size:9px;color:#fff;font-weight:600">$280.00</span></div>
+                <div class="sc-row"><span style="font-size:9px;color:rgba(255,255,255,.6)"><span style="color:var(--teal-lt);font-weight:700;margin-right:4px">Ln 22</span>Supplies</span><span style="font-size:9px;color:#fff;font-weight:600">$415.50</span></div>
+                <div class="sc-row"><span style="font-size:9px;color:rgba(255,255,255,.6)"><span style="color:var(--teal-lt);font-weight:700;margin-right:4px">Ln 24b</span>Meals (50%)</span><span style="font-size:9px;color:#fff;font-weight:600">$225.00</span></div>
+                <div style="border-top:1px solid rgba(255,255,255,.1);margin-top:6px;padding-top:6px;display:flex;justify-content:space-between"><span style="font-size:9px;color:var(--gold);font-weight:700">Total Deductions</span><span style="font-size:10px;color:var(--gold);font-weight:900">$1,240.50</span></div>
+                <div style="margin-top:9px;background:rgba(255,255,255,.05);border:1px solid var(--teal);color:var(--teal-lt);font-size:9px;font-weight:700;padding:8px;border-radius:8px;text-align:center;letter-spacing:.3px;opacity:.5">Export CSV →</div>
+                <div id="toast-msg" style="position:absolute;bottom:12px;left:13px;right:13px;background:#1DB954;color:#fff;font-size:9px;font-weight:700;padding:9px;border-radius:8px;text-align:center;opacity:0;transform:translateY(10px);transition:all .4s ease">✓ CSV downloaded</div>
               </div>
             </div>
-
           </div>
         </div>
-
-        <style>
-          .anim-field { background:rgba(255,255,255,0.05);border:1px solid rgba(255,255,255,0.1);border-radius:7px;padding:5px 8px;transition:all 0.4s ease; }
-          .sc-row { display:flex;justify-content:space-between;padding:3px 0;border-bottom:1px solid rgba(255,255,255,0.06);transition:opacity 0.3s ease; }
-        </style>
-
-        <script>
-        (function() {
-          const sleep = ms => new Promise(r => setTimeout(r, ms));
-
-          async function typeInto(elId, text, speed=55) {
-            const el = document.getElementById(elId);
-            el.textContent = '';
-            for (const ch of text) { el.textContent += ch; await sleep(speed); }
-          }
-
-          function show(elId, delay=0) {
-            return new Promise(r => setTimeout(() => {
-              const el = document.getElementById(elId);
-              if (el) { el.style.opacity='1'; el.style.transform='translateY(0)'; }
-              r();
-            }, delay));
-          }
-
-          function switchScene(from, to) {
-            const f = document.getElementById('ascene-'+from);
-            const t = document.getElementById('ascene-'+to);
-            if (f) f.style.display='none';
-            if (t) t.style.display='block';
-          }
-
-          async function runLoop() {
-            // Reset all
-            ['af-date','af-vendor','af-cat','af-amt','af-btn'].forEach(id => {
-              const el = document.getElementById(id);
-              if(el){el.style.opacity='0';el.style.transform='translateY(6px)';}
-            });
-            ['af-date-val','af-vendor-val','af-cat-val','af-amt-val'].forEach(id => {
-              const el = document.getElementById(id); if(el) el.textContent='';
-            });
-            ['ov-income','ov-expense','ov-profit'].forEach(id => {
-              const el = document.getElementById(id); if(el) el.style.fontSize='0px';
-            });
-            ['sc1','sc2','sc3','sc4'].forEach(id => {
-              const el = document.getElementById(id); if(el) el.style.opacity='0';
-            });
-            const scTotal = document.getElementById('sc-total');
-            if(scTotal) scTotal.style.opacity='0';
-            const scBtn = document.getElementById('sc-export-btn');
-            if(scBtn) scBtn.style.opacity='0';
-            const toast = document.getElementById('toast-msg');
-            if(toast){toast.style.opacity='0';toast.style.transform='translateY(10px)';}
-
-            // ── SCENE 1: Log Expense (0–7s) ──
-            switchScene(2,'1'); switchScene(3,'1'); switchScene(4,'1');
-            document.getElementById('ascene-1').style.display='block';
-
-            await sleep(400);
-            await show('af-date'); await sleep(200);
-            await typeInto('af-date-val', 'May 14, 2025');
-            await sleep(200);
-            await show('af-vendor'); await sleep(200);
-            await typeInto('af-vendor-val', 'Sephora');
-            await sleep(200);
-            await show('af-cat'); await sleep(200);
-            await typeInto('af-cat-val', 'Supplies');
-            await sleep(200);
-            await show('af-amt'); await sleep(200);
-            await typeInto('af-amt-val', '$87.50');
-            await sleep(300);
-            await show('af-btn');
-            // Button press
-            await sleep(600);
-            const btn = document.getElementById('af-btn');
-            if(btn){btn.style.background='#009E91';btn.style.transform='scale(0.97)';}
-            await sleep(200);
-            if(btn){btn.style.background='#00B4A6';btn.style.transform='scale(1)';}
-            await sleep(800);
-
-            // ── SCENE 2: Overview (7–12s) ──
-            switchScene(1,2);
-            await sleep(400);
-            const vals = [
-              ['ov-income', '18px'],
-              ['ov-expense', '18px'],
-              ['ov-profit', '18px']
-            ];
-            for (const [id, fs] of vals) {
-              const el = document.getElementById(id);
-              if(el){ el.style.transition='font-size 0.4s ease'; el.style.fontSize=fs; }
-              await sleep(350);
-            }
-            await sleep(1500);
-
-            // ── SCENE 3: Schedule C (12–17s) ──
-            switchScene(2,3);
-            await sleep(400);
-            for (const id of ['sc1','sc2','sc3','sc4']) { await show(id); await sleep(300); }
-            await sleep(200);
-            const st = document.getElementById('sc-total');
-            if(st){st.style.opacity='1';}
-            await sleep(400);
-            await show('sc-export-btn');
-            await sleep(1200);
-
-            // ── SCENE 4: Export (17–20s) ──
-            switchScene(3,4);
-            await sleep(500);
-            const t = document.getElementById('toast-msg');
-            if(t){t.style.opacity='1';t.style.transform='translateY(0)';}
-            await sleep(2000);
-
-            // Loop
-            runLoop();
-          }
-
-          // Start when visible
-          const observer = new IntersectionObserver(entries => {
-            if (entries[0].isIntersecting) { observer.disconnect(); runLoop(); }
-          }, { threshold: 0.3 });
-          observer.observe(document.getElementById('anim-screen'));
-        })();
-        </script>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════════════
-     FEATURES
-════════════════════════════════ -->
-<section class="features-section" id="features">
-  <div class="section-inner">
+<!-- FEATURES -->
+<section class="features" id="features">
+  <div class="inner">
     <div class="reveal">
-      <div class="section-label">Features</div>
+      <div class="label">Features</div>
       <h2>Everything you need,<br>nothing you don't.</h2>
-      <p class="section-desc">Built around how real entrepreneurs actually work — not how accountants wish they did.</p>
+      <p class="desc">Built around how real entrepreneurs actually work —<br>not how accountants wish they did.</p>
     </div>
-    <div class="features-grid" style="margin-top:56px">
-      <div class="feature-card reveal reveal-delay-1">
-        <span class="feature-icon">🗂</span>
-        <div class="feature-title">Multiple Business Tabs</div>
-        <div class="feature-desc">Separate tabs for each income stream. All your businesses in one app — cleanly organized.</div>
+    <div class="feat-grid">
+      <div class="fcard reveal d1">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M12 2.6 21 7.2 12 11.8 3 7.2z" fill="#00B4A6"/><path d="M3 11.8 12 16.4 21 11.8 21 13 12 17.6 3 13z" fill="#0D1B2A"/><path d="M3 15.9 12 20.5 21 15.9 21 17.1 12 21.7 3 17.1z" fill="#0D1B2A"/></svg>
+        <h4>Multiple business tabs</h4>
+        <p>A separate tab for each income stream. All your businesses in one app — cleanly organized.</p>
       </div>
-      <div class="feature-card reveal reveal-delay-2">
-        <span class="feature-icon">💳</span>
-        <div class="feature-title">Expense Logging</div>
-        <div class="feature-desc">Date, vendor, category, amount, payment method, and receipt photos — logged in seconds.</div>
+      <div class="fcard reveal d2">
+        <svg class="ic" viewBox="0 0 24 24"><rect x="3" y="6" width="18" height="12.8" rx="2.6" fill="#0D1B2A"/><rect x="3" y="9.4" width="18" height="2.4" fill="#F4A300"/><circle cx="16.9" cy="15.4" r="1.3" fill="#F4A300"/></svg>
+        <h4>Expense logging</h4>
+        <p>Date, vendor, category, amount, payment method and receipt photos — logged in seconds.</p>
       </div>
-
-      <div class="feature-card reveal reveal-delay-1">
-        <span class="feature-icon">💰</span>
-        <div class="feature-title">Income YTD + Net Profit</div>
-        <div class="feature-desc">Log platform income and watch your net profit calculate in real time per business.</div>
+      <div class="fcard reveal d3">
+        <svg class="ic" viewBox="0 0 24 24"><rect x="4" y="12.6" width="4" height="7.4" rx="1.3" fill="#0D1B2A"/><rect x="10" y="8.6" width="4" height="11.4" rx="1.3" fill="#00B4A6"/><rect x="16" y="4" width="4" height="16" rx="1.3" fill="#0D1B2A"/></svg>
+        <h4>Income YTD + net profit</h4>
+        <p>Log platform income and watch your net profit calculate in real time, per business.</p>
       </div>
-      <div class="feature-card reveal reveal-delay-2">
-        <span class="feature-icon">📋</span>
-        <div class="feature-title">1099 Form Storage</div>
-        <div class="feature-desc">Upload and store your 1099-NEC and 1099-K forms right inside your app. Tax season sorted.</div>
+      <div class="fcard reveal d1">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M6.5 3h6.2l4.8 4.8V19a2 2 0 0 1-2 2H6.5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2z" fill="#0D1B2A"/><path d="M12.7 3 17.5 7.8h-3.8a1 1 0 0 1-1-1z" fill="#F4A300"/><rect x="7.7" y="12.4" width="8.6" height="1.7" rx=".85" fill="#fff" opacity=".9"/><rect x="7.7" y="15.6" width="5.4" height="1.7" rx=".85" fill="#fff" opacity=".7"/></svg>
+        <h4>Tax form record keeping</h4>
+        <p>Store your 1099-NEC and 1099-K forms right inside your app. Tax season, sorted.</p>
       </div>
-      <div class="feature-card reveal reveal-delay-3">
-        <span class="feature-icon">📤</span>
-        <div class="feature-title">CSV + Schedule C Export</div>
-        <div class="feature-desc">One-tap export to Google Sheets or an IRS-ready Schedule C summary for your accountant.</div>
+      <div class="fcard reveal d2">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M5.6 11.6h12.8a1.6 1.6 0 0 1 1.6 1.6V18a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2v-4.8a1.6 1.6 0 0 1 1.6-1.6z" fill="#0D1B2A"/><path d="M12 2.4 16.6 7l-1.5 1.5-2.1-2.1V14a1 1 0 0 1-2 0V6.4L8.9 8.5 7.4 7z" fill="#00B4A6"/></svg>
+        <h4>CSV + Schedule C export</h4>
+        <p>One-tap export to a spreadsheet or an IRS-ready Schedule C summary for your accountant.</p>
       </div>
-
-
-      <div class="feature-card reveal reveal-delay-3">
-        <span class="feature-icon">🔄</span>
-        <div class="feature-title">Multi-Device Sync</div>
-        <div class="feature-desc">Optional Supabase cloud sync keeps your data seamless across iPhone, iPad, and browser.</div>
+      <div class="fcard reveal d3">
+        <svg class="ic" viewBox="0 0 24 24"><path d="M6.8 18.6a4.3 4.3 0 0 1-.45-8.55 5.8 5.8 0 0 1 11.2-1.53A3.85 3.85 0 0 1 17.4 18.6z" fill="#0D1B2A"/><path d="M9.5 13.9l1.9 1.9 3.5-3.7" stroke="#00B4A6" stroke-width="1.9" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <h4>Multi-device cloud sync</h4>
+        <p>Optional Supabase cloud sync keeps your data seamless across phone, tablet, and laptop.</p>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════════════
-     HOW IT WORKS
-════════════════════════════════ -->
-<section class="how-section" id="how">
-  <div class="section-inner">
+<!-- HOW -->
+<section class="how" id="how">
+  <div class="inner">
     <div class="reveal" style="text-align:center">
-      <div class="section-label" style="justify-content:center"><span style="display:none"></span>How It Works</div>
+      <div class="label center">How it works</div>
       <h2>First we listen.<br>Then we deliver.</h2>
-      <p class="section-desc" style="margin:0 auto">Every step is designed around you.</p>
+      <p class="desc" style="margin:0 auto">Every step is designed around you.</p>
     </div>
-    <div class="steps-grid">
-      <div class="step reveal reveal-delay-1">
-        <div class="step-num">1</div>
-        <div class="step-title">Fill the Intake Form</div>
-        <div class="step-desc">Tell us about your businesses, income types, and categories so we come to the call fully prepared.</div>
-      </div>
-      <div class="step reveal reveal-delay-2">
-        <div class="step-num">2</div>
-        <div class="step-title">Discovery Call</div>
-        <div class="step-desc">A focused call to review your intake form, answer questions, and confirm every detail before we build.</div>
-      </div>
-      <div class="step reveal reveal-delay-3">
-        <div class="step-num">3</div>
-        <div class="step-title">We Build Your App</div>
-        <div class="step-desc">Custom tabs, categories, colors, icon, and your business name — built and deployed within 48–72 hours.</div>
-      </div>
-      <div class="step reveal reveal-delay-4">
-        <div class="step-num">4</div>
-        <div class="step-title">2-Week Trial</div>
-        <div class="step-desc">Use it in real life. If anything doesn't feel right — we fix it. Your satisfaction is guaranteed.</div>
-      </div>
+    <div class="steps">
+      <div class="step reveal d1"><div class="step-num">1</div><h4>Fill the intake form</h4><p>Tell us about your businesses, income types and categories so we come to the call fully prepared.</p></div>
+      <div class="step reveal d2"><div class="step-num">2</div><h4>Discovery call</h4><p>A focused call to review your intake form, answer questions and confirm every detail before we build.</p></div>
+      <div class="step reveal d3"><div class="step-num">3</div><h4>We build your app</h4><p>Custom tabs, categories, colors, icon and your business name — built and deployed within 48–72 hours.</p></div>
+      <div class="step reveal d4"><div class="step-num">4</div><h4>2-week trial</h4><p>Use it in real life. If anything doesn't feel right — we fix it. Your satisfaction is guaranteed.</p></div>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════════════
-     PRICING
-════════════════════════════════ -->
-<section class="pricing-section" id="pricing">
-  <div class="section-inner">
-    <div class="reveal">
-      <div class="section-label">Pricing</div>
-      <h2>Simple, transparent.<br>No surprises.</h2>
-      <p class="section-desc">One investment. No monthly fees. No subscriptions. You own it — forever.</p>
+<!-- PRICING -->
+<section class="pricing" id="pricing">
+  <div class="inner">
+    <div class="ph reveal">
+      <div class="label center">Pricing</div>
+      <h2>Pick your level.<br><em>Own your app.</em></h2>
+      <p class="desc">From a quick setup you handle yourself to a fully custom build we craft around your business — every plan puts your name on it.</p>
     </div>
-    <div class="pricing-grid">
-      <!-- Base package -->
-      <div class="price-card featured reveal reveal-delay-1">
-        <div class="price-badge">Most Popular</div>
-        <div class="price-name">Base Package</div>
-        <div class="price-amount"><sup>$</sup>350</div>
-        <div class="price-sub">2–3 businesses included</div>
-        <ul class="price-features">
-          <li>Free discovery call included</li>
-          <li>Full custom build — name, icon & colors</li>
-          <li>Customized expense + income tracking</li>
-          <li>CSV + Schedule C export</li>
-          <li>1099 form storage</li>
-          <li>2-week trial with free revisions</li>
-          <li>Yours forever — no monthly fees</li>
+
+    <div class="tiers">
+      <div class="tier reveal d1">
+        <div class="tname serif">OwnIt Lite — DIY</div>
+        <div class="twho">Tech-comfortable self-starters</div>
+        <div class="tprice"><span class="cur">$</span><span class="amt">75</span></div>
+        <div class="tonce">One-time</div>
+        <a href="diy-intake.html" class="tbtn ghost">Start your DIY order</a>
+        <ul class="tpts">
+          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#00B4A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Your app, your business name</span></li>
+          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#00B4A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Self-serve setup — you build it</span></li>
+          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#00B4A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Cloud sync available, self-serve</span></li>
+          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#00B4A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Up to 3 businesses</span></li>
         </ul>
-        <div class="price-divider"></div>
-        <a href="#get-started" class="price-btn primary">Get Started →</a>
       </div>
-      <!-- Add-ons -->
-      <div class="price-card reveal reveal-delay-2">
-        <div class="price-name" style="margin-bottom:20px">Add-Ons & Revisions</div>
-        <div class="addon-item">
-          <div class="addon-price">+$30</div>
-          <div class="addon-desc">Each additional business beyond 3</div>
-        </div>
-        <div class="addon-item">
-          <div class="addon-price">+$50</div>
-          <div class="addon-desc">Multi-device sync via Supabase cloud setup</div>
-        </div>
-        <div class="price-divider"></div>
-        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;letter-spacing:0.5px;text-transform:uppercase;font-weight:600">Post-Delivery Revisions</div>
-        <div class="addon-item">
-          <div class="addon-price">$50</div>
-          <div class="addon-desc">Aesthetic revision — colors, labels, layout</div>
-        </div>
-        <div class="addon-item">
-          <div class="addon-price">$75</div>
-          <div class="addon-desc">Functional revision — new inputs, logic, tabs</div>
-        </div>
-        <div class="price-divider"></div>
-        <div style="background:rgba(244,163,0,0.08);border:1px solid rgba(244,163,0,0.2);border-radius:10px;padding:12px 14px;font-size:12px;color:rgba(255,255,255,0.65);line-height:1.6;">
-          ★ &nbsp;2-week trial included with every build — we fix anything that doesn't feel right, free of charge.
-        </div>
-        <a href="#get-started" class="price-btn secondary" style="margin-top:24px">View Intake Form →</a>
+
+      <div class="tier teal reveal d2">
+        <div class="tbadge teal">Most popular</div>
+        <div class="tname serif">OwnIt Lite — Guided</div>
+        <div class="twho">Want expert help getting set up</div>
+        <div class="tprice"><span class="cur">$</span><span class="amt">100</span></div>
+        <div class="tonce">One-time</div>
+        <a href="intake.html" class="tbtn teal">Book a setup call</a>
+        <ul class="tpts">
+          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#00B4A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Everything in OwnIt Lite — DIY</span></li>
+          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#00B4A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>30-minute onboarding call</span></li>
+          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#00B4A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Personalized icon setup</span></li>
+          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#00B4A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Cloud sync available (+$50)</span></li>
+        </ul>
+      </div>
+
+      <div class="tier gold reveal d3">
+        <div class="tbadge gold">Most powerful</div>
+        <div class="tname serif">Full Custom Build</div>
+        <div class="twho">A fully bespoke app, fully loaded</div>
+        <div class="tprice"><span class="cur">$</span><span class="amt">400</span><span class="plus">+</span></div>
+        <div class="tonce">One-time</div>
+        <a href="intake.html" class="tbtn gold">Start the intake form</a>
+        <ul class="tpts">
+          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#00B4A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Everything in OwnIt Lite — Guided</span></li>
+          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#00B4A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Custom features built for you</span></li>
+          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#00B4A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Custom income tracking</span></li>
+          <li><span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#00B4A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span><span>Cloud sync included</span></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="compare reveal">
+      <div class="cscroll">
+        <table class="cmp">
+          <thead><tr>
+            <th>Feature</th>
+            <th>DIY<span class="sub">$75</span></th>
+            <th class="tealcol">Guided<span class="sub">$100</span></th>
+            <th>Custom<span class="sub">$400+</span></th>
+          </tr></thead>
+          <tbody id="cmp-body"></tbody>
+        </table>
+      </div>
+    </div>
+
+    <div class="addons reveal">
+      <h4>Add-ons</h4>
+      <div class="addons-grid">
+        <div class="addon"><span class="t serif">Cloud Sync</span><span class="pr">Self-serve · +$50 · included</span><span class="d">Supabase backup + multi-device access. Self-serve on DIY, +$50 setup on Guided, included in Full Custom.</span></div>
+        <div class="addon"><span class="t serif">OwnIt Care</span><span class="pr">+$10 / mo</span><span class="d">Hosting, app updates &amp; support. Available on the Lite tiers.</span></div>
+        <div class="addon"><span class="t serif">Custom revisions</span><span class="pr">$50 / $75</span><span class="d">$50 aesthetic, $75 functional — per request, on Full Custom builds.</span></div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════════════
-     CUSTOMIZATION
-════════════════════════════════ -->
-<section class="custom-section" id="customize">
-  <div class="section-inner">
+<!-- CUSTOMIZE -->
+<section class="custom" id="customize">
+  <div class="inner">
     <div class="reveal">
-      <div class="section-label">Customization</div>
+      <div class="label">Customization</div>
       <h2>You even own<br>the name.</h2>
-      <p class="section-desc"><span style="color:var(--gold);font-weight:600;">Every OwnIt app is built from scratch for its owner. There is no generic version.</span></p>
+      <p class="desc"><span class="hl">Every OwnIt app is personalized and branded to you. No one app will be the same.</span> From OwnIt Lite — where you choose your name, colors, and icon — to a Full Custom Build shaped around exactly how you work, you decide how far the personalization goes.</p>
     </div>
     <div class="custom-grid">
-      <div class="custom-items">
-        <div class="custom-item reveal reveal-delay-1">
-          <div class="custom-item-icon">🏷</div>
-          <div>
-            <div class="custom-item-title">Your App Name</div>
-            <div class="custom-item-desc">Your business name appears on the Home Screen icon — not "OwnIt." Glam by Kia. The Hustle Hub. My Empire. Whatever you want.</div>
-          </div>
+      <div class="citems">
+        <div class="citem reveal d1">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M3.6 11.3 11.3 3.6a2 2 0 0 1 1.4-.6H19a2 2 0 0 1 2 2v6.3a2 2 0 0 1-.6 1.4l-7.7 7.7a2 2 0 0 1-2.8 0L3.6 14.1a2 2 0 0 1 0-2.8z" fill="#0D1B2A"/><circle cx="16" cy="8" r="1.9" fill="#F4A300"/></svg>
+          <div><h4>Your app name</h4><p>Your business name appears on the Home Screen icon — not "OwnIt." Glam by Kia. The Hustle Hub. My Empire. Whatever you want.</p></div>
         </div>
-        <div class="custom-item reveal reveal-delay-2">
-          <div class="custom-item-icon">🎨</div>
-          <div>
-            <div class="custom-item-title">Your Brand Colors</div>
-            <div class="custom-item-desc">Send us your hex codes, your Instagram, or just a vibe — we'll match the app to your brand palette.</div>
-          </div>
+        <div class="citem reveal d2">
+          <svg class="ic" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9" fill="#0D1B2A"/><circle cx="8.4" cy="9.8" r="1.5" fill="#fff"/><circle cx="12" cy="7.9" r="1.5" fill="#00B4A6"/><circle cx="15.6" cy="9.8" r="1.5" fill="#fff"/><circle cx="14.1" cy="14.4" r="1.5" fill="#F4A300"/></svg>
+          <div><h4>Your brand colors</h4><p>Send us your hex codes, your Instagram, or just a vibe — we'll match the app to your brand palette.</p></div>
         </div>
-        <div class="custom-item reveal reveal-delay-3">
-          <div class="custom-item-icon">✦</div>
-          <div>
-            <div class="custom-item-title">Your Icon</div>
-            <div class="custom-item-desc">A custom Home Screen icon that matches your brand — so it looks like your app from the moment you see it.</div>
-          </div>
+        <div class="citem reveal d3">
+          <svg class="ic" viewBox="0 0 24 24"><path d="M12 2.5 14 9.8 21.5 12 14 14.2 12 21.5 10 14.2 2.5 12 10 9.8z" fill="#0D1B2A"/><path d="M18.6 3 19.5 5.6 22.1 6.5 19.5 7.4 18.6 10 17.7 7.4 15.1 6.5 17.7 5.6z" fill="#F4A300"/></svg>
+          <div><h4>Your icon</h4><p>A custom Home Screen icon that matches your brand — so it looks like your app from the moment you see it.</p></div>
         </div>
-        <div class="custom-item reveal reveal-delay-4">
-          <div class="custom-item-icon">🗂</div>
-          <div>
-            <div class="custom-item-title">Your Categories & Fields</div>
-            <div class="custom-item-desc">Expense categories, dropdown options, tab names — all tailored to how your specific businesses actually operate.</div>
-          </div>
+        <div class="citem reveal d4">
+          <svg class="ic" viewBox="0 0 24 24"><rect x="3.5" y="3.5" width="7.5" height="7.5" rx="2" fill="#0D1B2A"/><rect x="13" y="3.5" width="7.5" height="7.5" rx="2" fill="#00B4A6"/><rect x="3.5" y="13" width="7.5" height="7.5" rx="2" fill="#00B4A6"/><rect x="13" y="13" width="7.5" height="7.5" rx="2" fill="#0D1B2A"/></svg>
+          <div><h4>Your categories &amp; fields</h4><p>Expense categories, dropdown options, tab names — all tailored to how your specific businesses actually operate.</p></div>
         </div>
       </div>
-      <div class="reveal reveal-delay-2">
-        <div class="palette-demo">
-          <div style="font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;font-weight:600;margin-bottom:8px">Example Client Palettes</div>
-          <div class="palette-row">
-            <div class="palette-label" style="color:var(--navy);font-weight:700;">Glam by Kia</div>
-            <div class="palette-swatches">
-              <div class="palette-dot" style="background:#C2185B"></div>
-              <div class="palette-dot" style="background:#880E4F"></div>
-              <div class="palette-dot" style="background:#FCE4EC"></div>
-              <div class="palette-dot" style="background:#1A0A2E"></div>
-            </div>
-          </div>
-          <div class="palette-row">
-            <div class="palette-label" style="color:var(--navy);font-weight:700;">The Hustle Hub</div>
-            <div class="palette-swatches">
-              <div class="palette-dot" style="background:#F4A300"></div>
-              <div class="palette-dot" style="background:#B07800"></div>
-              <div class="palette-dot" style="background:#1A1A1A"></div>
-              <div class="palette-dot" style="background:#FFFFFF"></div>
-            </div>
-          </div>
-          <div class="palette-row">
-            <div class="palette-label" style="color:var(--navy);font-weight:700;">My Empire</div>
-            <div class="palette-swatches">
-              <div class="palette-dot" style="background:#6C2FAF"></div>
-              <div class="palette-dot" style="background:#9B59D6"></div>
-              <div class="palette-dot" style="background:#D4ACFF"></div>
-              <div class="palette-dot" style="background:#0D1B2A"></div>
-            </div>
-          </div>
-          <div class="palette-row">
-            <div class="palette-label" style="color:var(--navy);font-weight:700;">Green & Clean</div>
-            <div class="palette-swatches">
-              <div class="palette-dot" style="background:#1DB954"></div>
-              <div class="palette-dot" style="background:#145E30"></div>
-              <div class="palette-dot" style="background:#E8F5E9"></div>
-              <div class="palette-dot" style="background:#212121"></div>
-            </div>
-          </div>
-          <div class="palette-tagline">"Built to look like yours — not ours."</div>
+      <div class="reveal d2">
+        <div class="palette">
+          <div class="pcap">Example client palettes</div>
+          <div class="prow"><div class="pname">Glam by Kia</div><div class="pswatch"><div class="pdot" style="background:#C2185B"></div><div class="pdot" style="background:#880E4F"></div><div class="pdot" style="background:#FCE4EC"></div><div class="pdot" style="background:#1A0A2E"></div></div></div>
+          <div class="prow"><div class="pname">The Hustle Hub</div><div class="pswatch"><div class="pdot" style="background:#F4A300"></div><div class="pdot" style="background:#B07800"></div><div class="pdot" style="background:#1A1A1A"></div><div class="pdot" style="background:#FFFFFF"></div></div></div>
+          <div class="prow"><div class="pname">My Empire</div><div class="pswatch"><div class="pdot" style="background:#6C2FAF"></div><div class="pdot" style="background:#9B59D6"></div><div class="pdot" style="background:#D4ACFF"></div><div class="pdot" style="background:#0D1B2A"></div></div></div>
+          <div class="prow"><div class="pname">Green &amp; Clean</div><div class="pswatch"><div class="pdot" style="background:#1DB954"></div><div class="pdot" style="background:#145E30"></div><div class="pdot" style="background:#E8F5E9"></div><div class="pdot" style="background:#212121"></div></div></div>
+          <div class="ptag">"Built to look like yours — not ours."</div>
         </div>
       </div>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════════════
-     CTA
-════════════════════════════════ -->
-<section class="cta-section" id="get-started">
-  <div class="section-inner" style="text-align:center">
+<!-- CTA -->
+<section class="cta dark" id="get-started">
+  <div class="inner" style="text-align:center">
     <div class="reveal">
-      <div class="section-label">Get Started</div>
-      <h2>Ready to OwnIt?</h2>
-      <p class="section-desc">Fill out the intake form and we'll reach out soon to get your build started.</p>
+      <div class="label center">Get started</div>
+      <h2>Ready to <em>OwnIt?</em></h2>
+      <p class="desc">Fill out the intake form and we'll reach out soon to get your build started.</p>
       <div class="hero-btns" style="margin-top:0">
-        <a href="https://ownitapp.info/intake" class="btn-primary">Fill Out Intake Form →</a>
-        <a href="mailto:Ownitapp.info@yahoo.com" class="btn-secondary">Email Us Instead</a>
+        <a href="intake.html" class="btn-primary">Fill out the intake form →</a>
+        <a href="/cdn-cgi/l/email-protection#9ad5edf4f3eefbeaeab4f3f4fcf5dae3fbf2f5f5b4f9f5f7" class="btn-secondary">Email us instead</a>
       </div>
-      <p class="cta-note">Starting at $350 · 2-week trial included · No subscriptions ever</p>
+      <p class="cta-note">Plans from $75 · 2-week trial included · No subscriptions ever</p>
     </div>
   </div>
 </section>
 
-<!-- ════════════════════════════════
-     FOOTER
-════════════════════════════════ -->
+<!-- FOOTER -->
 <footer>
-  <div>
-    <a href="#" class="footer-logo" style="display:flex;align-items:center;"><svg width="24" height="24" viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg" style="display:inline-block;vertical-align:middle;margin-right:8px;flex-shrink:0"><rect x="3" y="3" width="194" height="194" rx="42" fill="#0F2940" stroke="#00B4A6" stroke-width="6"/>
-  <polygon points="92,146 30,146 55,76" fill="#F4A300"/>
-  <polygon points="108,146 168,146 142,96" fill="#F4A300"/>
-  <polygon points="100,50 124,106 124,160 76,160 76,106" fill="#00B4A6"/>
-  <rect x="28" y="141" width="144" height="22" rx="6" fill="#F4A300"/>
-  <circle cx="55" cy="76" r="9" fill="#FFFFFF"/>
-  <circle cx="100" cy="50" r="10" fill="#FFFFFF"/>
-  <circle cx="142" cy="96" r="8" fill="#FFFFFF"/>
-  <circle cx="100" cy="50" r="16" fill="none" stroke="#00B4A6" stroke-width="3" stroke-dasharray="4 3"/></svg>Own<span>It</span></a>
-    <div class="footer-tagline">Your businesses. Your app.</div>
+  <div class="foot-top">
+    <div>
+      <a href="index.html" class="foot-logo"><svg viewBox="0 0 200 200" width="26" height="26" aria-hidden="true"><rect x="3" y="3" width="194" height="194" rx="42" fill="#0F2940" stroke="#00B4A6" stroke-width="6"/><polygon points="92,146 30,146 55,76" fill="#F4A300"/><polygon points="108,146 168,146 142,96" fill="#F4A300"/><polygon points="100,50 124,106 124,160 76,160 76,106" fill="#00B4A6"/><rect x="28" y="141" width="144" height="22" rx="6" fill="#F4A300"/><circle cx="55" cy="76" r="9" fill="#FFFFFF"/><circle cx="100" cy="50" r="10" fill="#FFFFFF"/><circle cx="142" cy="96" r="8" fill="#FFFFFF"/><circle cx="100" cy="50" r="16" fill="none" stroke="#00B4A6" stroke-width="3" stroke-dasharray="4 3"/></svg><span>Own<span class="it">It</span></span></a>
+      <div class="foot-tag">Your businesses. Your app.</div>
+    </div>
+    <ul class="foot-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#pricing">Pricing</a></li>
+      <li><a href="#customize">Customize</a></li>
+      <li><a href="intake.html">Get Started</a></li>
+      <li><a href="https://ownitapp.info/demoapp">Demo App</a></li>
+      <li><a href="refund.html">Refund Policy</a></li>
+    </ul>
   </div>
-  <ul class="footer-links">
-    <li><a href="#features">Features</a></li>
-    <li><a href="#pricing">Pricing</a></li>
-    <li><a href="#customize">Customize</a></li>
-    <li><a href="#get-started">Get Started</a></li>
-    <li><a href="refund.html">Refund Policy</a></li>
-  </ul>
-  <div class="footer-copy">© 2026 OwnIt · Built with care for entrepreneurs who mean business.</div>
+  <div class="foot-copy">© 2026 OwnIt · Built with care for entrepreneurs who mean business.</div>
 </footer>
 
-<script>
-// Scroll reveal
-const observer = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      entry.target.classList.add('visible');
-    }
-  });
-}, { threshold: 0.12 });
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+/* ── comparison table ── */
+(function(){
+  var CK='<span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#00B4A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>';
+  var DASH='<span class="dash"></span>';
+  function txt(s){return '<span class="ctxt">'+s+'</span>';}
+  function mut(s){return '<span class="cmut">'+s+'</span>';}
+  var rows=[
+    ['Your app, your business name',CK,CK,CK],
+    ['Expense logging + categories',CK,CK,CK],
+    ['Schedule C tax summaries',CK,CK,CK],
+    ['Tax form record keeping',CK,CK,CK],
+    ['Receipt photo capture',CK,CK,CK],
+    ['Printable PDF reports',CK,CK,CK],
+    ['Hosted at your own link',CK,CK,CK],
+    ['Businesses tracked',txt('Up to 3'),txt('Up to 3'),txt('3, +$30 each')],
+    ['Setup',mut('You do it'),txt('30-min call'),txt('We build it')],
+    ['30-minute onboarding call',DASH,CK,CK],
+    ['Personalized icon setup',DASH,CK,CK],
+    ['Custom features built for you',DASH,DASH,CK],
+    ['Custom income tracking',DASH,DASH,CK],
+    ['Cloud sync (multi-device)',mut('Self-serve'),txt('+$50'),CK],
+    ['Post-delivery revisions',DASH,DASH,txt('$50 / $75')]
+  ];
+  document.getElementById('cmp-body').innerHTML=rows.map(function(r){
+    return '<tr><td>'+r[0]+'</td><td>'+r[1]+'</td><td>'+r[2]+'</td><td>'+r[3]+'</td></tr>';
+  }).join('');
+})();
 
-document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+/* ── scroll reveal ── */
+var obs=new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('vis');}});},{threshold:.12});
+document.querySelectorAll('.reveal').forEach(function(el){obs.observe(el);});
+/* safety net: guarantee in-view content shows even if IO/transitions are frozen (inactive tab) */
+setTimeout(function(){
+  document.querySelectorAll('.reveal:not(.vis)').forEach(function(el){
+    var r=el.getBoundingClientRect();
+    if(r.top < window.innerHeight*1.3){el.style.transition='none';el.classList.add('vis');}
+  });
+},900);
+
+/* ── phone animation ── */
+(function(){
+  var sleep=function(ms){return new Promise(function(r){setTimeout(r,ms);});};
+  function typeInto(id,text,speed){speed=speed||55;var el=document.getElementById(id);el.textContent='';return (async function(){for(var i=0;i<text.length;i++){el.textContent+=text[i];await sleep(speed);}})();}
+  function show(id,delay){return new Promise(function(r){setTimeout(function(){var el=document.getElementById(id);if(el){el.style.opacity='1';el.style.transform='translateY(0)';}r();},delay||0);});}
+  function scene(n){for(var i=1;i<=4;i++){var el=document.getElementById('ascene-'+i);if(el)el.style.display=(i===n?'block':'none');}}
+  async function loop(){
+    ['af-date','af-vendor','af-cat','af-amt','af-btn'].forEach(function(id){var el=document.getElementById(id);if(el){el.style.opacity='0';el.style.transform='translateY(6px)';}});
+    ['af-date-val','af-vendor-val','af-cat-val','af-amt-val'].forEach(function(id){var el=document.getElementById(id);if(el)el.textContent='';});
+    ['ov-income','ov-expense','ov-profit'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.fontSize='0';});
+    ['sc1','sc2','sc3','sc4','sc-total','sc-export-btn'].forEach(function(id){var el=document.getElementById(id);if(el)el.style.opacity='0';});
+    var toast=document.getElementById('toast-msg');if(toast){toast.style.opacity='0';toast.style.transform='translateY(10px)';}
+
+    scene(1);await sleep(400);
+    await show('af-date');await sleep(180);await typeInto('af-date-val','May 14, 2025');await sleep(160);
+    await show('af-vendor');await sleep(180);await typeInto('af-vendor-val','Sephora');await sleep(160);
+    await show('af-cat');await sleep(180);await typeInto('af-cat-val','Supplies');await sleep(160);
+    await show('af-amt');await sleep(180);await typeInto('af-amt-val','$87.50');await sleep(280);
+    await show('af-btn');await sleep(560);
+    var b=document.getElementById('af-btn');if(b){b.style.transform='scale(0.97)';}await sleep(200);if(b){b.style.transform='scale(1)';}await sleep(760);
+
+    scene(2);await sleep(380);
+    var fs=[['ov-income','18px'],['ov-expense','18px'],['ov-profit','18px']];
+    for(var i=0;i<fs.length;i++){var el=document.getElementById(fs[i][0]);if(el){el.style.transition='font-size .4s ease';el.style.fontSize=fs[i][1];}await sleep(340);}
+    await sleep(1500);
+
+    scene(3);await sleep(380);
+    var ids=['sc1','sc2','sc3','sc4'];for(var j=0;j<ids.length;j++){await show(ids[j]);await sleep(280);}
+    await sleep(180);var st=document.getElementById('sc-total');if(st)st.style.opacity='1';await sleep(380);await show('sc-export-btn');await sleep(1150);
+
+    scene(4);await sleep(480);
+    var t=document.getElementById('toast-msg');if(t){t.style.opacity='1';t.style.transform='translateY(0)';}await sleep(2000);
+    loop();
+  }
+  var o=new IntersectionObserver(function(es){if(es[0].isIntersecting){o.disconnect();loop();}},{threshold:.3});
+  o.observe(document.getElementById('anim-screen'));
+})();
 </script>
 </body>
 </html>
