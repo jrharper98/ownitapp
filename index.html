@@ -526,7 +526,7 @@ footer{background:var(--navy-dk);padding:46px 5vw 30px;}
       <p class="desc">Fill out the intake form and we'll reach out soon to get your build started.</p>
       <div class="hero-btns" style="margin-top:0">
         <a href="intake.html" class="btn-primary">Fill out the intake form →</a>
-        <a href="/cdn-cgi/l/email-protection#1e716970776a7f6e6e30777078715e677f767171307d7173216d6b7c747b7d6a2357397a3b2c2e7277757b3b2c2e6a713b2c2e797b6a3b2c2e6d6a7f6c6a7b7a3b2c2e69776a763b2c2e516970576a" class="btn-secondary">Email us instead</a>
+        <a data-mailto data-subject="I'd like to get started with OwnIt" class="btn-secondary">Email us instead</a>
       </div>
       <p class="cta-note">Plans from $75 · 2-week trial included · No subscriptions ever</p>
     </div>
@@ -552,7 +552,7 @@ footer{background:var(--navy-dk);padding:46px 5vw 30px;}
   <div class="foot-copy">© 2026 OwnIt · Built with care for entrepreneurs who mean business.</div>
 </footer>
 
-<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+<script>
 /* ── comparison table ── */
 (function(){
   var CK='<span class="ck"><svg viewBox="0 0 24 24" fill="none" stroke="#00B4A6" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></span>';
@@ -628,6 +628,16 @@ setTimeout(function(){
   }
   var o=new IntersectionObserver(function(es){if(es[0].isIntersecting){o.disconnect();loop();}},{threshold:.3});
   o.observe(document.getElementById('anim-screen'));
+})();
+/* ── email link assembly (avoids Cloudflare email obfuscation) ── */
+(function(){
+  var addr='ownitapp.info'+'@'+'yahoo.com';
+  document.querySelectorAll('[data-mailto]').forEach(function(el){
+    var subj=el.getAttribute('data-subject');
+    el.setAttribute('href','mailto:'+addr+(subj?'?subject='+encodeURIComponent(subj):''));
+    if(el.hasAttribute('data-email'))el.textContent=addr;
+  });
+  document.querySelectorAll('[data-email]:not([data-mailto])').forEach(function(el){el.textContent=addr;});
 })();
 </script>
 </body>
