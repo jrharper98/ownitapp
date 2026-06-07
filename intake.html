@@ -41,11 +41,7 @@
       align-items: center;
       gap: 12px;
     }
-    .logo-svg {
-      width: 36px;
-      height: 36px;
-      flex-shrink: 0;
-    }
+    .logo-svg { width: 36px; height: 36px; flex-shrink: 0; }
     .logo-text {
       font-family: 'Playfair Display', serif;
       font-size: 22px;
@@ -65,16 +61,14 @@
       scrollbar-width: none;
     }
     .breadcrumb-bar::-webkit-scrollbar { display: none; }
+    .breadcrumb-bar.hidden { display: none; }
     .breadcrumb-list {
       display: flex;
       align-items: stretch;
       list-style: none;
       min-width: max-content;
     }
-    .breadcrumb-list li {
-      display: flex;
-      align-items: center;
-    }
+    .breadcrumb-list li { display: flex; align-items: center; }
     .breadcrumb-list li button {
       all: unset;
       cursor: pointer;
@@ -91,25 +85,28 @@
       white-space: nowrap;
     }
     .breadcrumb-list li button svg {
-      width: 14px;
-      height: 14px;
+      width: 14px; height: 14px;
       flex-shrink: 0;
       opacity: 0.6;
       transition: opacity 0.18s;
+      stroke: currentColor; fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
     }
     .breadcrumb-list li button.active {
       color: var(--teal);
       border-bottom-color: var(--teal);
       font-weight: 600;
     }
-    .breadcrumb-list li button.active svg { opacity: 1; stroke: var(--teal); }
+    .breadcrumb-list li button.active svg { opacity: 1; }
     .breadcrumb-list li button.done { color: var(--navy); }
-    .breadcrumb-list li button.done svg { opacity: 0.9; stroke: var(--teal); }
+    .breadcrumb-list li button.done svg { opacity: 0.9; }
     .bc-check {
       display: none;
-      width: 12px;
-      height: 12px;
+      width: 12px !important; height: 12px !important;
       flex-shrink: 0;
+      stroke: var(--teal) !important;
+      stroke-width: 2.5 !important;
+      opacity: 1 !important;
     }
     .breadcrumb-list li button.done .bc-check { display: block; }
     .breadcrumb-sep {
@@ -128,28 +125,19 @@
     }
 
     /* ── SECTION HEADER ── */
-    .section-head {
-      margin-bottom: 28px;
-    }
+    .section-head { margin-bottom: 28px; }
     .section-icon {
-      width: 44px;
-      height: 44px;
+      width: 44px; height: 44px;
       background: var(--white);
       border: 1px solid var(--border);
       border-radius: 12px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      display: flex; align-items: center; justify-content: center;
       margin-bottom: 14px;
     }
     .section-icon svg {
-      width: 22px;
-      height: 22px;
-      stroke: var(--teal);
-      fill: none;
-      stroke-width: 1.8;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      width: 22px; height: 22px;
+      stroke: var(--teal); fill: none;
+      stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round;
     }
     .section-head h1 {
       font-family: 'Playfair Display', serif;
@@ -159,10 +147,7 @@
       line-height: 1.2;
       margin-bottom: 6px;
     }
-    .section-head p {
-      color: var(--muted);
-      font-size: 14px;
-    }
+    .section-head p { color: var(--muted); font-size: 14px; }
 
     /* ── AUTOSAVE BADGE ── */
     .autosave-badge {
@@ -176,11 +161,7 @@
       transition: opacity 0.4s;
     }
     .autosave-badge.visible { opacity: 1; }
-    .autosave-badge .dot {
-      width: 6px; height: 6px;
-      background: var(--teal);
-      border-radius: 50%;
-    }
+    .autosave-badge .dot { width: 6px; height: 6px; background: var(--teal); border-radius: 50%; }
 
     /* ── CARD ── */
     .form-card {
@@ -192,22 +173,15 @@
     }
 
     /* ── FIELD GROUPS ── */
-    .field-row {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 16px;
-    }
+    .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
     @media (max-width: 520px) {
       .field-row { grid-template-columns: 1fr; }
       .form-card { padding: 20px 18px; }
     }
 
-    .field {
-      margin-bottom: 22px;
-    }
+    .field { margin-bottom: 22px; }
     .field:last-child { margin-bottom: 0; }
-
-    .field label {
+    .field label.flabel {
       display: block;
       font-size: 11.5px;
       font-weight: 600;
@@ -216,7 +190,7 @@
       color: var(--navy);
       margin-bottom: 7px;
     }
-    .field label .hint {
+    .field label.flabel .hint {
       display: block;
       font-size: 11.5px;
       font-weight: 400;
@@ -225,7 +199,7 @@
       color: var(--muted);
       margin-top: 2px;
     }
-    .field label .req { color: var(--teal); margin-left: 2px; }
+    .field label.flabel .req { color: var(--teal); margin-left: 2px; }
 
     .field input[type="text"],
     .field input[type="email"],
@@ -259,35 +233,23 @@
       padding-right: 36px;
     }
 
-    /* warning state */
     .field.warn input,
     .field.warn textarea,
     .field.warn select {
       border-color: var(--error);
       box-shadow: 0 0 0 3px rgba(224,90,90,0.10);
     }
-    .field .warn-msg {
-      display: none;
-      font-size: 12px;
-      color: var(--error);
-      margin-top: 5px;
-    }
+    .field .warn-msg { display: none; font-size: 12px; color: var(--error); margin-top: 5px; }
     .field.warn .warn-msg { display: block; }
 
     /* ── RADIO / CHECKBOX PILLS ── */
-    .pill-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 8px;
-    }
+    .pill-group { display: flex; flex-wrap: wrap; gap: 8px; }
     .pill-group input[type="radio"],
     .pill-group input[type="checkbox"] { display: none; }
     .pill-group label {
       cursor: pointer;
       font-size: 13.5px;
       font-weight: 500;
-      letter-spacing: 0;
-      text-transform: none;
       color: var(--navy);
       background: var(--bg);
       border: 1.5px solid var(--border);
@@ -303,6 +265,94 @@
       color: var(--white);
     }
 
+    /* ── PLAN SELECT CARDS ── */
+    .plan-grid { display: flex; flex-direction: column; gap: 14px; }
+    .plan-card { position: relative; display: block; cursor: pointer; }
+    .plan-card input { position: absolute; opacity: 0; pointer-events: none; }
+    .plan-card-inner {
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 22px 24px;
+      transition: border-color 0.16s, box-shadow 0.16s, transform 0.16s;
+    }
+    .plan-card:hover .plan-card-inner { border-color: var(--light-teal); }
+    .plan-card input:checked + .plan-card-inner {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 3px rgba(0,180,166,0.14), 0 18px 40px -26px rgba(0,180,166,0.6);
+    }
+    .plan-card.gold input:checked + .plan-card-inner {
+      border-color: var(--gold);
+      box-shadow: 0 0 0 3px rgba(244,163,0,0.16), 0 18px 40px -26px rgba(244,163,0,0.55);
+    }
+    .plan-top { display: flex; align-items: baseline; justify-content: space-between; gap: 12px; margin-bottom: 4px; }
+    .plan-name { font-family: 'Playfair Display', serif; font-weight: 700; font-size: 19px; color: var(--navy); }
+    .plan-badge {
+      font-size: 9.5px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--teal); background: rgba(0,180,166,0.1);
+      padding: 3px 9px; border-radius: 999px; margin-left: 8px; vertical-align: middle;
+    }
+    .plan-card.gold .plan-badge { color: #B47A00; background: rgba(244,163,0,0.14); }
+    .plan-price { font-family: 'Playfair Display', serif; font-weight: 800; font-size: 26px; color: var(--navy); white-space: nowrap; }
+    .plan-price small { font-size: 13px; font-weight: 600; color: var(--muted); }
+    .plan-who { font-size: 13.5px; color: var(--muted); margin-bottom: 12px; }
+    .plan-pts { list-style: none; display: flex; flex-direction: column; gap: 7px; }
+    .plan-pts li { display: flex; gap: 9px; align-items: flex-start; font-size: 13.5px; color: var(--text); }
+    .plan-pts li svg { width: 15px; height: 15px; flex-shrink: 0; margin-top: 3px; stroke: var(--teal); fill: none; stroke-width: 2.4; stroke-linecap: round; stroke-linejoin: round; }
+    .plan-tag {
+      display: inline-flex; align-items: center; gap: 7px;
+      margin-top: 14px; padding-top: 13px;
+      border-top: 1px dashed var(--border);
+      width: 100%;
+      font-size: 12.5px; font-weight: 600; color: var(--navy);
+    }
+    .plan-tag svg { width: 15px; height: 15px; stroke: var(--teal); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .plan-fee { display: block; margin-top: 10px; font-size: 12px; color: var(--muted); line-height: 1.5; }
+    .plan-fee strong { color: var(--navy); font-weight: 600; }
+
+    /* ── CALLOUT NOTE ── */
+    .callout {
+      display: flex; gap: 12px; align-items: flex-start;
+      background: rgba(0,180,166,0.07);
+      border: 1px solid var(--light-teal);
+      border-radius: var(--radius);
+      padding: 14px 16px;
+      font-size: 13.5px; color: var(--deep-navy);
+      line-height: 1.55;
+      margin-bottom: 16px;
+    }
+    .callout svg { width: 18px; height: 18px; flex-shrink: 0; margin-top: 1px; stroke: var(--teal); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+    .callout.gold { background: rgba(244,163,0,0.08); border-color: rgba(244,163,0,0.4); }
+    .callout.gold svg { stroke: var(--gold); }
+    .callout strong { font-weight: 600; }
+
+    /* ── PALETTE SWATCHES ── */
+    .palette-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+    @media (max-width: 520px) { .palette-grid { grid-template-columns: repeat(2, 1fr); } }
+    .palette-grid input { display: none; }
+    .swatch {
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      border-radius: var(--radius);
+      padding: 10px;
+      display: flex; flex-direction: column; gap: 8px;
+      transition: border-color 0.14s, box-shadow 0.14s;
+    }
+    .swatch:hover { border-color: var(--light-teal); }
+    .palette-grid input:checked + .swatch {
+      border-color: var(--teal);
+      box-shadow: 0 0 0 2.5px rgba(0,180,166,0.16);
+    }
+    .swatch-colors { display: flex; height: 28px; border-radius: 6px; overflow: hidden; }
+    .swatch-colors span { flex: 1; }
+    .swatch-name { font-size: 11.5px; font-weight: 500; color: var(--navy); text-align: center; }
+    .swatch.neutral .swatch-colors {
+      align-items: center; justify-content: center;
+      background: var(--bg); color: var(--muted);
+    }
+    .swatch.neutral .swatch-colors span { flex: none; }
+    .swatch.neutral svg { width: 18px; height: 18px; stroke: var(--muted); fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+
     /* ── BUSINESS REPEATER ── */
     .business-entry {
       background: var(--bg);
@@ -313,153 +363,108 @@
       position: relative;
     }
     .business-entry h4 {
-      font-size: 11px;
-      font-weight: 600;
-      color: var(--muted);
-      margin-bottom: 14px;
-      text-transform: uppercase;
-      letter-spacing: 0.07em;
+      font-size: 11px; font-weight: 600; color: var(--muted);
+      margin-bottom: 14px; text-transform: uppercase; letter-spacing: 0.07em;
     }
     .remove-btn {
-      position: absolute;
-      top: 14px; right: 14px;
-      background: none;
-      border: none;
-      cursor: pointer;
-      color: var(--muted);
-      line-height: 1;
-      transition: color 0.15s;
-      padding: 2px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      position: absolute; top: 14px; right: 14px;
+      background: none; border: none; cursor: pointer;
+      color: var(--muted); line-height: 1; transition: color 0.15s;
+      padding: 2px; display: flex; align-items: center; justify-content: center;
     }
     .remove-btn:hover { color: var(--error); }
     .remove-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; }
     .add-btn {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      background: none;
-      border: 1.5px dashed var(--teal);
-      border-radius: var(--radius);
-      color: var(--teal);
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      padding: 11px 20px;
-      cursor: pointer;
-      width: 100%;
-      justify-content: center;
-      transition: background 0.15s;
-      margin-top: 4px;
+      display: inline-flex; align-items: center; gap: 8px;
+      background: none; border: 1.5px dashed var(--teal);
+      border-radius: var(--radius); color: var(--teal);
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+      padding: 11px 20px; cursor: pointer; width: 100%; justify-content: center;
+      transition: background 0.15s; margin-top: 4px;
     }
     .add-btn:hover { background: rgba(0,180,166,0.06); }
     .add-btn svg { width: 16px; height: 16px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; }
 
     /* ── NAV BUTTONS ── */
     .form-nav {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-top: 28px;
-      gap: 12px;
+      display: flex; justify-content: space-between; align-items: center;
+      margin-top: 28px; gap: 12px;
     }
     .btn-back {
-      background: none;
-      border: 1.5px solid var(--border);
-      border-radius: var(--radius);
-      padding: 11px 22px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 14px;
-      font-weight: 600;
-      color: var(--muted);
-      cursor: pointer;
+      background: none; border: 1.5px solid var(--border);
+      border-radius: var(--radius); padding: 11px 22px;
+      font-family: 'DM Sans', sans-serif; font-size: 14px; font-weight: 600;
+      color: var(--muted); cursor: pointer;
       transition: border-color 0.15s, color 0.15s;
-      display: inline-flex;
-      align-items: center;
-      gap: 6px;
+      display: inline-flex; align-items: center; gap: 6px;
     }
     .btn-back:hover { border-color: var(--navy); color: var(--navy); }
     .btn-back svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
     .btn-next {
-      background: var(--teal);
-      border: none;
-      border-radius: var(--radius);
-      padding: 12px 28px;
-      font-family: 'DM Sans', sans-serif;
-      font-size: 15px;
-      font-weight: 600;
-      color: var(--white);
-      cursor: pointer;
+      background: var(--teal); border: none; border-radius: var(--radius);
+      padding: 12px 28px; font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+      color: var(--white); cursor: pointer;
       transition: background 0.15s, transform 0.1s;
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
+      display: inline-flex; align-items: center; gap: 8px;
     }
     .btn-next:hover { background: #009e92; }
     .btn-next:active { transform: scale(0.98); }
     .btn-next svg { width: 14px; height: 14px; stroke: currentColor; fill: none; stroke-width: 2.2; stroke-linecap: round; stroke-linejoin: round; }
-    .btn-submit {
-      background: var(--gold);
-      color: var(--navy);
-    }
+    .btn-submit { background: var(--gold); color: var(--navy); }
     .btn-submit:hover { background: #d99200; }
+    .calendly-btn {
+      display: flex; align-items: center; justify-content: center; gap: 10px;
+      width: 100%; background: var(--teal); color: #fff;
+      border-radius: var(--radius); padding: 14px 20px;
+      font-family: 'DM Sans', sans-serif; font-weight: 600; font-size: 15px;
+      text-decoration: none; transition: background 0.15s;
+    }
+    .calendly-btn:hover { background: #009e92; }
+    .calendly-btn svg { width: 18px; height: 18px; stroke: #fff; fill: none; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
 
     /* ── PAGES ── */
     .page { display: none; }
     .page.active { display: block; }
 
     /* ── THANK YOU ── */
-    .thankyou {
-      text-align: center;
-      padding: 60px 20px;
-    }
+    .thankyou { text-align: center; padding: 60px 20px; }
     .thankyou .ty-icon {
-      width: 64px;
-      height: 64px;
-      background: var(--white);
-      border: 1px solid var(--border);
-      border-radius: 20px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      width: 64px; height: 64px;
+      background: var(--white); border: 1px solid var(--border);
+      border-radius: 20px; display: flex; align-items: center; justify-content: center;
       margin: 0 auto 20px;
     }
     .thankyou .ty-icon svg {
-      width: 30px;
-      height: 30px;
-      stroke: var(--teal);
-      fill: none;
-      stroke-width: 2;
-      stroke-linecap: round;
-      stroke-linejoin: round;
+      width: 30px; height: 30px;
+      stroke: var(--teal); fill: none;
+      stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
     }
-    .thankyou h1 {
-      font-family: 'Playfair Display', serif;
-      font-size: 32px;
-      color: var(--navy);
-      margin-bottom: 12px;
+    .thankyou h1 { font-family: 'Playfair Display', serif; font-size: 32px; color: var(--navy); margin-bottom: 12px; }
+    .thankyou p { color: var(--muted); font-size: 15px; max-width: 440px; margin: 0 auto; line-height: 1.7; }
+    .thankyou .ty-steps {
+      max-width: 380px; margin: 26px auto 0; text-align: left;
+      background: var(--white); border: 1px solid var(--border); border-radius: var(--radius-lg);
+      padding: 20px 22px;
     }
-    .thankyou p { color: var(--muted); font-size: 15px; max-width: 400px; margin: 0 auto; line-height: 1.7; }
+    .thankyou .ty-steps h3 { font-size: 11.5px; font-weight: 600; letter-spacing: 0.07em; text-transform: uppercase; color: var(--muted); margin-bottom: 12px; }
+    .thankyou .ty-steps ol { list-style: none; counter-reset: s; display: flex; flex-direction: column; gap: 11px; }
+    .thankyou .ty-steps li { counter-increment: s; display: flex; gap: 12px; align-items: flex-start; font-size: 14px; color: var(--text); }
+    .thankyou .ty-steps li::before {
+      content: counter(s);
+      flex-shrink: 0; width: 22px; height: 22px;
+      background: var(--teal); color: #fff;
+      border-radius: 50%; font-size: 12px; font-weight: 700;
+      display: flex; align-items: center; justify-content: center;
+    }
 
     /* ── FOOTER ── */
     .site-footer {
-      text-align: center;
-      padding: 24px;
-      font-size: 12px;
-      color: var(--muted);
-      border-top: 1px solid var(--border);
-      margin-top: 20px;
+      text-align: center; padding: 24px;
+      font-size: 12px; color: var(--muted);
+      border-top: 1px solid var(--border); margin-top: 20px;
     }
 
-    /* ── STEP COUNTER ── */
-    .step-count {
-      font-size: 12px;
-      color: var(--muted);
-      font-weight: 500;
-      flex-shrink: 0;
-    }
+    .step-count { font-size: 12px; color: var(--muted); font-weight: 500; flex-shrink: 0; }
   </style>
 </head>
 <body>
@@ -480,143 +485,293 @@
   <div class="logo-text">Own<span>It</span></div>
 </header>
 
-<!-- BREADCRUMBS -->
+<!-- BREADCRUMBS (built dynamically) -->
 <nav class="breadcrumb-bar" aria-label="Form sections">
-  <ul class="breadcrumb-list" id="breadcrumbs">
-    <li>
-      <button onclick="goToPage(0)" id="bc-0">
-        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-        About You
-        <svg class="bc-check" viewBox="0 0 24 24" stroke="#00B4A6" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      </button>
-    </li>
-    <li><span class="breadcrumb-sep">›</span></li>
-    <li>
-      <button onclick="goToPage(1)" id="bc-1">
-        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
-        Businesses
-        <svg class="bc-check" viewBox="0 0 24 24" stroke="#00B4A6" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      </button>
-    </li>
-    <li><span class="breadcrumb-sep">›</span></li>
-    <li>
-      <button onclick="goToPage(2)" id="bc-2">
-        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-        Expenses
-        <svg class="bc-check" viewBox="0 0 24 24" stroke="#00B4A6" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      </button>
-    </li>
-    <li><span class="breadcrumb-sep">›</span></li>
-    <li>
-      <button onclick="goToPage(3)" id="bc-3">
-        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-        Income &amp; Tax
-        <svg class="bc-check" viewBox="0 0 24 24" stroke="#00B4A6" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      </button>
-    </li>
-    <li><span class="breadcrumb-sep">›</span></li>
-    <li>
-      <button onclick="goToPage(4)" id="bc-4">
-        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-        Setup
-        <svg class="bc-check" viewBox="0 0 24 24" stroke="#00B4A6" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      </button>
-    </li>
-    <li><span class="breadcrumb-sep">›</span></li>
-    <li>
-      <button onclick="goToPage(5)" id="bc-5">
-        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-        Branding
-        <svg class="bc-check" viewBox="0 0 24 24" stroke="#00B4A6" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      </button>
-    </li>
-    <li><span class="breadcrumb-sep">›</span></li>
-    <li>
-      <button onclick="goToPage(6)" id="bc-6">
-        <svg viewBox="0 0 24 24" stroke="currentColor" fill="none" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-        Anything Else
-        <svg class="bc-check" viewBox="0 0 24 24" stroke="#00B4A6" fill="none" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg>
-      </button>
-    </li>
-  </ul>
+  <ul class="breadcrumb-list" id="breadcrumbs"></ul>
 </nav>
 
 <main class="form-container">
 
-  <!-- ═══ PAGE 0 — ABOUT YOU ═══ -->
-  <div class="page" id="page-0">
+  <!-- ═══ ABOUT YOU ═══ -->
+  <div class="page" data-page="about" data-screen-label="About You">
     <div class="section-head">
-      <div class="section-icon">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg>
-      </div>
+      <div class="section-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
       <h1>About You</h1>
       <p>Basic contact info so we can get started.</p>
     </div>
-    <div class="autosave-badge" id="save-0"><span class="dot"></span> Saved</div>
+    <div class="autosave-badge"><span class="dot"></span> Saved</div>
     <div class="form-card">
       <div class="field-row">
         <div class="field" id="f-firstName">
-          <label>First Name <span class="req">*</span></label>
+          <label class="flabel">First Name <span class="req">*</span></label>
           <input type="text" id="firstName" placeholder="Jane" autocomplete="given-name" />
           <span class="warn-msg">Please enter your first name.</span>
         </div>
         <div class="field" id="f-lastName">
-          <label>Last Name <span class="req">*</span></label>
+          <label class="flabel">Last Name <span class="req">*</span></label>
           <input type="text" id="lastName" placeholder="Smith" autocomplete="family-name" />
           <span class="warn-msg">Please enter your last name.</span>
         </div>
       </div>
       <div class="field" id="f-email">
-        <label>Email Address <span class="req">*</span></label>
+        <label class="flabel">Email Address <span class="req">*</span><span class="hint">Where we'll send your app link &amp; updates</span></label>
         <input type="email" id="email" placeholder="jane@example.com" autocomplete="email" />
         <span class="warn-msg">Please enter a valid email.</span>
       </div>
       <div class="field">
-        <label>Phone / Best Way to Reach You</label>
+        <label class="flabel">Phone / Best Way to Reach You</label>
         <input type="tel" id="phone" placeholder="(555) 000-0000" autocomplete="tel" />
       </div>
     </div>
     <div class="form-nav">
-      <span class="step-count">Step 1 of 7</span>
-      <button class="btn-next" onclick="nextPage(0)">Businesses <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <span class="step-count"></span>
+      <button class="btn-next" onclick="goNext()">Continue <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
     </div>
   </div>
 
-  <!-- ═══ PAGE 1 — BUSINESSES ═══ -->
-  <div class="page" id="page-1">
+  <!-- ═══ PLAN SELECT ═══ -->
+  <div class="page" data-page="plan" data-screen-label="Choose Your Plan">
     <div class="section-head">
-      <div class="section-icon">
-        <svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg>
+      <div class="section-icon"><svg viewBox="0 0 24 24"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg></div>
+      <h1>Which OwnIt is right for you?</h1>
+      <p>Pick the option you'd like to move forward with. The rest of the form adapts to your choice.</p>
+    </div>
+    <div class="autosave-badge"><span class="dot"></span> Saved</div>
+
+    <div class="field" id="f-plan">
+      <div class="plan-grid">
+
+        <label class="plan-card" for="plan-diy">
+          <input type="radio" name="plan" id="plan-diy" value="diy" />
+          <div class="plan-card-inner">
+            <div class="plan-top">
+              <span class="plan-name">OwnIt Lite — DIY</span>
+              <span class="plan-price"><small>$</small>75</span>
+            </div>
+            <p class="plan-who">For tech-comfortable self-starters who want to set things up themselves.</p>
+            <ul class="plan-pts">
+              <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Your app, your business name</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Self-serve setup — up to 3 businesses</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Cloud sync available, self-serve</li>
+            </ul>
+            <span class="plan-tag"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>We email you a private setup link</span>
+          </div>
+        </label>
+
+        <label class="plan-card" for="plan-guided">
+          <input type="radio" name="plan" id="plan-guided" value="guided" />
+          <div class="plan-card-inner">
+            <div class="plan-top">
+              <span class="plan-name">OwnIt Lite — Guided <span class="plan-badge">Most popular</span></span>
+              <span class="plan-price"><small>$</small>100</span>
+            </div>
+            <p class="plan-who">Same app, but we walk you through setup on a 30-minute call.</p>
+            <ul class="plan-pts">
+              <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Everything in DIY</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>30-minute onboarding call + icon setup</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Cloud sync available (+$50)</li>
+            </ul>
+            <span class="plan-tag"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>We set up a call with you</span>
+            <span class="plan-fee"><strong>+ $25 booking fee</strong> to confirm your call — credited toward your total</span>
+          </div>
+        </label>
+
+        <label class="plan-card gold" for="plan-custom">
+          <input type="radio" name="plan" id="plan-custom" value="custom" />
+          <div class="plan-card-inner">
+            <div class="plan-top">
+              <span class="plan-name">Full Custom Build <span class="plan-badge">Most powerful</span></span>
+              <span class="plan-price"><small>$</small>400<small>+</small></span>
+            </div>
+            <p class="plan-who">A fully bespoke app, built around exactly how your business works.</p>
+            <ul class="plan-pts">
+              <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Everything in Guided</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Custom features &amp; income tracking</li>
+              <li><svg viewBox="0 0 24 24"><path d="M20 6 9 17l-5-5"/></svg>Cloud sync included</li>
+            </ul>
+            <span class="plan-tag"><svg viewBox="0 0 24 24"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4z"/></svg>Full intake form (about 5 minutes)</span>
+            <span class="plan-fee"><strong>+ $50 scoping fee</strong> to confirm your call — credited toward your build</span>
+          </div>
+        </label>
+
       </div>
+      <span class="warn-msg" style="margin-top:10px;">Please choose an option to continue.</span>
+    </div>
+
+    <div class="form-nav">
+      <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+      <span class="step-count"></span>
+      <button class="btn-next" onclick="goNext()">Continue <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ═══ LITE — APP BASICS (DIY + Guided) ═══ -->
+  <div class="page" data-page="lite-basics" data-screen-label="App Basics">
+    <div class="section-head">
+      <div class="section-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
+      <h1>Let's set up the basics</h1>
+      <p>Just a few quick things so your app arrives feeling like yours. You can change any of it later inside the app.</p>
+    </div>
+    <div class="autosave-badge"><span class="dot"></span> Saved</div>
+    <div class="form-card">
+      <div class="field" id="f-liteAppName">
+        <label class="flabel">What should your app be called? <span class="req">*</span><span class="hint">This is the name on your Home Screen — e.g. your business name</span></label>
+        <input type="text" id="liteAppName" placeholder="e.g. Glam by Kia" />
+        <span class="warn-msg">Please enter an app name.</span>
+      </div>
+
+      <div class="field" id="f-liteBizCount">
+        <label class="flabel">How many businesses will you track? <span class="req">*</span><span class="hint">OwnIt Lite supports up to 3</span></label>
+        <div class="pill-group">
+          <input type="radio" name="liteBizCount" id="lbc-1" value="1 business" /><label for="lbc-1">1</label>
+          <input type="radio" name="liteBizCount" id="lbc-2" value="2 businesses" /><label for="lbc-2">2</label>
+          <input type="radio" name="liteBizCount" id="lbc-3" value="3 businesses" /><label for="lbc-3">3</label>
+          <input type="radio" name="liteBizCount" id="lbc-more" value="More than 3" /><label for="lbc-more">More than 3</label>
+        </div>
+        <span class="warn-msg">Please pick how many businesses.</span>
+        <div class="callout gold" id="bizOverflowNote" style="display:none;margin-top:14px;margin-bottom:0;">
+          <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+          <span>OwnIt Lite handles up to 3 businesses. For more, the <strong>Full Custom Build</strong> is the better fit — you can go back and switch your plan, or note it below and we'll advise.</span>
+        </div>
+      </div>
+
+      <div class="field">
+        <label class="flabel">List your businesses <span class="hint">Optional — helps us pre-load them for you</span></label>
+        <textarea id="liteBusinesses" placeholder="e.g. Freelance photography, Etsy shop, Weekend catering"></textarea>
+      </div>
+
+      <div class="field">
+        <label class="flabel">Pick a color palette <span class="hint">Optional — or choose your own inside the app later</span></label>
+        <div class="palette-grid" id="paletteGrid"></div>
+      </div>
+
+      <div class="field" id="f-liteCloudSync">
+        <label class="flabel">Want to use your app on more than one device? <span class="hint">Cloud sync keeps everything in sync across phone, tablet &amp; computer</span></label>
+        <div class="pill-group">
+          <input type="radio" name="liteCloudSync" id="lcs-yes" value="Yes — wants cloud sync" /><label for="lcs-yes">Yes, sync my devices</label>
+          <input type="radio" name="liteCloudSync" id="lcs-no" value="No — single device is fine" /><label for="lcs-no">No, one device is fine</label>
+          <input type="radio" name="liteCloudSync" id="lcs-maybe" value="Tell me more" /><label for="lcs-maybe">Tell me more</label>
+        </div>
+        <div class="callout" id="syncNote" style="display:none;margin-top:14px;margin-bottom:0;">
+          <svg viewBox="0 0 24 24"><path d="M18 10h-1.26A8 8 0 1 0 9 20h9a5 5 0 0 0 0-10z"/></svg>
+          <span id="syncNoteText"></span>
+        </div>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+      <span class="step-count"></span>
+      <button class="btn-next" onclick="goNext()">Continue <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+    </div>
+  </div>
+
+  <!-- ═══ DIY — FINISH / GET YOUR LINK ═══ -->
+  <div class="page" data-page="diy-finish" data-screen-label="Get Your Link">
+    <div class="section-head">
+      <div class="section-icon"><svg viewBox="0 0 24 24"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg></div>
+      <h1>You're almost there</h1>
+      <p>Once you submit, we'll email a Stripe payment link — then your private OwnIt Lite link and a quick-start guide.</p>
+    </div>
+    <div class="autosave-badge"><span class="dot"></span> Saved</div>
+    <div class="callout">
+      <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span><strong>How DIY works:</strong> first we'll email a secure <strong>Stripe payment link</strong>. Once that's complete, you'll get your private app link — set a passcode and follow the short in-app setup wizard. Most people are up and running in under 10 minutes.</span>
+    </div>
+    <div class="form-card">
+      <div class="field">
+        <label class="flabel">How did you hear about OwnIt?</label>
+        <select id="hearAboutLite">
+          <option value="">Select one…</option>
+          <option value="Instagram">Instagram</option>
+          <option value="Word of mouth / friend referral">Word of mouth / friend referral</option>
+          <option value="Google search">Google search</option>
+          <option value="Scanned a t-shirt">Scanned a t-shirt</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="flabel">Anything you'd like us to know? <span class="hint">Optional</span></label>
+        <textarea id="liteNotes" placeholder="Questions, accessibility needs, anything at all…"></textarea>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+      <span class="step-count"></span>
+      <button class="btn-next btn-submit" onclick="submitForm()">Send My Order</button>
+    </div>
+  </div>
+
+  <!-- ═══ GUIDED — BOOK YOUR CALL ═══ -->
+  <div class="page" data-page="guided-call" data-screen-label="Book Your Call">
+    <div class="section-head">
+      <div class="section-icon"><svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></div>
+      <h1>Book your setup call</h1>
+      <p>Submit your details, then grab a 30-minute onboarding slot that suits you.</p>
+    </div>
+    <div class="autosave-badge"><span class="dot"></span> Saved</div>
+    <div class="callout">
+      <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+      <span><strong>Two quick steps:</strong> submit this form so we have your details, then pick a time on Calendly. A <strong>$25 booking fee</strong> is charged before your call is confirmed — we'll email a secure link, and it's credited in full toward your OwnIt Lite — Guided total.</span>
+    </div>
+    <div class="form-card">
+      <a class="calendly-btn" id="calendlyBtn" href="#" target="_blank" rel="noopener">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Pick your time on Calendly
+      </a>
+      <div class="field" style="margin-top:22px;">
+        <label class="flabel">How did you hear about OwnIt?</label>
+        <select id="hearAboutGuided">
+          <option value="">Select one…</option>
+          <option value="Instagram">Instagram</option>
+          <option value="Word of mouth / friend referral">Word of mouth / friend referral</option>
+          <option value="Google search">Google search</option>
+          <option value="Scanned a t-shirt">Scanned a t-shirt</option>
+          <option value="Other">Other</option>
+        </select>
+      </div>
+      <div class="field">
+        <label class="flabel">Anything you'd like to cover on the call? <span class="hint">Optional</span></label>
+        <textarea id="liteNotesGuided" placeholder="Questions, goals, things you're unsure about…"></textarea>
+      </div>
+    </div>
+    <div class="form-nav">
+      <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+      <span class="step-count"></span>
+      <button class="btn-next btn-submit" onclick="submitForm()">Request My Call</button>
+    </div>
+  </div>
+
+  <!-- ═══ CUSTOM — BUSINESSES ═══ -->
+  <div class="page" data-page="biz" data-screen-label="Businesses">
+    <div class="section-head">
+      <div class="section-icon"><svg viewBox="0 0 24 24"><rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/></svg></div>
       <h1>Your Businesses</h1>
       <p>Tell us about each income stream — one entry per business.</p>
     </div>
-    <div class="autosave-badge" id="save-1"><span class="dot"></span> Saved</div>
+    <div class="autosave-badge"><span class="dot"></span> Saved</div>
     <div id="business-list"></div>
     <button class="add-btn" onclick="addBusiness()">
       <svg viewBox="0 0 24 24"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
       Add Another Business
     </button>
     <div class="form-nav">
-      <button class="btn-back" onclick="prevPage(1)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <span class="step-count">Step 2 of 7</span>
-      <button class="btn-next" onclick="nextPage(1)">Expenses <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+      <span class="step-count"></span>
+      <button class="btn-next" onclick="goNext()">Continue <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
     </div>
   </div>
 
-  <!-- ═══ PAGE 2 — EXPENSES & PAYMENTS ═══ -->
-  <div class="page" id="page-2">
+  <!-- ═══ CUSTOM — EXPENSES & PAYMENTS ═══ -->
+  <div class="page" data-page="expenses" data-screen-label="Expenses">
     <div class="section-head">
-      <div class="section-icon">
-        <svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg>
-      </div>
+      <div class="section-icon"><svg viewBox="0 0 24 24"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/></svg></div>
       <h1>Expenses &amp; Payments</h1>
       <p>How you spend and how you get paid.</p>
     </div>
-    <div class="autosave-badge" id="save-2"><span class="dot"></span> Saved</div>
+    <div class="autosave-badge"><span class="dot"></span> Saved</div>
     <div class="form-card">
       <div class="field">
-        <label>What Payment Methods Do You Use? <span class="hint">Select all that apply</span></label>
+        <label class="flabel">What Payment Methods Do You Use for Your Expenses? <span class="hint">Select all that apply</span></label>
         <div class="pill-group" id="paymentMethods">
           <input type="checkbox" id="pm-bizcard" value="Business Card" /><label for="pm-bizcard">Business Card</label>
           <input type="checkbox" id="pm-perscard" value="Personal Card" /><label for="pm-perscard">Personal Card</label>
@@ -630,11 +785,11 @@
         </div>
       </div>
       <div class="field">
-        <label>List Your Main Expense Categories <span class="hint">Think global expenses that span all businesses — e.g. Mileage, Home Office, Phone Bill, Health Insurance, Professional Development</span></label>
-        <textarea id="expenseCategories" placeholder="Mileage, Home Office, Phone Bill, Subscriptions..."></textarea>
+        <label class="flabel">List Your Main Expense Categories <span class="hint">e.g. Transportation, Supplies, Subscriptions, Marketing</span></label>
+        <textarea id="expenseCategories" placeholder="Transportation, Supplies, Marketing..."></textarea>
       </div>
       <div class="field">
-        <label>Do You Have Recurring Expenses You'd Want to Duplicate Quickly?</label>
+        <label class="flabel">Do You Have Recurring Expenses You'd Want to Duplicate Quickly?</label>
         <div class="pill-group">
           <input type="radio" name="recurringExp" id="re-yes" value="Yes" /><label for="re-yes">Yes</label>
           <input type="radio" name="recurringExp" id="re-no" value="No" /><label for="re-no">No</label>
@@ -642,7 +797,7 @@
         </div>
       </div>
       <div class="field">
-        <label>Do You Attach Receipts or Photos to Expenses?</label>
+        <label class="flabel">Do You Attach Receipts or Photos to Expenses?</label>
         <div class="pill-group">
           <input type="radio" name="receipts" id="rec-always" value="Yes — always" /><label for="rec-always">Yes — always</label>
           <input type="radio" name="receipts" id="rec-sometimes" value="Sometimes" /><label for="rec-sometimes">Sometimes</label>
@@ -651,25 +806,23 @@
       </div>
     </div>
     <div class="form-nav">
-      <button class="btn-back" onclick="prevPage(2)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <span class="step-count">Step 3 of 7</span>
-      <button class="btn-next" onclick="nextPage(2)">Income &amp; Tax <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+      <span class="step-count"></span>
+      <button class="btn-next" onclick="goNext()">Continue <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
     </div>
   </div>
 
-  <!-- ═══ PAGE 3 — INCOME & TAX ═══ -->
-  <div class="page" id="page-3">
+  <!-- ═══ CUSTOM — INCOME & TAX ═══ -->
+  <div class="page" data-page="income" data-screen-label="Income & Tax">
     <div class="section-head">
-      <div class="section-icon">
-        <svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg>
-      </div>
+      <div class="section-icon"><svg viewBox="0 0 24 24"><line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/></svg></div>
       <h1>Income &amp; Tax Info</h1>
       <p>Helps us set up the right tracking features for you.</p>
     </div>
-    <div class="autosave-badge" id="save-3"><span class="dot"></span> Saved</div>
+    <div class="autosave-badge"><span class="dot"></span> Saved</div>
     <div class="form-card">
       <div class="field">
-        <label>Do You File Taxes Using Schedule C? <span class="hint">Sole proprietors &amp; single-member LLCs</span></label>
+        <label class="flabel">Do You File Taxes Using Schedule C? <span class="hint">Sole proprietors &amp; single-member LLCs</span></label>
         <div class="pill-group">
           <input type="radio" name="scheduleC" id="sc-yes" value="Yes" /><label for="sc-yes">Yes</label>
           <input type="radio" name="scheduleC" id="sc-no" value="No" /><label for="sc-no">No</label>
@@ -677,7 +830,7 @@
         </div>
       </div>
       <div class="field">
-        <label>Do You Receive 1099-NEC or 1099-K Forms?</label>
+        <label class="flabel">Do You Receive 1099-NEC or 1099-K Forms?</label>
         <div class="pill-group">
           <input type="radio" name="form1099" id="f99-yes" value="Yes" /><label for="f99-yes">Yes</label>
           <input type="radio" name="form1099" id="f99-no" value="No" /><label for="f99-no">No</label>
@@ -685,7 +838,7 @@
         </div>
       </div>
       <div class="field">
-        <label>Do You Want to Export Data to Google Sheets for Your Accountant?</label>
+        <label class="flabel">Do You Want to Export Data to Google Sheets for Your Accountant?</label>
         <div class="pill-group">
           <input type="radio" name="googleSheets" id="gs-yes" value="Yes please" /><label for="gs-yes">Yes please</label>
           <input type="radio" name="googleSheets" id="gs-no" value="Not needed" /><label for="gs-no">Not needed</label>
@@ -693,61 +846,42 @@
         </div>
       </div>
       <div class="field">
-        <label>Do You Want to Export into QuickBooks or Another Accounting Platform?</label>
+        <label class="flabel">Do You Receive Revenue from Out of State or Internationally? <span class="hint">Anything outside California helps us set up the right tax handling</span></label>
         <div class="pill-group">
-          <input type="radio" name="quickbooks" id="qb-yes" value="Yes" /><label for="qb-yes">Yes</label>
-          <input type="radio" name="quickbooks" id="qb-no" value="No" /><label for="qb-no">No</label>
-          <input type="radio" name="quickbooks" id="qb-notsure" value="Not sure" /><label for="qb-notsure">Not sure</label>
+          <input type="radio" name="outOfState" id="oos-ca" value="California only" /><label for="oos-ca">California only</label>
+          <input type="radio" name="outOfState" id="oos-states" value="Yes — other US states" /><label for="oos-states">Other US states</label>
+          <input type="radio" name="outOfState" id="oos-intl" value="Yes — international" /><label for="oos-intl">International</label>
+          <input type="radio" name="outOfState" id="oos-both" value="Yes — US states &amp; international" /><label for="oos-both">Both</label>
+          <input type="radio" name="outOfState" id="oos-notsure" value="Not sure" /><label for="oos-notsure">Not sure</label>
         </div>
       </div>
       <div class="field">
-        <label>Do You Have a Part-Time or Full-Time Job? <span class="hint">W2 forms for 1040 tax filing</span></label>
+        <label class="flabel">Do You Have a Part-Time or Full-Time Job? <span class="hint">W2 forms for 1040 tax filing</span></label>
         <div class="pill-group">
           <input type="radio" name="w2job" id="w2-ft" value="Yes — full-time" /><label for="w2-ft">Yes — full-time</label>
           <input type="radio" name="w2job" id="w2-pt" value="Yes — part-time" /><label for="w2-pt">Yes — part-time</label>
           <input type="radio" name="w2job" id="w2-no" value="No" /><label for="w2-no">No</label>
         </div>
       </div>
-      <div class="field">
-        <label>Do You Have Other Tax Forms You Need to Fill Out? <span class="hint">e.g. Schedule E (rental), Schedule F (farm), 1065 (partnership)</span></label>
-        <div class="pill-group" id="taxForms">
-          <input type="checkbox" id="tf-sche" value="Schedule E" /><label for="tf-sche">Schedule E (Rental)</label>
-          <input type="checkbox" id="tf-schf" value="Schedule F" /><label for="tf-schf">Schedule F (Farm)</label>
-          <input type="checkbox" id="tf-1065" value="1065 Partnership" /><label for="tf-1065">1065 (Partnership)</label>
-          <input type="checkbox" id="tf-1120s" value="1120-S S-Corp" /><label for="tf-1120s">1120-S (S-Corp)</label>
-          <input type="checkbox" id="tf-other" value="Other" /><label for="tf-other">Other</label>
-          <input type="checkbox" id="tf-none" value="None" /><label for="tf-none">None / Not sure</label>
-        </div>
-      </div>
-      <div class="field">
-        <label>Are There Sales and Use Taxes You Are Responsible For? <span class="hint">Check the CDTFA website if your business operates in California</span></label>
-        <div class="pill-group">
-          <input type="radio" name="salesTax" id="st-yes" value="Yes" /><label for="st-yes">Yes</label>
-          <input type="radio" name="salesTax" id="st-no" value="No" /><label for="st-no">No</label>
-          <input type="radio" name="salesTax" id="st-notsure" value="Not sure" /><label for="st-notsure">Not sure</label>
-        </div>
-      </div>
     </div>
     <div class="form-nav">
-      <button class="btn-back" onclick="prevPage(3)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <span class="step-count">Step 4 of 7</span>
-      <button class="btn-next" onclick="nextPage(3)">Setup <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+      <span class="step-count"></span>
+      <button class="btn-next" onclick="goNext()">Continue <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
     </div>
   </div>
 
-  <!-- ═══ PAGE 4 — SETUP & DEVICES ═══ -->
-  <div class="page" id="page-4">
+  <!-- ═══ CUSTOM — SETUP & DEVICES ═══ -->
+  <div class="page" data-page="setup" data-screen-label="Setup & Devices">
     <div class="section-head">
-      <div class="section-icon">
-        <svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg>
-      </div>
+      <div class="section-icon"><svg viewBox="0 0 24 24"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/></svg></div>
       <h1>Setup &amp; Devices</h1>
       <p>So we build the right version for your life.</p>
     </div>
-    <div class="autosave-badge" id="save-4"><span class="dot"></span> Saved</div>
+    <div class="autosave-badge"><span class="dot"></span> Saved</div>
     <div class="form-card">
       <div class="field" id="f-deviceCount">
-        <label>How Many Devices Do You Plan to Use the App On? <span class="req">*</span><span class="hint">Multi-device needs Supabase sync (+$50)</span></label>
+        <label class="flabel">How Many Devices Do You Plan to Use the App On? <span class="req">*</span><span class="hint">Multi-device needs Supabase sync (+$50)</span></label>
         <div class="pill-group">
           <input type="radio" name="deviceCount" id="dc-1" value="Just 1 device" /><label for="dc-1">Just 1 device</label>
           <input type="radio" name="deviceCount" id="dc-2" value="2 or more devices" /><label for="dc-2">2 or more devices</label>
@@ -756,7 +890,7 @@
         <span class="warn-msg">Please select an option.</span>
       </div>
       <div class="field">
-        <label>Do You Use Apple Products or Android/Windows? <span class="hint">Helps us optimize your app experience</span></label>
+        <label class="flabel">Do You Use Apple Products or Android/Windows? <span class="hint">Helps us optimize your app experience</span></label>
         <div class="pill-group">
           <input type="radio" name="platform" id="pl-apple" value="Apple (iPhone/iPad/Mac)" /><label for="pl-apple">Apple (iPhone/iPad/Mac)</label>
           <input type="radio" name="platform" id="pl-android" value="Android / Windows" /><label for="pl-android">Android / Windows</label>
@@ -765,30 +899,28 @@
       </div>
     </div>
     <div class="form-nav">
-      <button class="btn-back" onclick="prevPage(4)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <span class="step-count">Step 5 of 7</span>
-      <button class="btn-next" onclick="nextPage(4)">Branding <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+      <span class="step-count"></span>
+      <button class="btn-next" onclick="goNext()">Continue <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
     </div>
   </div>
 
-  <!-- ═══ PAGE 5 — APP BRANDING ═══ -->
-  <div class="page" id="page-5">
+  <!-- ═══ CUSTOM — APP BRANDING ═══ -->
+  <div class="page" data-page="branding" data-screen-label="App Branding">
     <div class="section-head">
-      <div class="section-icon">
-        <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg>
-      </div>
+      <div class="section-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/></svg></div>
       <h1>App Branding</h1>
       <p>Make it look and feel like yours.</p>
     </div>
-    <div class="autosave-badge" id="save-5"><span class="dot"></span> Saved</div>
+    <div class="autosave-badge"><span class="dot"></span> Saved</div>
     <div class="form-card">
       <div class="field" id="f-appName">
-        <label>What Do You Want Your App to Be Called? <span class="req">*</span><span class="hint">This becomes the app name on your Home Screen</span></label>
+        <label class="flabel">What Do You Want Your App to Be Called? <span class="req">*</span><span class="hint">This becomes the app name on your Home Screen</span></label>
         <input type="text" id="appName" placeholder="e.g. My Business Hub" />
         <span class="warn-msg">Please enter your app name.</span>
       </div>
       <div class="field">
-        <label>Do You Have a Brand Color or Logo You Want Used?</label>
+        <label class="flabel">Do You Have a Brand Color or Logo You Want Used?</label>
         <div class="pill-group">
           <input type="radio" name="hasBrand" id="br-yes" value="Yes — I'll share it" /><label for="br-yes">Yes — I'll share it</label>
           <input type="radio" name="hasBrand" id="br-no" value="No — you choose" /><label for="br-no">No — you choose</label>
@@ -796,11 +928,11 @@
         </div>
       </div>
       <div class="field">
-        <label>What Are Your Brand Colors? <span class="hint">Hex codes, "vibes," or paste an Instagram link</span></label>
+        <label class="flabel">What Are Your Brand Colors? <span class="hint">Hex codes, "vibes," or paste an Instagram link</span></label>
         <textarea id="brandColors" placeholder="#FF5733, warm terracotta vibes, @myinstagram"></textarea>
       </div>
       <div class="field">
-        <label>Do You Have a Logo You'd Like to Use as Your App Icon?</label>
+        <label class="flabel">Do You Have a Logo You'd Like to Use as Your App Icon?</label>
         <div class="pill-group">
           <input type="radio" name="hasLogo" id="lo-yes" value="Yes — I'll send it" /><label for="lo-yes">Yes — I'll send it</label>
           <input type="radio" name="hasLogo" id="lo-no" value="No — create one for me" /><label for="lo-no">No — create one for me</label>
@@ -808,46 +940,43 @@
         </div>
       </div>
       <div class="field">
-        <label>Any Other Visual Notes? <span class="hint">Fonts, styles, inspiration accounts, anything helps</span></label>
+        <label class="flabel">Any Other Visual Notes? <span class="hint">Fonts, styles, inspiration accounts, anything helps</span></label>
         <textarea id="visualNotes" placeholder="Clean and modern, no serif fonts, inspired by @someaccount..."></textarea>
       </div>
     </div>
     <div class="form-nav">
-      <button class="btn-back" onclick="prevPage(5)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <span class="step-count">Step 6 of 7</span>
-      <button class="btn-next" onclick="nextPage(5)">Finish Up <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
+      <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+      <span class="step-count"></span>
+      <button class="btn-next" onclick="goNext()">Continue <svg viewBox="0 0 24 24"><polyline points="9 18 15 12 9 6"/></svg></button>
     </div>
   </div>
 
-  <!-- ═══ PAGE 6 — ANYTHING ELSE ═══ -->
-  <div class="page" id="page-6">
+  <!-- ═══ CUSTOM — ANYTHING ELSE ═══ -->
+  <div class="page" data-page="else" data-screen-label="Anything Else">
     <div class="section-head">
-      <div class="section-icon">
-        <svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg>
-      </div>
+      <div class="section-icon"><svg viewBox="0 0 24 24"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></div>
       <h1>Anything Else?</h1>
       <p>Your chance to tell us anything we haven't asked.</p>
     </div>
-    <div class="autosave-badge" id="save-6"><span class="dot"></span> Saved</div>
+    <div class="autosave-badge"><span class="dot"></span> Saved</div>
     <div class="form-card">
       <div class="field">
-        <label>How Did You Hear About OwnIt?</label>
+        <label class="flabel">How Did You Hear About OwnIt?</label>
         <select id="hearAbout">
           <option value="">Select one…</option>
           <option value="Instagram">Instagram</option>
           <option value="Word of mouth / friend referral">Word of mouth / friend referral</option>
-          <option value="LinkedIn">LinkedIn</option>
-          <option value="TikTok">TikTok</option>
           <option value="Google search">Google search</option>
+          <option value="Scanned a t-shirt">Scanned a t-shirt</option>
           <option value="Other">Other</option>
         </select>
       </div>
       <div class="field">
-        <label>Anything Special You Want in Your App? <span class="hint">Dream features, specific workflows, anything goes</span></label>
+        <label class="flabel">Anything Special You Want in Your App? <span class="hint">Dream features, specific workflows, anything goes</span></label>
         <textarea id="dreamFeatures" placeholder="I'd love a mileage tracker, a client CRM, invoice templates..."></textarea>
       </div>
       <div class="field">
-        <label>What's Your Ideal Timeline?</label>
+        <label class="flabel">What's Your Ideal Timeline?</label>
         <div class="pill-group">
           <input type="radio" name="timeline" id="tl-asap" value="ASAP" /><label for="tl-asap">ASAP</label>
           <input type="radio" name="timeline" id="tl-week" value="Within a week" /><label for="tl-week">Within a week</label>
@@ -855,54 +984,74 @@
         </div>
       </div>
     </div>
-
-    <!-- HIDDEN FORM for Formspree -->
-    <form id="ownit-form" action="https://formspree.io/f/mlgazvra" method="POST" style="display:none">
-      <input type="hidden" name="firstName" id="h-firstName" />
-      <input type="hidden" name="lastName" id="h-lastName" />
-      <input type="hidden" name="email" id="h-email" />
-      <input type="hidden" name="phone" id="h-phone" />
-      <input type="hidden" name="businesses" id="h-businesses" />
-      <input type="hidden" name="paymentMethods" id="h-paymentMethods" />
-      <input type="hidden" name="expenseCategories" id="h-expenseCategories" />
-      <input type="hidden" name="recurringExpenses" id="h-recurringExp" />
-      <input type="hidden" name="receipts" id="h-receipts" />
-      <input type="hidden" name="scheduleC" id="h-scheduleC" />
-      <input type="hidden" name="form1099" id="h-form1099" />
-      <input type="hidden" name="googleSheets" id="h-googleSheets" />
-      <input type="hidden" name="quickbooks" id="h-quickbooks" />
-      <input type="hidden" name="w2job" id="h-w2job" />
-      <input type="hidden" name="otherTaxForms" id="h-otherTaxForms" />
-      <input type="hidden" name="salesTax" id="h-salesTax" />
-      <input type="hidden" name="deviceCount" id="h-deviceCount" />
-      <input type="hidden" name="platform" id="h-platform" />
-      <input type="hidden" name="appName" id="h-appName" />
-      <input type="hidden" name="hasBrand" id="h-hasBrand" />
-      <input type="hidden" name="brandColors" id="h-brandColors" />
-      <input type="hidden" name="hasLogo" id="h-hasLogo" />
-      <input type="hidden" name="visualNotes" id="h-visualNotes" />
-      <input type="hidden" name="hearAbout" id="h-hearAbout" />
-      <input type="hidden" name="dreamFeatures" id="h-dreamFeatures" />
-      <input type="hidden" name="timeline" id="h-timeline" />
-    </form>
-
+    <div class="callout gold">
+      <svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <span>Before your planning call is confirmed, we'll email a secure <strong>$50 scoping-fee</strong> link. It's credited in full toward your final build — or toward OwnIt Lite if you decide that's a better fit. You'll book your 60-minute call right after submitting.</span>
+    </div>
     <div class="form-nav">
-      <button class="btn-back" onclick="prevPage(6)"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
-      <span class="step-count">Step 7 of 7</span>
+      <button class="btn-back" onclick="goBack()"><svg viewBox="0 0 24 24"><polyline points="15 18 9 12 15 6"/></svg> Back</button>
+      <span class="step-count"></span>
       <button class="btn-next btn-submit" onclick="submitForm()">Submit My Intake Form</button>
     </div>
   </div>
 
-  <!-- ═══ PAGE 7 — THANK YOU ═══ -->
-  <div class="page" id="page-7">
+  <!-- ═══ THANK YOU (dynamic) ═══ -->
+  <div class="page" data-page="thankyou">
     <div class="thankyou">
-      <div class="ty-icon">
-        <svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>
+      <div class="ty-icon"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg></div>
+      <h1 id="ty-title">You're all set!</h1>
+      <p id="ty-body">We'll review your answers and reach out soon.</p>
+      <a id="ty-calendly" class="calendly-btn" href="#" target="_blank" rel="noopener" style="display:none;max-width:300px;margin:24px auto 0;">
+        <svg viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+        Pick your time on Calendly
+      </a>
+      <div class="ty-steps" id="ty-steps" style="display:none;">
+        <h3>What happens next</h3>
+        <ol id="ty-steps-list"></ol>
       </div>
-      <h1>You're all set!</h1>
-      <p>We'll review your answers and reach out soon to confirm your build details. Keep an eye on your inbox.</p>
     </div>
   </div>
+
+  <!-- HIDDEN FORM for Formspree -->
+  <form id="ownit-form" action="https://formspree.io/f/mlgazvra" method="POST" style="display:none">
+    <input type="hidden" name="_subject" id="h-_subject" />
+    <input type="hidden" name="Plan" id="h-plan" />
+    <input type="hidden" name="Action needed" id="h-action" />
+    <input type="hidden" name="First name" id="h-firstName" />
+    <input type="hidden" name="Last name" id="h-lastName" />
+    <input type="hidden" name="Email" id="h-email" />
+    <input type="hidden" name="Phone" id="h-phone" />
+    <input type="hidden" name="How they heard" id="h-hearAbout" />
+    <!-- Lite -->
+    <input type="hidden" name="App name" id="h-liteAppName" />
+    <input type="hidden" name="Number of businesses" id="h-liteBizCount" />
+    <input type="hidden" name="Businesses" id="h-liteBusinesses" />
+    <input type="hidden" name="Color palette" id="h-litePalette" />
+    <input type="hidden" name="Cloud sync" id="h-liteCloudSync" />
+    <input type="hidden" name="Notes" id="h-liteNotes" />
+    <!-- Guided scheduling -->
+    <input type="hidden" name="Scheduling" id="h-scheduling" />
+    <!-- Full custom -->
+    <input type="hidden" name="Businesses (detailed)" id="h-businesses" />
+    <input type="hidden" name="Payment methods" id="h-paymentMethods" />
+    <input type="hidden" name="Expense categories" id="h-expenseCategories" />
+    <input type="hidden" name="Recurring expenses" id="h-recurringExp" />
+    <input type="hidden" name="Receipts" id="h-receipts" />
+    <input type="hidden" name="Schedule C" id="h-scheduleC" />
+    <input type="hidden" name="1099 forms" id="h-form1099" />
+    <input type="hidden" name="Google Sheets export" id="h-googleSheets" />
+    <input type="hidden" name="Out-of-state / international revenue" id="h-outOfState" />
+    <input type="hidden" name="W2 job" id="h-w2job" />
+    <input type="hidden" name="Device count" id="h-deviceCount" />
+    <input type="hidden" name="Platform" id="h-platform" />
+    <input type="hidden" name="Custom app name" id="h-appName" />
+    <input type="hidden" name="Has brand" id="h-hasBrand" />
+    <input type="hidden" name="Brand colors" id="h-brandColors" />
+    <input type="hidden" name="Has logo" id="h-hasLogo" />
+    <input type="hidden" name="Visual notes" id="h-visualNotes" />
+    <input type="hidden" name="Dream features" id="h-dreamFeatures" />
+    <input type="hidden" name="Timeline" id="h-timeline" />
+  </form>
 
 </main>
 
@@ -911,68 +1060,200 @@
 </footer>
 
 <script>
-  const STORAGE_KEY = 'ownit_intake_v1';
-  const TOTAL_PAGES = 7;
-  let currentPage = 0;
+  // ── CONFIG ──────────────────────────────────────────────
+  const STORAGE_KEY = 'ownit_intake_v2';
+  const FORMSPREE_URL = 'https://formspree.io/f/mlgazvra';
+  // ⬇️ Replace with your Calendly scheduling link
+  const CALENDLY_URL = 'https://calendly.com/ownitapp-info/30min';
+  // Full Custom kickoff call (60 min)
+  const CALENDLY_CUSTOM_URL = 'https://calendly.com/ownitapp-info/60-minute-full-custom';
+
+  const FLOWS = {
+    custom: ['about','plan','biz','expenses','income','setup','branding','else'],
+    diy:    ['about','plan','diy-finish'],
+    guided: ['about','plan','lite-basics','guided-call'],
+  };
+
+  const ICONS = {
+    user:     '<circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>',
+    tag:      '<path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/>',
+    phone:    '<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
+    send:     '<line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>',
+    calendar: '<rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/>',
+    briefcase:'<rect x="2" y="7" width="20" height="14" rx="2"/><path d="M16 7V5a2 2 0 0 0-2-2h-4a2 2 0 0 0-2 2v2"/>',
+    card:     '<rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/>',
+    chart:    '<line x1="18" y1="20" x2="18" y2="10"/><line x1="12" y1="20" x2="12" y2="4"/><line x1="6" y1="20" x2="6" y2="14"/>',
+    device:   '<rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12.01" y2="18"/>',
+    palette:  '<circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.22 4.22l1.42 1.42M18.36 18.36l1.42 1.42M1 12h2M21 12h2M4.22 19.78l1.42-1.42M18.36 5.64l1.42-1.42"/>',
+    chat:     '<path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>',
+  };
+  const CHECK = '<polyline points="20 6 9 17 4 12"/>';
+
+  const PAGE_META = {
+    about:        { label: 'About You',   icon: 'user' },
+    plan:         { label: 'Your Plan',   icon: 'tag' },
+    'lite-basics':{ label: 'App Basics',  icon: 'phone' },
+    'diy-finish': { label: 'Get Link',    icon: 'send' },
+    'guided-call':{ label: 'Book Call',   icon: 'calendar' },
+    biz:          { label: 'Businesses',  icon: 'briefcase' },
+    expenses:     { label: 'Expenses',    icon: 'card' },
+    income:       { label: 'Income & Tax',icon: 'chart' },
+    setup:        { label: 'Setup',       icon: 'device' },
+    branding:     { label: 'Branding',    icon: 'palette' },
+    else:         { label: 'Anything Else',icon: 'chat' },
+  };
+
+  // Color palettes from OwnIt Lite (shown as swatches; pr/ac/bg)
+  const PALETTES = [
+    {id:"ocean-depth",    name:"Ocean Depth",     bg:"#EBF4F8", pr:"#1A5F7A", ac:"#2E9CCA"},
+    {id:"navy-tan",       name:"Navy & Tan",      bg:"#F0E5D8", pr:"#007A8E", ac:"#A2C2D4"},
+    {id:"dusty-rose",     name:"Dusty Rose",      bg:"#FAF0F0", pr:"#8C4A5A", ac:"#C97A8A"},
+    {id:"slate-gold",     name:"Slate & Gold",    bg:"#F2F4F6", pr:"#3A4A5C", ac:"#C4A244"},
+    {id:"olive-cream",    name:"Olive & Cream",   bg:"#F6F4EC", pr:"#5A6030", ac:"#9AA050"},
+    {id:"midnight-plum",  name:"Midnight Plum",   bg:"#F0EEF8", pr:"#4A3870", ac:"#8A6CB8"},
+    {id:"terracotta",     name:"Terracotta",      bg:"#FAF0EB", pr:"#8C4A2E", ac:"#C47A5A"},
+    {id:"blue-goldenrod", name:"Blue & Goldenrod",bg:"#EEF4FF", pr:"#2B4EA8", ac:"#E8C84A"},
+    {id:"warm-charcoal",  name:"Warm Charcoal",   bg:"#F6F4F0", pr:"#4A3E30", ac:"#8A7A60"},
+    {id:"berry-cream",    name:"Berry & Cream",   bg:"#F8F0F6", pr:"#6A2A5A", ac:"#B05A98"},
+    {id:"teal-linen",     name:"Teal & Linen",    bg:"#F4F8F6", pr:"#2A6A64", ac:"#50AEA4"},
+    {id:"golden-hour",    name:"Golden Hour",     bg:"#FBF5E8", pr:"#7A5A18", ac:"#C8942A"},
+    {id:"peach-blush",    name:"Peach Blush",     bg:"#FFF4EE", pr:"#E8845A", ac:"#F4B89A"},
+    {id:"peach-wisteria", name:"Peach & Wisteria",bg:"#FFF0E0", pr:"#C97ABE", ac:"#F4C3A0"},
+    {id:"earthen-spice",  name:"Earthen Spice",   bg:"#FFF8DC", pr:"#5B3A29", ac:"#8FBC8F"},
+  ];
+
+  // Field groupings for clean per-flow submissions
+  const FIELD_GROUPS = {
+    shared:     ['_subject','plan','action','firstName','lastName','email','phone','hearAbout'],
+    liteBasics: ['liteAppName','liteBizCount','liteBusinesses','litePalette','liteCloudSync'],
+    notes:      ['liteNotes'],
+    scheduling: ['scheduling'],
+    custom: ['businesses','paymentMethods','expenseCategories','recurringExp','receipts',
+             'scheduleC','form1099','googleSheets','outOfState','w2job','deviceCount','platform',
+             'appName','hasBrand','brandColors','hasLogo','visualNotes','dreamFeatures','timeline'],
+  };
+
+  // ── STATE ───────────────────────────────────────────────
+  let currentFlow = 'custom';
+  let flowChosen  = false;
+  let pageIndex   = 0;
   let businessCount = 0;
 
+  function currentSequence() {
+    return flowChosen ? FLOWS[currentFlow] : ['about','plan'];
+  }
+  function currentPageId() { return currentSequence()[pageIndex]; }
+
+  // ── INIT ────────────────────────────────────────────────
   window.addEventListener('DOMContentLoaded', () => {
+    renderPalettes();
     loadAll();
-    showPage(currentPage);
+    const cb = document.getElementById('calendlyBtn'); if (cb) cb.href = CALENDLY_URL;
+
+    // URL ?plan= deep-link (from website buttons)
+    const urlPlan = new URLSearchParams(location.search).get('plan');
+    if (urlPlan && FLOWS[urlPlan]) {
+      const radioEl = document.querySelector('input[name="plan"][value="' + urlPlan + '"]');
+      if (radioEl) radioEl.checked = true;
+    }
+
     if (businessCount === 0) addBusiness();
+    refreshConditionalNotes();
+    showPageById(currentPageId());
   });
 
-  function showPage(idx) {
+  // ── NAVIGATION ──────────────────────────────────────────
+  function showPageById(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
-    document.getElementById('page-' + idx).classList.add('active');
-    updateBreadcrumbs(idx);
+    const el = document.querySelector('.page[data-page="' + id + '"]');
+    if (el) el.classList.add('active');
+    document.querySelector('.breadcrumb-bar').classList.toggle('hidden', id === 'thankyou');
+    renderBreadcrumbs();
+    updateStepCount();
     window.scrollTo({ top: 0, behavior: 'smooth' });
-    currentPage = idx;
   }
 
-  function nextPage(fromIdx) {
-    if (hasErrors(fromIdx)) return;
-    saveAll();
-    showPage(fromIdx + 1);
-  }
-
-  function prevPage(fromIdx) {
-    saveAll();
-    showPage(fromIdx - 1);
-  }
-
-  function goToPage(idx) {
-    saveAll();
-    showPage(idx);
-  }
-
-  function updateBreadcrumbs(activeIdx) {
-    for (let i = 0; i < TOTAL_PAGES; i++) {
-      const btn = document.getElementById('bc-' + i);
-      if (!btn) continue;
-      btn.className = '';
-      if (i === activeIdx) btn.classList.add('active');
-      else if (i < activeIdx) btn.classList.add('done');
+  function goNext() {
+    const id = currentPageId();
+    if (hasErrors(id)) return;
+    if (id === 'plan') {
+      currentFlow = planValue();
+      flowChosen = true;
     }
+    saveAll();
+    pageIndex++;
+    showPageById(currentPageId());
   }
 
-  // Required field definitions
+  function goBack() {
+    saveAll();
+    if (pageIndex > 0) pageIndex--;
+    showPageById(currentPageId());
+  }
+
+  function goToPageById(id) {
+    const idx = currentSequence().indexOf(id);
+    if (idx === -1) return;
+    saveAll();
+    pageIndex = idx;
+    showPageById(id);
+  }
+
+  function planValue() {
+    const v = (document.querySelector('input[name="plan"]:checked') || {}).value;
+    return FLOWS[v] ? v : 'custom';
+  }
+
+  // ── BREADCRUMBS ─────────────────────────────────────────
+  function renderBreadcrumbs() {
+    const seq = currentSequence();
+    const bar = document.getElementById('breadcrumbs');
+    bar.innerHTML = '';
+    seq.forEach((id, i) => {
+      const meta = PAGE_META[id];
+      const li = document.createElement('li');
+      const btn = document.createElement('button');
+      if (i === pageIndex) btn.classList.add('active');
+      else if (i < pageIndex) btn.classList.add('done');
+      btn.innerHTML =
+        '<svg viewBox="0 0 24 24">' + ICONS[meta.icon] + '</svg>' +
+        '<span>' + meta.label + '</span>' +
+        '<svg class="bc-check" viewBox="0 0 24 24">' + CHECK + '</svg>';
+      btn.addEventListener('click', () => goToPageById(id));
+      li.appendChild(btn);
+      bar.appendChild(li);
+      if (i < seq.length - 1) {
+        const sep = document.createElement('li');
+        sep.innerHTML = '<span class="breadcrumb-sep">›</span>';
+        bar.appendChild(sep);
+      }
+    });
+  }
+
+  function updateStepCount() {
+    const seq = currentSequence();
+    const active = document.querySelector('.page.active .step-count');
+    if (active) active.textContent = 'Step ' + (pageIndex + 1) + ' of ' + seq.length;
+  }
+
+  // ── REQUIRED VALIDATION ─────────────────────────────────
   const requiredMap = {
-    0: [
+    about: [
       { fieldId: 'f-firstName', inputId: 'firstName', type: 'text' },
       { fieldId: 'f-lastName',  inputId: 'lastName',  type: 'text' },
       { fieldId: 'f-email',     inputId: 'email',     type: 'email' },
     ],
-    4: [
-      { fieldId: 'f-deviceCount', name: 'deviceCount', type: 'radio' },
+    plan: [ { fieldId: 'f-plan', name: 'plan', type: 'radio' } ],
+    'lite-basics': [
+      { fieldId: 'f-liteAppName',  inputId: 'liteAppName', type: 'text' },
+      { fieldId: 'f-liteBizCount', name: 'liteBizCount',   type: 'radio' },
     ],
-    5: [
-      { fieldId: 'f-appName', inputId: 'appName', type: 'text' },
-    ],
+    setup:    [ { fieldId: 'f-deviceCount', name: 'deviceCount', type: 'radio' } ],
+    branding: [ { fieldId: 'f-appName',     inputId: 'appName',  type: 'text' } ],
   };
 
-  function hasErrors(pageIdx) {
-    const fields = requiredMap[pageIdx];
+  function hasErrors(pageId) {
+    const fields = requiredMap[pageId];
     if (!fields) return false;
     let anyError = false;
     fields.forEach(f => {
@@ -980,12 +1261,14 @@
       if (!el) return;
       let empty = false;
       if (f.type === 'radio') {
-        empty = !document.querySelector(`input[name="${f.name}"]:checked`);
+        empty = !document.querySelector('input[name="' + f.name + '"]:checked');
       } else if (f.type === 'email') {
-        const v = document.getElementById(f.inputId).value.trim();
+        const v = (document.getElementById(f.inputId).value || '').trim();
         empty = !v || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v);
+      } else if (f.type === 'select') {
+        empty = !(document.getElementById(f.inputId).value || '').trim();
       } else {
-        empty = !document.getElementById(f.inputId).value.trim();
+        empty = !(document.getElementById(f.inputId).value || '').trim();
       }
       el.classList.toggle('warn', empty);
       if (empty) anyError = true;
@@ -993,177 +1276,140 @@
     return anyError;
   }
 
-  // Business repeater
+  // ── PALETTE SWATCHES ────────────────────────────────────
+  function renderPalettes() {
+    const grid = document.getElementById('paletteGrid');
+    let html =
+      '<input type="radio" name="litePalette" id="pal-none" value="I\'ll choose in the app" />' +
+      '<label for="pal-none" class="swatch neutral">' +
+        '<span class="swatch-colors"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v2M12 21v2M4.2 4.2l1.4 1.4M18.4 18.4l1.4 1.4M1 12h2M21 12h2M4.2 19.8l1.4-1.4M18.4 5.6l1.4-1.4"/></svg></span>' +
+        '<span class="swatch-name">I\'ll pick in-app</span>' +
+      '</label>';
+    PALETTES.forEach(p => {
+      html +=
+        '<input type="radio" name="litePalette" id="pal-' + p.id + '" value="' + p.name + '" />' +
+        '<label for="pal-' + p.id + '" class="swatch">' +
+          '<span class="swatch-colors">' +
+            '<span style="background:' + p.pr + '"></span>' +
+            '<span style="background:' + p.ac + '"></span>' +
+            '<span style="background:' + p.bg + '"></span>' +
+          '</span>' +
+          '<span class="swatch-name">' + p.name + '</span>' +
+        '</label>';
+    });
+    grid.innerHTML = html;
+  }
+
+  // ── CONDITIONAL NOTES ───────────────────────────────────
+  function refreshConditionalNotes() {
+    const overflow = document.getElementById('bizOverflowNote');
+    if (overflow) {
+      const more = document.getElementById('lbc-more');
+      overflow.style.display = (more && more.checked) ? 'flex' : 'none';
+    }
+    const syncNote = document.getElementById('syncNote');
+    const syncText = document.getElementById('syncNoteText');
+    if (syncNote && syncText) {
+      const sync = radio('liteCloudSync');
+      if (sync === 'Yes — wants cloud sync' || sync === 'Tell me more') {
+        syncNote.style.display = 'flex';
+        syncText.innerHTML = (currentFlowOrPlan() === 'guided')
+          ? 'Cloud sync is an optional <strong>+$50</strong> add-on. We\'ll get it connected for you during your setup call.'
+          : 'Cloud sync is an optional add-on you can switch on yourself inside the app whenever you\'re ready.';
+      } else {
+        syncNote.style.display = 'none';
+      }
+    }
+  }
+  function currentFlowOrPlan() {
+    return flowChosen ? currentFlow : planValue();
+  }
+
+  // ── BUSINESS REPEATER (custom) ──────────────────────────
   function addBusiness() {
     const idx = businessCount++;
     const list = document.getElementById('business-list');
     const entry = document.createElement('div');
     entry.className = 'business-entry';
     entry.id = 'biz-' + idx;
-    entry.innerHTML = `
-      <h4>Business ${idx + 1}</h4>
-      ${idx > 0 ? `<button class="remove-btn" onclick="removeBusiness(${idx})" title="Remove">
-        <svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
-      </button>` : ''}
-      <div class="form-card" style="border:none;padding:0;margin:0;background:transparent;">
-        <div class="field">
-          <label>Business / Income Stream Name</label>
-          <input type="text" id="biz-name-${idx}" placeholder="e.g. Freelance Photography" />
-        </div>
-        <div class="field">
-          <label>What Type of Work Is It?</label>
-          <input type="text" id="biz-type-${idx}" placeholder="e.g. Services, Products, Rental income" />
-        </div>
-        <div class="field">
-          <label>Give us details! <span class="hint">What different services/products do you sell? How do people book you? Where do you sell?</span></label>
-          <textarea id="biz-notes-${idx}" placeholder="e.g. I offer 1:1 sessions, group classes, and digital downloads. Clients book via my website. I also sell on Etsy."></textarea>
-        </div>
-        <div class="field">
-          <label>How Do Clients Pay You?</label>
-          <div class="pill-group">
-            <input type="checkbox" id="biz-pay-cash-${idx}" /><label for="biz-pay-cash-${idx}">Cash</label>
-            <input type="checkbox" id="biz-pay-card-${idx}" /><label for="biz-pay-card-${idx}">Card</label>
-            <input type="checkbox" id="biz-pay-zelle-${idx}" /><label for="biz-pay-zelle-${idx}">Zelle</label>
-            <input type="checkbox" id="biz-pay-venmo-${idx}" /><label for="biz-pay-venmo-${idx}">Venmo</label>
-            <input type="checkbox" id="biz-pay-invoice-${idx}" /><label for="biz-pay-invoice-${idx}">Invoice</label>
-            <input type="checkbox" id="biz-pay-other-${idx}" /><label for="biz-pay-other-${idx}">Other</label>
-          </div>
-        </div>
-        <div class="field">
-          <label>What Expenses Do You Accrue for This Business? <span class="hint">Select all that apply</span></label>
-          <div class="pill-group">
-            <input type="checkbox" id="biz-exp-supplies-${idx}" /><label for="biz-exp-supplies-${idx}">Supplies</label>
-            <input type="checkbox" id="biz-exp-transport-${idx}" /><label for="biz-exp-transport-${idx}">Transportation</label>
-            <input type="checkbox" id="biz-exp-marketing-${idx}" /><label for="biz-exp-marketing-${idx}">Marketing</label>
-            <input type="checkbox" id="biz-exp-software-${idx}" /><label for="biz-exp-software-${idx}">Software / Subscriptions</label>
-            <input type="checkbox" id="biz-exp-equipment-${idx}" /><label for="biz-exp-equipment-${idx}">Equipment</label>
-            <input type="checkbox" id="biz-exp-contractors-${idx}" /><label for="biz-exp-contractors-${idx}">Contractors / Freelancers</label>
-            <input type="checkbox" id="biz-exp-inventory-${idx}" /><label for="biz-exp-inventory-${idx}">Inventory / COGS</label>
-            <input type="checkbox" id="biz-exp-fees-${idx}" /><label for="biz-exp-fees-${idx}">Platform / Transaction Fees</label>
-            <input type="checkbox" id="biz-exp-other-${idx}" /><label for="biz-exp-other-${idx}">Other</label>
-          </div>
-          <textarea id="biz-exp-notes-${idx}" placeholder="Anything specific we should know about your expenses..." style="margin-top:10px"></textarea>
-        </div>
-        <div class="field">
-          <label>What Platforms Are You Currently Using for This Business? <span class="hint">Select all that apply</span></label>
-          <div class="pill-group">
-            <input type="checkbox" id="biz-plat-stripe-${idx}" /><label for="biz-plat-stripe-${idx}">Stripe</label>
-            <input type="checkbox" id="biz-plat-paypal-${idx}" /><label for="biz-plat-paypal-${idx}">PayPal</label>
-            <input type="checkbox" id="biz-plat-etsy-${idx}" /><label for="biz-plat-etsy-${idx}">Etsy</label>
-            <input type="checkbox" id="biz-plat-freshbooks-${idx}" /><label for="biz-plat-freshbooks-${idx}">FreshBooks</label>
-            <input type="checkbox" id="biz-plat-expensify-${idx}" /><label for="biz-plat-expensify-${idx}">Expensify</label>
-            <input type="checkbox" id="biz-plat-square-${idx}" /><label for="biz-plat-square-${idx}">Square</label>
-            <input type="checkbox" id="biz-plat-shopify-${idx}" /><label for="biz-plat-shopify-${idx}">Shopify</label>
-            <input type="checkbox" id="biz-plat-none-${idx}" /><label for="biz-plat-none-${idx}">None</label>
-            <input type="checkbox" id="biz-plat-other-${idx}" /><label for="biz-plat-other-${idx}">Other</label>
-          </div>
-        </div>
-        <div class="field">
-          <label>Do You Have Employees or Contractors You Pay? <span class="hint">Helps us flag 1099-NEC filing requirements</span></label>
-          <div class="pill-group">
-            <input type="radio" name="biz-contractors-${idx}" id="biz-con-yes-${idx}" value="Yes" /><label for="biz-con-yes-${idx}">Yes</label>
-            <input type="radio" name="biz-contractors-${idx}" id="biz-con-no-${idx}" value="No" /><label for="biz-con-no-${idx}">No</label>
-          </div>
-        </div>
-        <div class="field">
-          <label>Do You Operate This Business in California?</label>
-          <div class="pill-group">
-            <input type="radio" name="biz-california-${idx}" id="biz-ca-yes-${idx}" value="Yes" /><label for="biz-ca-yes-${idx}">Yes</label>
-            <input type="radio" name="biz-california-${idx}" id="biz-ca-no-${idx}" value="No" /><label for="biz-ca-no-${idx}">No</label>
-          </div>
-        </div>
-        <div class="field">
-          <label>Do You Have a Separate Business Bank Account?</label>
-          <div class="pill-group">
-            <input type="radio" name="biz-bankaccount-${idx}" id="biz-ba-yes-${idx}" value="Yes" /><label for="biz-ba-yes-${idx}">Yes</label>
-            <input type="radio" name="biz-bankaccount-${idx}" id="biz-ba-no-${idx}" value="No" /><label for="biz-ba-no-${idx}">No</label>
-            <input type="radio" name="biz-bankaccount-${idx}" id="biz-ba-plan-${idx}" value="Planning to" /><label for="biz-ba-plan-${idx}">Planning to</label>
-          </div>
-        </div>
-        <div class="field">
-          <label>Do You Make Estimated Quarterly Tax Payments?</label>
-          <div class="pill-group">
-            <input type="radio" name="biz-quarterly-${idx}" id="biz-qt-yes-${idx}" value="Yes" /><label for="biz-qt-yes-${idx}">Yes</label>
-            <input type="radio" name="biz-quarterly-${idx}" id="biz-qt-no-${idx}" value="No" /><label for="biz-qt-no-${idx}">No</label>
-            <input type="radio" name="biz-quarterly-${idx}" id="biz-qt-notsure-${idx}" value="Not sure" /><label for="biz-qt-notsure-${idx}">Not sure</label>
-          </div>
-        </div>
-      </div>
-    `;
+    entry.innerHTML =
+      '<h4>Business ' + (idx + 1) + '</h4>' +
+      (idx > 0 ? '<button class="remove-btn" onclick="removeBusiness(' + idx + ')" title="Remove"><svg viewBox="0 0 24 24"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg></button>' : '') +
+      '<div style="border:none;padding:0;margin:0;background:transparent;">' +
+        '<div class="field"><label class="flabel">Business / Income Stream Name</label><input type="text" id="biz-name-' + idx + '" placeholder="e.g. Freelance Photography" /></div>' +
+        '<div class="field"><label class="flabel">What Type of Work Is It?</label><input type="text" id="biz-type-' + idx + '" placeholder="e.g. Services, Products, Rental income" /></div>' +
+        '<div class="field"><label class="flabel">How Do Clients Pay You?</label><div class="pill-group">' +
+          '<input type="checkbox" id="biz-pay-cash-' + idx + '" /><label for="biz-pay-cash-' + idx + '">Cash</label>' +
+          '<input type="checkbox" id="biz-pay-card-' + idx + '" /><label for="biz-pay-card-' + idx + '">Card</label>' +
+          '<input type="checkbox" id="biz-pay-zelle-' + idx + '" /><label for="biz-pay-zelle-' + idx + '">Zelle</label>' +
+          '<input type="checkbox" id="biz-pay-venmo-' + idx + '" /><label for="biz-pay-venmo-' + idx + '">Venmo</label>' +
+          '<input type="checkbox" id="biz-pay-invoice-' + idx + '" /><label for="biz-pay-invoice-' + idx + '">Invoice</label>' +
+          '<input type="checkbox" id="biz-pay-other-' + idx + '" /><label for="biz-pay-other-' + idx + '">Other</label>' +
+        '</div></div>' +
+      '</div>';
     list.appendChild(entry);
     saveAll();
   }
-
   function removeBusiness(idx) {
     const el = document.getElementById('biz-' + idx);
     if (el) el.remove();
     saveAll();
   }
 
-  // Save & Load
+  // ── DATA HELPERS ────────────────────────────────────────
+  function val(id) { const el = document.getElementById(id); return el ? el.value : ''; }
+  function radio(name) { const el = document.querySelector('input[name="' + name + '"]:checked'); return el ? el.value : ''; }
+  function checks(containerId) {
+    return [...document.querySelectorAll('#' + containerId + ' input:checked')].map(i => i.value);
+  }
+  function setVal(id, v) { const el = document.getElementById(id); if (el && v != null) el.value = v; }
+
   function getData() {
     const bizEntries = [];
     document.querySelectorAll('.business-entry').forEach(entry => {
       const id = entry.id.split('-')[1];
       const pays = [];
       ['cash','card','zelle','venmo','invoice','other'].forEach(p => {
-        if (document.getElementById(`biz-pay-${p}-${id}`)?.checked) pays.push(p);
-      });
-      const expenses = [];
-      ['supplies','transport','marketing','software','equipment','contractors','inventory','fees','other'].forEach(e => {
-        if (document.getElementById(`biz-exp-${e}-${id}`)?.checked) expenses.push(e);
-      });
-      const platforms = [];
-      ['stripe','paypal','etsy','freshbooks','expensify','square','shopify','none','other'].forEach(p => {
-        if (document.getElementById(`biz-plat-${p}-${id}`)?.checked) platforms.push(p);
+        const cb = document.getElementById('biz-pay-' + p + '-' + id);
+        if (cb && cb.checked) pays.push(p);
       });
       bizEntries.push({
-        name:        val(`biz-name-${id}`),
-        type:        val(`biz-type-${id}`),
-        notes:       val(`biz-notes-${id}`),
-        pays,
-        expenses,
-        expenseNotes: val(`biz-exp-notes-${id}`),
-        platforms,
-        contractors: radio(`biz-contractors-${id}`),
-        california:  radio(`biz-california-${id}`),
-        bankAccount: radio(`biz-bankaccount-${id}`),
-        quarterly:   radio(`biz-quarterly-${id}`),
+        name: val('biz-name-' + id), type: val('biz-type-' + id), pays,
       });
     });
 
-    const pmChecked = [...document.querySelectorAll('#paymentMethods input:checked')].map(i => i.value);
-    const taxForms = [...document.querySelectorAll('#taxForms input:checked')].map(i => i.value);
-
     return {
+      _nav: { currentFlow, flowChosen, pageIndex, businessCount },
+      plan: planValue(),
       firstName: val('firstName'), lastName: val('lastName'),
       email: val('email'), phone: val('phone'),
+      // lite
+      liteAppName: val('liteAppName'), liteBizCount: radio('liteBizCount'),
+      liteBusinesses: val('liteBusinesses'), litePalette: radio('litePalette'),
+      liteCloudSync: radio('liteCloudSync'),
+      liteNotes: val('liteNotes'), liteNotesGuided: val('liteNotesGuided'),
+      hearAboutLite: val('hearAboutLite'), hearAboutGuided: val('hearAboutGuided'),
+      // guided (scheduling handled via Calendly)
+      // custom
       businesses: bizEntries,
-      paymentMethods: pmChecked,
+      paymentMethods: checks('paymentMethods'),
       expenseCategories: val('expenseCategories'),
       recurringExp: radio('recurringExp'), receipts: radio('receipts'),
       scheduleC: radio('scheduleC'), form1099: radio('form1099'),
-      googleSheets: radio('googleSheets'), quickbooks: radio('quickbooks'),
-      w2job: radio('w2job'),
-      otherTaxForms: taxForms.join(', '),
-      salesTax: radio('salesTax'),
-      deviceCount: radio('deviceCount'),
+      googleSheets: radio('googleSheets'), outOfState: radio('outOfState'),
+      w2job: radio('w2job'), deviceCount: radio('deviceCount'),
       platform: radio('platform'), appName: val('appName'),
       hasBrand: radio('hasBrand'), brandColors: val('brandColors'),
       hasLogo: radio('hasLogo'), visualNotes: val('visualNotes'),
       hearAbout: val('hearAbout'), dreamFeatures: val('dreamFeatures'),
       timeline: radio('timeline'),
-      businessCount,
     };
   }
 
-  function val(id) { const el = document.getElementById(id); return el ? el.value : ''; }
-  function radio(name) { const el = document.querySelector(`input[name="${name}"]:checked`); return el ? el.value : ''; }
-
+  // ── SAVE & LOAD ─────────────────────────────────────────
   function saveAll() {
-    const data = getData();
-    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(data)); } catch(e) {}
-    const badge = document.getElementById('save-' + currentPage);
+    try { localStorage.setItem(STORAGE_KEY, JSON.stringify(getData())); } catch (e) {}
+    const badge = document.querySelector('.page.active .autosave-badge');
     if (badge) {
       badge.classList.add('visible');
       clearTimeout(badge._t);
@@ -1173,100 +1419,152 @@
 
   function loadAll() {
     let data;
-    try { data = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch(e) {}
+    try { data = JSON.parse(localStorage.getItem(STORAGE_KEY)); } catch (e) {}
     if (!data) return;
 
-    ['firstName','lastName','email','phone','expenseCategories','appName',
-     'brandColors','visualNotes','hearAbout','dreamFeatures'].forEach(id => setVal(id, data[id]));
+    ['firstName','lastName','email','phone','liteAppName','liteBusinesses',
+     'liteNotes','liteNotesGuided','hearAboutLite','hearAboutGuided',
+     'expenseCategories','appName','brandColors',
+     'visualNotes','hearAbout','dreamFeatures'].forEach(id => setVal(id, data[id]));
 
-    if (data.paymentMethods) {
-      data.paymentMethods.forEach(v => {
-        const el = document.querySelector(`#paymentMethods input[value="${v}"]`);
-        if (el) el.checked = true;
-      });
-    }
+    setSelect('hearAboutLite', data.hearAboutLite);
+    setSelect('hearAboutGuided', data.hearAboutGuided);
+    setSelect('hearAbout', data.hearAbout);
 
-    ['recurringExp','receipts','scheduleC','form1099','googleSheets',
-     'quickbooks','w2job','salesTax','deviceCount','platform','hasBrand','hasLogo','timeline'].forEach(name => {
-      const v = data[name];
+    // radios
+    [['plan','plan'],['liteBizCount','liteBizCount'],['litePalette','litePalette'],
+     ['liteCloudSync','liteCloudSync'],
+     ['recurringExp','recurringExp'],['receipts','receipts'],['scheduleC','scheduleC'],
+     ['form1099','form1099'],['googleSheets','googleSheets'],['outOfState','outOfState'],
+     ['w2job','w2job'],['deviceCount','deviceCount'],['platform','platform'],
+     ['hasBrand','hasBrand'],['hasLogo','hasLogo'],['timeline','timeline']
+    ].forEach(([name, key]) => {
+      const v = data[key];
       if (v) {
-        const el = document.querySelector(`input[name="${name}"][value="${CSS.escape(v)}"]`);
+        const el = document.querySelector('input[name="' + name + '"][value="' + (window.CSS && CSS.escape ? CSS.escape(v) : v) + '"]');
         if (el) el.checked = true;
       }
     });
 
-    if (data.businesses && data.businesses.length) {
+    // checkbox groups
+    if (Array.isArray(data.paymentMethods)) data.paymentMethods.forEach(v => {
+      const el = document.querySelector('#paymentMethods input[value="' + v + '"]'); if (el) el.checked = true;
+    });
+
+    // businesses
+    if (Array.isArray(data.businesses) && data.businesses.length) {
       businessCount = 0;
+      document.getElementById('business-list').innerHTML = '';
       data.businesses.forEach(biz => {
         addBusiness();
         const id = businessCount - 1;
-        setVal(`biz-name-${id}`, biz.name);
-        setVal(`biz-type-${id}`, biz.type);
-        setVal(`biz-notes-${id}`, biz.notes);
-        setVal(`biz-exp-notes-${id}`, biz.expenseNotes);
-        if (biz.pays) {
-          biz.pays.forEach(p => {
-            const cb = document.getElementById(`biz-pay-${p}-${id}`);
-            if (cb) cb.checked = true;
-          });
-        }
-        if (biz.expenses) {
-          biz.expenses.forEach(e => {
-            const cb = document.getElementById(`biz-exp-${e}-${id}`);
-            if (cb) cb.checked = true;
-          });
-        }
-        if (biz.platforms) {
-          biz.platforms.forEach(p => {
-            const cb = document.getElementById(`biz-plat-${p}-${id}`);
-            if (cb) cb.checked = true;
-          });
-        }
-        ['contractors','california','bankaccount','quarterly'].forEach(field => {
-          const key = field === 'bankaccount' ? 'bankAccount' : field;
-          const v = biz[key] || biz[field];
-          if (v) {
-            const el = document.querySelector(`input[name="biz-${field}-${id}"][value="${CSS.escape(v)}"]`);
-            if (el) el.checked = true;
-          }
+        setVal('biz-name-' + id, biz.name);
+        setVal('biz-type-' + id, biz.type);
+        (biz.pays || []).forEach(p => {
+          const cb = document.getElementById('biz-pay-' + p + '-' + id); if (cb) cb.checked = true;
         });
       });
     }
+
+    // nav state
+    if (data._nav) {
+      currentFlow = data._nav.currentFlow || 'custom';
+      flowChosen  = !!data._nav.flowChosen;
+      const seqLen = currentSequence().length;
+      pageIndex   = Math.min(Math.max(0, data._nav.pageIndex || 0), seqLen - 1);
+    }
   }
 
-  function setVal(id, v) { const el = document.getElementById(id); if (el && v) el.value = v; }
+  function setSelect(id, v) { const el = document.getElementById(id); if (el && v) el.value = v; }
 
-  document.addEventListener('change', () => saveAll());
+  // autosave on any change
+  document.addEventListener('change', () => { refreshConditionalNotes(); saveAll(); });
   document.addEventListener('input', () => saveAll());
 
+  // ── SUBMIT ──────────────────────────────────────────────
   function submitForm() {
+    const id = currentPageId();
+    if (hasErrors(id)) return;
     const data = getData();
-    document.getElementById('h-firstName').value       = data.firstName;
-    document.getElementById('h-lastName').value        = data.lastName;
-    document.getElementById('h-email').value           = data.email;
-    document.getElementById('h-phone').value           = data.phone;
-    document.getElementById('h-businesses').value      = JSON.stringify(data.businesses);
-    document.getElementById('h-paymentMethods').value  = data.paymentMethods.join(', ');
-    document.getElementById('h-expenseCategories').value = data.expenseCategories;
-    document.getElementById('h-recurringExp').value    = data.recurringExp;
-    document.getElementById('h-receipts').value        = data.receipts;
-    document.getElementById('h-scheduleC').value       = data.scheduleC;
-    document.getElementById('h-form1099').value        = data.form1099;
-    document.getElementById('h-googleSheets').value    = data.googleSheets;
-    document.getElementById('h-quickbooks').value      = data.quickbooks;
-    document.getElementById('h-w2job').value           = data.w2job;
-    document.getElementById('h-otherTaxForms').value   = data.otherTaxForms;
-    document.getElementById('h-salesTax').value        = data.salesTax;
-    document.getElementById('h-deviceCount').value     = data.deviceCount;
-    document.getElementById('h-platform').value        = data.platform;
-    document.getElementById('h-appName').value         = data.appName;
-    document.getElementById('h-hasBrand').value        = data.hasBrand;
-    document.getElementById('h-brandColors').value     = data.brandColors;
-    document.getElementById('h-hasLogo').value         = data.hasLogo;
-    document.getElementById('h-visualNotes').value     = data.visualNotes;
-    document.getElementById('h-hearAbout').value       = data.hearAbout;
-    document.getElementById('h-dreamFeatures').value   = data.dreamFeatures;
-    document.getElementById('h-timeline').value        = data.timeline;
+    const flow = currentFlow;
+
+    const planLabels = {
+      diy:    'OwnIt Lite — DIY ($75)',
+      guided: 'OwnIt Lite — Guided ($100)',
+      custom: 'Full Custom Build ($400+)',
+    };
+    const actions = {
+      diy:    'SEND the client their OwnIt Lite app link + setup guide',
+      guided: 'SCHEDULE the 30-minute onboarding call (see preferred times)',
+      custom: 'REVIEW the full custom intake & reach out to confirm scope',
+    };
+    const name = (data.firstName + ' ' + data.lastName).trim() || 'New client';
+
+    // shared
+    setVal('h-_subject', 'New OwnIt order — ' + planLabels[flow] + ' — ' + name);
+    setVal('h-plan', planLabels[flow]);
+    setVal('h-action', actions[flow]);
+    setVal('h-firstName', data.firstName);
+    setVal('h-lastName', data.lastName);
+    setVal('h-email', data.email);
+    setVal('h-phone', data.phone);
+
+    // lite
+    setVal('h-liteAppName', data.liteAppName);
+    setVal('h-liteBizCount', data.liteBizCount);
+    setVal('h-liteBusinesses', data.liteBusinesses);
+    setVal('h-litePalette', data.litePalette);
+    setVal('h-liteCloudSync', data.liteCloudSync);
+
+    // guided scheduling (handled via Calendly)
+    setVal('h-scheduling', flow === 'guided' ? 'Client will self-book via Calendly' : '');
+
+    // notes + hearAbout depend on flow
+    if (flow === 'diy') {
+      setVal('h-liteNotes', data.liteNotes);
+      setVal('h-hearAbout', data.hearAboutLite);
+    } else if (flow === 'guided') {
+      setVal('h-liteNotes', data.liteNotesGuided);
+      setVal('h-hearAbout', data.hearAboutGuided);
+    } else {
+      setVal('h-hearAbout', data.hearAbout);
+    }
+
+    // custom
+    setVal('h-businesses', JSON.stringify(data.businesses));
+    setVal('h-paymentMethods', (data.paymentMethods || []).join(', '));
+    setVal('h-expenseCategories', data.expenseCategories);
+    setVal('h-recurringExp', data.recurringExp);
+    setVal('h-receipts', data.receipts);
+    setVal('h-scheduleC', data.scheduleC);
+    setVal('h-form1099', data.form1099);
+    setVal('h-googleSheets', data.googleSheets);
+    setVal('h-outOfState', data.outOfState);
+    setVal('h-w2job', data.w2job);
+    setVal('h-deviceCount', data.deviceCount);
+    setVal('h-platform', data.platform);
+    setVal('h-appName', data.appName);
+    setVal('h-hasBrand', data.hasBrand);
+    setVal('h-brandColors', data.brandColors);
+    setVal('h-hasLogo', data.hasLogo);
+    setVal('h-visualNotes', data.visualNotes);
+    setVal('h-dreamFeatures', data.dreamFeatures);
+    setVal('h-timeline', data.timeline);
+
+    // Only submit the fields relevant to this flow (cleaner email)
+    const keep = new Set(FIELD_GROUPS.shared);
+    if (flow === 'custom') {
+      FIELD_GROUPS.custom.forEach(k => keep.add(k));
+    } else {
+      FIELD_GROUPS.notes.forEach(k => keep.add(k));        // DIY + Guided
+      if (flow === 'guided') {
+        FIELD_GROUPS.liteBasics.forEach(k => keep.add(k));
+        FIELD_GROUPS.scheduling.forEach(k => keep.add(k));
+      }
+    }
+    document.querySelectorAll('#ownit-form input').forEach(inp => {
+      inp.disabled = !keep.has(inp.id.replace(/^h-/, ''));
+    });
 
     const form = document.getElementById('ownit-form');
     fetch(form.action, {
@@ -1275,14 +1573,55 @@
       headers: { 'Accept': 'application/json' },
     })
     .then(res => {
-      if (res.ok) {
-        try { localStorage.removeItem(STORAGE_KEY); } catch(e) {}
-        showPage(7);
-      } else {
-        alert('Submission failed. Please try again or email us directly.');
-      }
+      // re-enable so future edits work if needed
+      document.querySelectorAll('#ownit-form input').forEach(i => i.disabled = false);
+      if (res.ok) { finishUp(flow); }
+      else { alert('Something went wrong submitting the form. Please try again, or email us directly.'); }
     })
-    .catch(() => showPage(7));
+    .catch(() => { document.querySelectorAll('#ownit-form input').forEach(i => i.disabled = false); finishUp(flow); });
+  }
+
+  function finishUp(flow) {
+    try { localStorage.removeItem(STORAGE_KEY); } catch (e) {}
+    const title = document.getElementById('ty-title');
+    const body  = document.getElementById('ty-body');
+    const steps = document.getElementById('ty-steps');
+    const list  = document.getElementById('ty-steps-list');
+
+    const content = {
+      diy: {
+        title: 'Your order is in!',
+        body: 'Thanks! Check your inbox — we\'ll send a secure Stripe payment link first, then your private OwnIt Lite link and a quick-start guide.',
+        steps: ['Watch for an email with your Stripe payment link', 'Complete payment, then receive your app link', 'Set a passcode & follow the in-app setup wizard'],
+      },
+      guided: {
+        title: 'One last step — book your call',
+        body: 'Thanks! Your details are in. We\'ll email a $25 booking-fee link — once it\'s paid, your 30-minute call is locked in. The fee is credited in full toward your OwnIt Lite — Guided total.',
+        steps: ['Pay the $25 booking fee we email you (credited to your total)', 'Pick your time on Calendly below', 'We set up your app together on the call'],
+      },
+      custom: {
+        title: 'You\'re all set!',
+        body: 'Thanks! We\'ll email a $50 scoping-fee link — once it\'s paid, your 60-minute planning call is confirmed. The fee is credited in full toward your build (or toward OwnIt Lite if you choose that instead).',
+        steps: ['Pay the $50 scoping fee we email you (credited to your build)', 'Book your 60-min call on Calendly below', 'We confirm scope, price & timeline together'],
+      },
+    };
+    const c = content[flow] || content.custom;
+    title.textContent = c.title;
+    body.textContent = c.body;
+    list.innerHTML = c.steps.map(s => '<li>' + s + '</li>').join('');
+    const cal = document.getElementById('ty-calendly');
+    if (cal) {
+      if (flow === 'guided')      { cal.href = CALENDLY_URL;        cal.style.display = 'flex'; }
+      else if (flow === 'custom') { cal.href = CALENDLY_CUSTOM_URL; cal.style.display = 'flex'; }
+      else cal.style.display = 'none';
+    }
+    steps.style.display = 'block';
+
+    // jump to thank-you (outside any flow sequence)
+    document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+    document.querySelector('.page[data-page="thankyou"]').classList.add('active');
+    document.querySelector('.breadcrumb-bar').classList.add('hidden');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 </script>
 </body>
