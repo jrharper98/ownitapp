@@ -523,6 +523,8 @@ function newClientObj() {
     status: 'active',
     createdAt: new Date().toISOString(),
     updatedAt: new Date().toISOString(),
+    // Plan
+    plan:'',
     // Profile
     firstName:'', lastName:'', email:'', phone:'',
     businesses:[],
@@ -530,9 +532,14 @@ function newClientObj() {
     expenseCategories:'',
     recurringExp:'', receipts:'',
     scheduleC:'', form1099:'', googleSheets:'', quickbooks:'', w2job:'',
+    outOfState:'',
     deviceCount:'', platform:'',
     appName:'', hasBrand:'', brandColors:'', hasLogo:'', visualNotes:'',
     hearAbout:'', dreamFeatures:'', timeline:'',
+    otherTaxForms:'', salesTax:'',
+    // OwnIt Lite fields
+    liteAppName:'', liteBizCount:'', liteBusinesses:'', litePalette:'',
+    liteCloudSync:'', liteNotes:'', scheduling:'',
     // Internal
     hostingOption:'',
     supabaseUrl:'', supabaseKey:'', supabaseProjectNote:'',
@@ -653,105 +660,125 @@ function populateFromIntake(data) {
   const c = getActive();
   if (!c) return;
 
-  // Fix UTF-8 encoding issues from Formspree PDF export
-  const fix = (str) => (str||'')
+  // Fix UTF-8 encoding issues from Formspree export
+  const fix = (str) => (str==null ? '' : String(str))
     .replace(/â€"/g, '—')
     .replace(/Ã©/g, 'é')
     .replace(/â€œ/g, '"')
     .replace(/â€/g, '"')
     .replace(/â€™/g, "'");
 
-  const map = (key) => fix(data[key] || '');
+  // Pull a value by trying multiple possible keys (label-based first, then camelCase)
+  const pick = (...keys) => {
+    for (const k of keys) {
+      if (data[k] !== undefined && data[k] !== null && data[k] !== '') return fix(data[k]);
+    }
+    return '';
+  };
 
-  c.firstName = map('firstName'); c.lastName = map('lastName');
-  c.email = map('email'); c.phone = map('phone');
-  c.paymentMethods = Array.isArray(data.paymentMethods) ? data.paymentMethods : (data.paymentMethods||'').split(',').map(s=>s.trim()).filter(Boolean);
-  c.expenseCategories = map('expenseCategories');
-  // Handle both recurringExp (old) and recurringExpenses (Formspree export)
-  c.recurringExp = map('recurringExp') || map('recurringExpenses');
-  c.receipts = map('receipts');
-  c.scheduleC = map('scheduleC'); c.form1099 = map('form1099');
-  c.googleSheets = map('googleSheets'); c.quickbooks = map('quickbooks');
-  c.w2job = map('w2job');
-  c.otherTaxForms = map('otherTaxForms');
-  c.salesTax = map('salesTax');
-  c.deviceCount = map('deviceCount'); c.platform = map('platform');
-  c.appName = map('appName'); c.hasBrand = map('hasBrand'); c.brandColors = map('brandColors');
-  c.hasLogo = map('hasLogo'); c.visualNotes = map('visualNotes');
-  c.hearAbout = map('hearAbout'); c.dreamFeatures = map('dreamFeatures'); c.timeline = map('timeline');
-  // Parse businesses — also handle Formspree JSON string
+  // ── PLAN ──
+  // Formspree label "Plan" e.g. "OwnIt Lite — DIY ($75)" / "OwnIt Lite — Guided ($100)" / "Full Custom Build ($400+)"
+  const planRaw = pick('Plan', 'plan');
+  c.plan = planRaw;
+  const isLite = /lite/i.test(planRaw);
+  const isCustom = !planRaw || /custom/i.test(planRaw);
+
+  // ── SHARED CONTACT ──
+  c.firstName = pick('First name', 'firstName');
+  c.lastName  = pick('Last name', 'lastName');
+  c.email     = pick('Email', 'email');
+  c.phone     = pick('Phone', 'phone');
+  c.hearAbout = pick('How they heard', 'hearAbout', 'hearAboutLite', 'hearAboutGuided');
+
+  // ── LITE FIELDS ──
+  c.liteAppName   = pick('App name', 'liteAppName');
+  c.liteBizCount  = pick('Number of businesses', 'liteBizCount');
+  c.liteBusinesses= pick('Businesses', 'liteBusinesses');
+  c.litePalette   = pick('Color palette', 'litePalette');
+  c.liteCloudSync = pick('Cloud sync', 'liteCloudSync');
+  c.liteNotes     = pick('Notes', 'liteNotes', 'liteNotesGuided');
+  c.scheduling    = pick('Scheduling', 'scheduling');
+
+  // ── CUSTOM FIELDS ──
+  c.paymentMethods = (() => {
+    const pm = data['Payment methods'] || data.paymentMethods;
+    if (Array.isArray(pm)) return pm;
+    return fix(pm).split(',').map(s=>s.trim()).filter(Boolean);
+  })();
+  c.expenseCategories = pick('Expense categories', 'expenseCategories');
+  c.recurringExp = pick('Recurring expenses', 'recurringExp', 'recurringExpenses');
+  c.receipts     = pick('Receipts', 'receipts');
+  c.scheduleC    = pick('Schedule C', 'scheduleC');
+  c.form1099     = pick('1099 forms', 'form1099');
+  c.googleSheets = pick('Google Sheets export', 'googleSheets');
+  c.outOfState   = pick('Out-of-state / international revenue', 'outOfState');
+  c.w2job        = pick('W2 job', 'w2job');
+  c.deviceCount  = pick('Device count', 'deviceCount');
+  c.platform     = pick('Platform', 'platform');
+  c.appName      = pick('Custom app name', 'appName');
+  c.hasBrand     = pick('Has brand', 'hasBrand');
+  c.brandColors  = pick('Brand colors', 'brandColors');
+  c.hasLogo      = pick('Has logo', 'hasLogo');
+  c.visualNotes  = pick('Visual notes', 'visualNotes');
+  c.dreamFeatures= pick('Dream features', 'dreamFeatures');
+  c.timeline     = pick('Timeline', 'timeline');
+  c.otherTaxForms= pick('Other tax forms', 'otherTaxForms');
+  c.salesTax     = pick('Sales tax', 'salesTax');
+
+  // Parse detailed businesses (custom flow) — JSON string or array
   try {
-    if (typeof data.businesses === 'string') c.businesses = JSON.parse(data.businesses);
-    else if (Array.isArray(data.businesses)) c.businesses = data.businesses;
-    // Fix encoding in business fields
+    const biz = data['Businesses (detailed)'] || data.businesses;
+    if (typeof biz === 'string' && biz.trim().startsWith('[')) c.businesses = JSON.parse(biz);
+    else if (Array.isArray(biz)) c.businesses = biz;
     if (c.businesses) c.businesses = c.businesses.map(b => ({
       ...b,
       name: fix(b.name), type: fix(b.type), notes: fix(b.notes||''),
       expenseNotes: fix(b.expenseNotes||'')
     }));
   } catch(e) {}
-  // Auto-suggest features based on answers
+
+  // ── AUTO-SET PLAN STATUS & FEATURES ──
+  if (isLite) {
+    c.features.custom_branding = true;
+    // Lite cloud sync
+    if (/yes/i.test(c.liteCloudSync)) c.features.sync_status = true;
+  }
   if (c.form1099 === 'Yes') c.features.form_1099 = true;
   if (c.googleSheets === 'Yes please') c.features.google_sheets = true;
-  if (c.quickbooks === 'Yes') c.features.quickbooks = true;
   if (c.otherTaxForms && c.otherTaxForms.includes('Schedule E')) c.features.schedule_e = true;
   if (c.otherTaxForms && c.otherTaxForms.includes('Schedule F')) c.features.schedule_f = true;
   if (c.w2job && c.w2job.startsWith('Yes')) c.features.w2_tracking = true;
-  // Auto-populate Discovery Call notes from intake answers
+
+  // ── DISCOVERY NOTES (Custom flow only — Lite skips discovery) ──
   if (!c.discoveryNotes) c.discoveryNotes = {};
-
-  // Q01 — business details
-  if (c.businesses && c.businesses.length) {
-    const bizNotes = c.businesses
-      .filter(b => b.notes && b.notes.trim())
-      .map((b, i) => `${b.name || 'Business ' + (i+1)}: ${b.notes.trim()}`)
-      .join('\n\n');
-    if (bizNotes) c.discoveryNotes['01'] = bizNotes;
+  if (isCustom) {
+    if (c.businesses && c.businesses.length) {
+      const bizNotes = c.businesses
+        .filter(b => b.notes && b.notes.trim())
+        .map((b, i) => `${b.name || 'Business ' + (i+1)}: ${b.notes.trim()}`)
+        .join('\n\n');
+      if (bizNotes) c.discoveryNotes['01'] = bizNotes;
+      const names = c.businesses.map((b,i) => b.name || 'Business '+(i+1)).join(', ');
+      c.discoveryNotes['04'] = `${c.businesses.length} — ${names}`;
+    }
+    if (c.recurringExp) c.discoveryNotes['05'] = c.recurringExp;
+    if (c.receipts) c.discoveryNotes['06'] = c.receipts;
+    if (c.scheduleC) c.discoveryNotes['08'] = c.scheduleC;
+    if (c.form1099) c.discoveryNotes['09'] = c.form1099;
+    if (c.otherTaxForms) c.discoveryNotes['10'] = c.otherTaxForms;
+    if (c.w2job) c.discoveryNotes['11'] = c.w2job;
+    if (c.deviceCount) c.discoveryNotes['12'] = c.deviceCount;
+    const brandParts = [c.hasBrand, c.hasLogo, c.brandColors].filter(Boolean);
+    if (brandParts.length) c.discoveryNotes['14'] = brandParts.join(' · ');
+    if (c.appName) c.discoveryNotes['15'] = c.appName;
+    if (c.timeline) c.discoveryNotes['16'] = c.timeline;
+    if (c.dreamFeatures) c.discoveryNotes['17'] = c.dreamFeatures;
   }
-
-  // Q04 — income streams
-  if (c.businesses && c.businesses.length) {
-    const names = c.businesses.map((b,i) => b.name || 'Business '+(i+1)).join(', ');
-    c.discoveryNotes['04'] = `${c.businesses.length} — ${names}`;
-  }
-
-  // Q05 — recurring expenses
-  if (c.recurringExp) c.discoveryNotes['05'] = c.recurringExp;
-
-  // Q06 — receipts
-  if (c.receipts) c.discoveryNotes['06'] = c.receipts;
-
-  // Q08 — Schedule C
-  if (c.scheduleC) c.discoveryNotes['08'] = c.scheduleC;
-
-  // Q09 — 1099s
-  if (c.form1099) c.discoveryNotes['09'] = c.form1099;
-
-  // Q10 — other tax forms
-  if (c.otherTaxForms) c.discoveryNotes['10'] = c.otherTaxForms;
-
-  // Q11 — W-2 job
-  if (c.w2job) c.discoveryNotes['11'] = c.w2job;
-
-  // Q12 — device count
-  if (c.deviceCount) c.discoveryNotes['12'] = c.deviceCount;
-
-  // Q14 — branding
-  const brandParts = [c.hasBrand, c.hasLogo, c.brandColors].filter(Boolean);
-  if (brandParts.length) c.discoveryNotes['14'] = brandParts.join(' · ');
-
-  // Q15 — app name
-  if (c.appName) c.discoveryNotes['15'] = c.appName;
-
-  // Q16 — timeline
-  if (c.timeline) c.discoveryNotes['16'] = c.timeline;
-
-  // Q17 — dream features
-  if (c.dreamFeatures) c.discoveryNotes['17'] = c.dreamFeatures;
 
   saveActive();
   renderWorkspace();
-  showToast('Profile auto-populated from intake form ✓');
+  const planMsg = planRaw ? ` (${planRaw})` : '';
+  showToast(`Profile auto-populated from intake${planMsg} ✓`);
 }
 
 // ═══ DELETE ═══
@@ -852,11 +879,22 @@ function renderWorkspace() {
   document.getElementById('workspace').style.display = c ? 'block' : 'none';
   if (!c) return;
   const name = (c.firstName && c.lastName) ? `${c.firstName} ${c.lastName}` : (c.firstName || 'New Client');
+  // Plan badge
+  const planLabel = c.plan || '';
+  let planBadge = '';
+  if (planLabel) {
+    const isLitePlan = /lite/i.test(planLabel);
+    const badgeColor = /custom/i.test(planLabel) ? 'background:var(--gold-light);color:#7A5C00'
+      : isLitePlan ? 'background:#E6F9F7;color:var(--teal)' : 'background:var(--pale-teal);color:var(--navy)';
+    planBadge = `<span style="display:inline-block;font-size:11px;font-weight:700;padding:3px 10px;border-radius:20px;${badgeColor};margin-bottom:6px">${planLabel}</span><br/>`;
+  }
+  const appNameDisplay = c.appName || c.liteAppName;
   document.getElementById('workspace').innerHTML = `
     <div class="workspace-header">
       <div>
+        ${planBadge}
         <div class="workspace-title">${name}</div>
-        <div class="workspace-sub">${c.appName ? '📱 ' + c.appName : 'App name not set'} &nbsp;·&nbsp; ${c.email || 'No email'}</div>
+        <div class="workspace-sub">${appNameDisplay ? '📱 ' + appNameDisplay : 'App name not set'} &nbsp;·&nbsp; ${c.email || 'No email'}</div>
       </div>
       <div class="workspace-actions">
         <select style="border:1.5px solid var(--border);border-radius:8px;padding:7px 10px;font-family:'DM Sans',sans-serif;font-size:13px;color:var(--muted);background:var(--bg);outline:none;cursor:pointer" onchange="changeStatus(this.value)">
@@ -939,31 +977,36 @@ function renderWorkspace() {
 
 // ═══ TAB RENDERS ═══
 function renderProfileTab(c) {
+  const isLite = /lite/i.test(c.plan || '');
+
   const bizList = (c.businesses||[]).map((b,i) => `
     <div style="background:var(--pale-teal);border:1px solid var(--border);border-radius:8px;padding:14px 16px;margin-bottom:10px">
       <div style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:0.07em;margin-bottom:8px">Business ${i+1}</div>
       <div class="info-grid">
         <div class="info-item"><label>Name</label><div class="val ${!b.name?'empty':''}">${b.name||'—'}</div></div>
         <div class="info-item"><label>Type</label><div class="val ${!b.type?'empty':''}">${b.type||'—'}</div></div>
-        <div class="info-item"><label>Revenue</label><div class="val ${!b.revenue?'empty':''}">${b.revenue||'—'}</div></div>
         <div class="info-item"><label>Payment Methods</label><div class="val">${(b.pays||[]).join(', ')||'—'}</div></div>
       </div>
     </div>`).join('') || '<div style="color:var(--muted);font-size:13px;font-style:italic">No businesses added yet</div>';
 
-  return `<div class="tab-panel active" id="tab-profile">
-    <div class="section-card">
-      <div class="section-card-title">Contact Information</div>
-      <div class="section-card-sub">Auto-populated from intake form submission</div>
+  // OwnIt Lite card — shown only for Lite plans
+  const liteCard = isLite ? `
+    <div class="section-card" style="border-color:var(--teal)">
+      <div class="section-card-title" style="color:var(--teal)">OwnIt Lite Setup</div>
+      <div class="section-card-sub">Self-serve Lite order — no discovery call needed. Configure and send the app link.</div>
       <div class="info-grid">
-        <div class="info-item"><label>First Name</label><div class="val ${!c.firstName?'empty':''}">${c.firstName||'Not set'}</div></div>
-        <div class="info-item"><label>Last Name</label><div class="val ${!c.lastName?'empty':''}">${c.lastName||'Not set'}</div></div>
-        <div class="info-item"><label>Email</label><div class="val ${!c.email?'empty':''}">${c.email||'Not set'}</div></div>
-        <div class="info-item"><label>Phone</label><div class="val ${!c.phone?'empty':''}">${c.phone||'Not set'}</div></div>
-        <div class="info-item"><label>Timeline</label><div class="val ${!c.timeline?'empty':''}">${c.timeline||'Not set'}</div></div>
-        <div class="info-item"><label>How They Found OwnIt</label><div class="val ${!c.hearAbout?'empty':''}">${c.hearAbout||'Not set'}</div></div>
-        <div class="info-item full"><label>Dream Features</label><div class="val ${!c.dreamFeatures?'empty':''}">${c.dreamFeatures||'None listed'}</div></div>
+        <div class="info-item"><label>App Name</label><div class="val ${!c.liteAppName?'empty':''}">${c.liteAppName||'Not set'}</div></div>
+        <div class="info-item"><label># of Businesses</label><div class="val ${!c.liteBizCount?'empty':''}">${c.liteBizCount||'—'}</div></div>
+        <div class="info-item"><label>Color Palette</label><div class="val ${!c.litePalette?'empty':''}">${c.litePalette||'Client will choose in-app'}</div></div>
+        <div class="info-item"><label>Cloud Sync</label><div class="val ${!c.liteCloudSync?'empty':''}">${c.liteCloudSync||'—'}</div></div>
+        <div class="info-item full"><label>Businesses Listed</label><div class="val ${!c.liteBusinesses?'empty':''}">${c.liteBusinesses||'Not listed'}</div></div>
+        ${c.scheduling ? `<div class="info-item full"><label>Scheduling</label><div class="val">${c.scheduling}</div></div>` : ''}
+        <div class="info-item full"><label>Client Notes</label><div class="val ${!c.liteNotes?'empty':''}">${c.liteNotes||'None'}</div></div>
       </div>
-    </div>
+    </div>` : '';
+
+  // For Lite plans, hide the detailed custom-only sections
+  const customSections = isLite ? '' : `
     <div class="section-card">
       <div class="section-card-title">Businesses & Income Streams</div>
       <div class="section-card-sub">From intake form — Business section</div>
@@ -978,8 +1021,9 @@ function renderProfileTab(c) {
         <div class="info-item"><label>Files Schedule C</label><div class="val ${!c.scheduleC?'empty':''}">${c.scheduleC||'—'}</div></div>
         <div class="info-item"><label>Receives 1099s</label><div class="val ${!c.form1099?'empty':''}">${c.form1099||'—'}</div></div>
         <div class="info-item"><label>Google Sheets Export</label><div class="val ${!c.googleSheets?'empty':''}">${c.googleSheets||'—'}</div></div>
-        <div class="info-item"><label>QuickBooks Export</label><div class="val ${!c.quickbooks?'empty':''}">${c.quickbooks||'—'}</div></div>
+        <div class="info-item"><label>Out-of-State Revenue</label><div class="val ${!c.outOfState?'empty':''}">${c.outOfState||'—'}</div></div>
         <div class="info-item"><label>Has W-2 Job</label><div class="val ${!c.w2job?'empty':''}">${c.w2job||'—'}</div></div>
+        <div class="info-item"><label>Other Tax Forms</label><div class="val ${!c.otherTaxForms?'empty':''}">${c.otherTaxForms||'—'}</div></div>
         <div class="info-item full"><label>Expense Categories</label><div class="val ${!c.expenseCategories?'empty':''}">${c.expenseCategories||'Not listed'}</div></div>
         <div class="info-item full"><label>Payment Methods (Expenses)</label>
           <div class="tag-list">${(c.paymentMethods||[]).map(p=>`<span class="tag">${p}</span>`).join('')||'<span style="color:var(--muted);font-size:13px">None selected</span>'}</div>
@@ -992,7 +1036,25 @@ function renderProfileTab(c) {
         <div class="info-item"><label>Device Count</label><div class="val ${!c.deviceCount?'empty':''}">${c.deviceCount||'—'}</div></div>
         <div class="info-item"><label>Platform</label><div class="val ${!c.platform?'empty':''}">${c.platform||'—'}</div></div>
       </div>
+    </div>`;
+
+  return `<div class="tab-panel active" id="tab-profile">
+    <div class="section-card">
+      <div class="section-card-title">Contact Information</div>
+      <div class="section-card-sub">Auto-populated from intake form submission</div>
+      <div class="info-grid">
+        <div class="info-item"><label>First Name</label><div class="val ${!c.firstName?'empty':''}">${c.firstName||'Not set'}</div></div>
+        <div class="info-item"><label>Last Name</label><div class="val ${!c.lastName?'empty':''}">${c.lastName||'Not set'}</div></div>
+        <div class="info-item"><label>Email</label><div class="val ${!c.email?'empty':''}">${c.email||'Not set'}</div></div>
+        <div class="info-item"><label>Phone</label><div class="val ${!c.phone?'empty':''}">${c.phone||'Not set'}</div></div>
+        <div class="info-item"><label>Plan</label><div class="val ${!c.plan?'empty':''}">${c.plan||'Not set'}</div></div>
+        <div class="info-item"><label>How They Found OwnIt</label><div class="val ${!c.hearAbout?'empty':''}">${c.hearAbout||'Not set'}</div></div>
+        ${!isLite ? `<div class="info-item"><label>Timeline</label><div class="val ${!c.timeline?'empty':''}">${c.timeline||'Not set'}</div></div>
+        <div class="info-item full"><label>Dream Features</label><div class="val ${!c.dreamFeatures?'empty':''}">${c.dreamFeatures||'None listed'}</div></div>` : ''}
+      </div>
     </div>
+    ${liteCard}
+    ${customSections}
   </div>`;
 }
 
